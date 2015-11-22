@@ -26,6 +26,9 @@ AEarth::AEarth()
 void AEarth::OnConstruction(const FTransform& transform)
 {
 	Super::OnConstruction(transform);
+
+	camera->SetRelativeLocation(cameraOffset);
+	camera->SetRelativeRotation(cameraRotation);
 }
 
 // Called when the game starts or when spawned
