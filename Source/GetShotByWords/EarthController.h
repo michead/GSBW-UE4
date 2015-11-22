@@ -12,8 +12,12 @@ UCLASS()
 class GETSHOTBYWORDS_API AEarthController : public APlayerController
 {
 	GENERATED_BODY()
-	
-	
-	
-	
+
+	AEarthController();
+
+	virtual void SetupInputComponent() override;
+
+	virtual void HandleAlphaInput(float value);
+
+	inline virtual TCHAR ConvertAlphaInputToLetter(float value);
 };
