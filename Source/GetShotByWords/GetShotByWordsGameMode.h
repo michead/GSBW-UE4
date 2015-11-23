@@ -14,4 +14,6 @@ class GETSHOTBYWORDS_API AGetShotByWordsGameMode : public AGameMode
 	GENERATED_BODY()
 	
 	AGetShotByWordsGameMode();
+
+	void SetGamePause(bool isGamePaused);
 };

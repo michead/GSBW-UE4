@@ -10,5 +10,10 @@ AGetShotByWordsGameMode::AGetShotByWordsGameMode()
 {
 	DefaultPawnClass = AEarth::StaticClass();
 	PlayerControllerClass = AEarthController::StaticClass();
-	GameStateClass = AEarthState::StaticClass();
+}
+
+void AGetShotByWordsGameMode::SetGamePause(bool isGamePaused)
+{
+	AEarthController* const earth = Cast<AEarthController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
+	if (earth) earth->SetPause(isGamePaused);
 }
