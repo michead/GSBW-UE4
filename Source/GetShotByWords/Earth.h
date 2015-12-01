@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Asteroid.h"
 #include "GameFramework/Pawn.h"
 #include "Earth.generated.h"
 
@@ -39,4 +40,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
 	FRotator cameraRotation;
+
+	AAsteroid* target;
 };

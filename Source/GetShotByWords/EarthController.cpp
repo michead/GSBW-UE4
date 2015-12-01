@@ -2,6 +2,8 @@
 
 #include "GetShotByWords.h"
 #include "EarthController.h"
+#include "Earth.h"
+#include "Asteroid.h"
 #include "GameUtils.h"
 
 AEarthController::AEarthController()
@@ -17,6 +19,23 @@ void AEarthController::SetupInputComponent()
 }
 
 void AEarthController::HandleAlphaInput(float value)
+{
+	check(value);
+
+	if (IsPaused()) return; // TODO Handle paused case
+	else ShootWord(ConvertAlphaInputToLetter(value));
+}
+
+void AEarthController::ShootWord(TCHAR letter)
+{
+	AAsteroid* target = Cast<AEarth>(GetPawn())->target;
+	if (!target) LockTarget(letter);
+	check(target);
+	
+	// TODO Shoot rocket
+}
+
+void AEarthController::LockTarget(TCHAR letter)
 {
 
 }

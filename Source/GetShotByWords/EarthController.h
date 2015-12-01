@@ -17,7 +17,11 @@ class GETSHOTBYWORDS_API AEarthController : public APlayerController
 
 	virtual void SetupInputComponent() override;
 
-	virtual void HandleAlphaInput(float value);
+	inline TCHAR ConvertAlphaInputToLetter(float value);
 
-	inline virtual TCHAR ConvertAlphaInputToLetter(float value);
+	void HandleAlphaInput(float value);
+
+	void ShootWord(TCHAR letter);
+
+	void LockTarget(TCHAR letter);
 };

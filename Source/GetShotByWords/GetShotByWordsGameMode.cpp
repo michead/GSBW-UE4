@@ -14,6 +14,8 @@ AGetShotByWordsGameMode::AGetShotByWordsGameMode()
 
 void AGetShotByWordsGameMode::SetGamePause(bool isGamePaused)
 {
+	check(GEngine);
+
 	AEarthController* const earth = Cast<AEarthController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
 	if (earth) earth->SetPause(isGamePaused);
 }
