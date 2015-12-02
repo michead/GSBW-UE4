@@ -2,17 +2,20 @@
 
 #pragma once
 
+#include "Asteroid.h"
 #include "GameFramework/Actor.h"
-#include "Asteroid.generated.h"
+#include "Rocket.generated.h"
 
 UCLASS()
-class GETSHOTBYWORDS_API AAsteroid : public AActor
+class GETSHOTBYWORDS_API ARocket : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AAsteroid();
+	ARocket();
+
+	ARocket(AAsteroid* asteroid);
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -20,5 +23,7 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
-	FString word;
+	void Fire();
+
+	AAsteroid* target;
 };

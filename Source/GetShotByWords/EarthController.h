@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Asteroid.h"
 #include "GameFramework/PlayerController.h"
 #include "EarthController.generated.h"
 
@@ -23,5 +24,7 @@ class GETSHOTBYWORDS_API AEarthController : public APlayerController
 
 	void ShootWord(TCHAR letter);
 
-	void LockTarget(TCHAR letter);
+	bool LockTarget(TCHAR letter);
+
+	void FireRocket(AAsteroid* target);
 };

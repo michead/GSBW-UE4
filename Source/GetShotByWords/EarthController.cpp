@@ -3,7 +3,7 @@
 #include "GetShotByWords.h"
 #include "EarthController.h"
 #include "Earth.h"
-#include "Asteroid.h"
+#include "EngineUtils.h"
 #include "GameUtils.h"
 
 AEarthController::AEarthController()
@@ -29,15 +29,25 @@ void AEarthController::HandleAlphaInput(float value)
 void AEarthController::ShootWord(TCHAR letter)
 {
 	AAsteroid* target = Cast<AEarth>(GetPawn())->target;
-	if (!target) LockTarget(letter);
-	check(target);
 	
-	// TODO Shoot rocket
+	if (!target)
+		if (!LockTarget(letter)) return;
+	
+	FireRocket(Cast<AEarth>(GetPawn())->target);
 }
 
-void AEarthController::LockTarget(TCHAR letter)
+bool AEarthController::LockTarget(TCHAR letter)
 {
+	for (TActorIterator<AAsteroid> iter(GetWorld()); iter; ++iter)
+	{
+		if ((*iter)->word.GetCharArray()[0] == letter)
+		{
+			Cast<AEarth>(GetPawn())->target = *iter;
+			return true;
+		}
+	}
 
+	return false;
 }
 
 TCHAR AEarthController::ConvertAlphaInputToLetter(float value)
@@ -45,4 +55,9 @@ TCHAR AEarthController::ConvertAlphaInputToLetter(float value)
 	check(value);
 
 	return ALPHABET[value - 1];
+}
+
+void AEarthController::FireRocket(AAsteroid* target)
+{
+	// TODO
 }
