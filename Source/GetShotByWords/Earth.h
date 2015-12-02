@@ -42,4 +42,6 @@ public:
 	FRotator cameraRotation;
 
 	AAsteroid* target;
+
+	float forceMagnitude;
 };

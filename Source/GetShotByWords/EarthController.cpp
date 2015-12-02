@@ -3,6 +3,8 @@
 #include "GetShotByWords.h"
 #include "EarthController.h"
 #include "Earth.h"
+#include "Rocket.h"
+#include "PrimitiveComponent.h"
 #include "EngineUtils.h"
 #include "GameUtils.h"
 
@@ -59,5 +61,14 @@ TCHAR AEarthController::ConvertAlphaInputToLetter(float value)
 
 void AEarthController::FireRocket(AAsteroid* target)
 {
-	// TODO
+	check(target);
+
+	ARocket* rocket = Cast<ARocket>(GetWorld()->SpawnActor(ARocket::StaticClass())); // TODO Set transform
+	rocket->target = target;
+
+	FVector direction = target->GetActorLocation() - rocket->GetActorLocation();
+	direction.Normalize();
+
+	UStaticMeshComponent* meshComp = Cast<UStaticMeshComponent>(rocket->GetComponentByClass(UStaticMeshComponent::StaticClass()));
+	meshComp->AddForce(direction * Cast<AEarth>(GetPawn())->forceMagnitude);
 }
