@@ -27,4 +27,7 @@ class GETSHOTBYWORDS_API AEarthController : public APlayerController
 	bool LockTarget(TCHAR letter);
 
 	void FireRocket(AAsteroid* target);
+
+	// Mimic button down event
+	float lastVal;
 };

@@ -4,28 +4,32 @@
 #include "EarthController.h"
 #include "Earth.h"
 #include "Rocket.h"
-#include "PrimitiveComponent.h"
 #include "EngineUtils.h"
 #include "GameUtils.h"
 
 AEarthController::AEarthController()
 {	
-
+	lastVal = -1.f;
 }
 
 void AEarthController::SetupInputComponent()
 {
-	check(InputComponent);
+	if (!InputComponent)
+	{
+		InputComponent = ConstructObject<UInputComponent>(UInputComponent::StaticClass(), this, TEXT("InputComponent"));
+	}
 
 	InputComponent->BindAxis("Alphabet", this, &AEarthController::HandleAlphaInput);
 }
 
 void AEarthController::HandleAlphaInput(float value)
 {
-	check(value);
+	if (!value || value == lastVal) return;
 
 	if (IsPaused()) return; // TODO Handle paused case
 	else ShootWord(ConvertAlphaInputToLetter(value));
+
+	lastVal = value;
 }
 
 void AEarthController::ShootWord(TCHAR letter)
@@ -63,11 +67,16 @@ void AEarthController::FireRocket(AAsteroid* target)
 {
 	check(target);
 
-	ARocket* rocket = Cast<ARocket>(GetWorld()->SpawnActor(ARocket::StaticClass())); // TODO Set transform
-	rocket->target = target;
+	FVector earthLocation = GetPawn()->GetActorLocation();
+	FRotator earthRotation = GetPawn()->GetActorRotation();
 
-	FVector direction = target->GetActorLocation() - rocket->GetActorLocation();
+	FVector direction = target->GetActorLocation() - earthLocation;
 	direction.Normalize();
+	FVector spawnLocation = earthLocation + direction * ROCKET_SPAWN_LOCATION_OFFSET;
+
+	ARocket* rocket = Cast<ARocket>(GetWorld()->SpawnActor(ARocket::StaticClass(), &spawnLocation, &earthRotation));
+	rocket->target = target;
+	rocket->SetLifeSpan(ROCKET_LIFESPAN);
 
 	UStaticMeshComponent* meshComp = Cast<UStaticMeshComponent>(rocket->GetComponentByClass(UStaticMeshComponent::StaticClass()));
 	meshComp->AddForce(direction * Cast<AEarth>(GetPawn())->forceMagnitude);

@@ -16,3 +16,5 @@ class GETSHOTBYWORDS_API UGameUtils : public UObject
 };
 
 const TArray<TCHAR> ALPHABET = FString(TEXT("abcdefghijklmnopqrstuvwxyz")).GetCharArray();
+const float ROCKET_LIFESPAN = 10.f;
+const float ROCKET_SPAWN_LOCATION_OFFSET = 30.f;

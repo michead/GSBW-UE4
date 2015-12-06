@@ -20,5 +20,10 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
+	void Hit(class AActor* SelfActor, class AActor* OtherActor, FVector NormalImpulse, struct FHitResult Hit);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rendering)
+	UStaticMeshComponent* mesh;
+
 	FString word;
 };
