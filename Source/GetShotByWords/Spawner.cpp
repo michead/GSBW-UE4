@@ -45,7 +45,7 @@ void ASpawner::SpawnAsteroid()
 	UStaticMeshComponent* meshComp = Cast<UStaticMeshComponent>(asteroid->GetComponentByClass(UStaticMeshComponent::StaticClass()));
 	meshComp->AddForce(direction * GetForceMagnitude());
 
-	asteroid->word = GetWord();
+	asteroid->SetWord(GetWord());
 
 	GetWorldTimerManager().ClearTimer(timerHandle);
 	GetWorldTimerManager().SetTimer(timerHandle, this, &ASpawner::SpawnAsteroid, GetSpawnTimeout());

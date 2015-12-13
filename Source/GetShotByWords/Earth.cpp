@@ -19,7 +19,6 @@ AEarth::AEarth()
 
 	camera->SetRelativeLocation(cameraOffset);
 	camera->SetRelativeRotation(cameraRotation);
-
 	camera->AttachTo(RootComponent);
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> RocketAsset(TEXT("/Game/Meshes/Shape_Sphere"));

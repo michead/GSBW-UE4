@@ -23,11 +23,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rendering)
 	UStaticMeshComponent* mesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rendering)
+	UTextRenderComponent* textComp;
+
 	UFUNCTION(BlueprintCallable, Category = Gameplay)
 	void NotifyRocketHit();
 
 	UFUNCTION(BlueprintCallable, Category = Gameplay)
 	void NotifyDestroy();
+
+	UFUNCTION(BlueprintCallable, Category = Gameplay)
+	float GetAsteroidRadius();
+
+	UFUNCTION(BlueprintCallable, Category = Gameplay)
+	void SetWord(FString w);
 
 	FString word;
 };

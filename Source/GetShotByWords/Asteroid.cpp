@@ -12,18 +12,28 @@ AAsteroid::AAsteroid()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> RocketAsset(TEXT("/Game/Meshes/Shape_Sphere"));
 	if (RocketAsset.Succeeded())
 	{
 		mesh->SetStaticMesh(RocketAsset.Object);
 	}
-	mesh->AttachTo(RootComponent);
-
+	mesh->SetRelativeLocation(FVector(0));
+	mesh->SetRelativeRotation(FRotator::ZeroRotator);
 	mesh->SetSimulatePhysics(true);
 	mesh->SetEnableGravity(false);
+
+	RootComponent = mesh;
+
+	textComp = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextComponent"));
+	textComp->AttachTo(RootComponent);
+	textComp->SetRelativeLocation(FVector(0, 0, 2 * GetAsteroidRadius()));
+	textComp->SetRelativeRotation(FRotator(90, 0, 180));
+	textComp->SetTextRenderColor(FColor::Blue);
+	textComp->VerticalAlignment = EVerticalTextAligment::EVRTA_TextCenter;
+	textComp->HorizontalAlignment = EHorizTextAligment::EHTA_Center;
+	textComp->SetXScale(2);
+	textComp->SetYScale(2);
 }
 
 // Called when the game starts or when spawned
@@ -53,5 +63,17 @@ void AAsteroid::NotifyDestroy()
 {
 	Cast<AEarth>(GetWorld()->GetFirstPlayerController()->GetPawn())->NotifyEnemyDown();
 	Destroy();
+}
+
+float AAsteroid::GetAsteroidRadius()
+{
+	// TODO Extend this
+	return 50.f;
+}
+
+void AAsteroid::SetWord(FString w)
+{
+	word = w;
+	textComp->SetText(word);
 }
 
