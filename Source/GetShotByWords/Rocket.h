@@ -23,10 +23,14 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rendering)
 	UStaticMeshComponent* mesh;
 
 	void Fire();
 
 	AAsteroid* target;
+
+	TCHAR letter;
 };

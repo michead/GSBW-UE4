@@ -24,7 +24,11 @@ void AEarthController::SetupInputComponent()
 
 void AEarthController::HandleAlphaInput(float value)
 {
-	if (!value || value == lastVal) return;
+	if (!value || value == lastVal || value >= ALPHABET.Num())
+	{
+		lastVal = value;
+		return;
+	}
 
 	if (IsPaused()) return; // TODO Handle paused case
 	else ShootWord(ConvertAlphaInputToLetter(value));
@@ -36,10 +40,10 @@ void AEarthController::ShootWord(TCHAR letter)
 {
 	AAsteroid* target = Cast<AEarth>(GetPawn())->target;
 	
-	if (!target)
-		if (!LockTarget(letter)) return;
-	
-	FireRocket(Cast<AEarth>(GetPawn())->target);
+	if (!target && !LockTarget(letter)) return;
+	if (!CheckLetter(letter)) return;
+
+	FireRocket(Cast<AEarth>(GetPawn())->target, letter);
 }
 
 bool AEarthController::LockTarget(TCHAR letter)
@@ -63,12 +67,14 @@ TCHAR AEarthController::ConvertAlphaInputToLetter(float value)
 	return ALPHABET[value - 1];
 }
 
-void AEarthController::FireRocket(AAsteroid* target)
+void AEarthController::FireRocket(AAsteroid* target, TCHAR letter)
 {
 	check(target);
 
-	FVector earthLocation = GetPawn()->GetActorLocation();
-	FRotator earthRotation = GetPawn()->GetActorRotation();
+	AEarth* earth = Cast<AEarth>(GetPawn());
+
+	FVector earthLocation = earth->GetActorLocation();
+	FRotator earthRotation = earth->GetActorRotation();
 
 	FVector direction = target->GetActorLocation() - earthLocation;
 	direction.Normalize();
@@ -77,7 +83,18 @@ void AEarthController::FireRocket(AAsteroid* target)
 	ARocket* rocket = Cast<ARocket>(GetWorld()->SpawnActor(ARocket::StaticClass(), &spawnLocation, &earthRotation));
 	rocket->target = target;
 	rocket->SetLifeSpan(ROCKET_LIFESPAN);
+	rocket->letter = letter;
 
 	UStaticMeshComponent* meshComp = Cast<UStaticMeshComponent>(rocket->GetComponentByClass(UStaticMeshComponent::StaticClass()));
-	meshComp->AddForce(direction * Cast<AEarth>(GetPawn())->forceMagnitude);
+	meshComp->AddForce(direction * earth->forceMagnitude);
+
+	earth->currentIndex++;
+}
+
+bool AEarthController::CheckLetter(TCHAR letter)
+{
+	AEarth* earth = Cast<AEarth>(GetPawn());
+	AAsteroid* target = earth->target;
+
+	return target->word.Len() > 0 && target->word.GetCharArray()[earth->currentIndex] == letter;
 }

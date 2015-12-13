@@ -41,7 +41,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
 	FRotator cameraRotation;
 
+	void NotifyEnemyHit();
+	void NotifyEnemyDown();
+
 	AAsteroid* target;
+	int currentIndex;
 
 	float forceMagnitude;
 };

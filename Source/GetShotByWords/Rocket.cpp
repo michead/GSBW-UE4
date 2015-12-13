@@ -21,8 +21,12 @@ ARocket::ARocket()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> RocketAsset(TEXT("/Game/Meshes/Shape_Sphere"));
 	if (RocketAsset.Succeeded())
 	{
+		mesh->SetWorldScale3D(FVector(.25f));
 		mesh->SetStaticMesh(RocketAsset.Object);
 	}
+	
+	mesh->bGenerateOverlapEvents = true;
+	mesh->SetCollisionProfileName("OverlapAll");
 }
 
 // Sets default values
@@ -50,4 +54,15 @@ void ARocket::Tick( float DeltaTime )
 void ARocket::Fire()
 {
 
+}
+
+void ARocket::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	check(GEngine);
+
+	if (OtherActor == target && target->word.GetCharArray()[0] == letter)
+	{
+		target->NotifyRocketHit();
+		Destroy();
+	}
 }

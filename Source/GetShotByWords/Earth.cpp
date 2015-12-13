@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GetShotByWords.h"
+#include "GameUtils.h"
 #include "Earth.h"
 
 
@@ -20,7 +21,18 @@ AEarth::AEarth()
 	camera->SetRelativeRotation(cameraRotation);
 
 	camera->AttachTo(RootComponent);
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> RocketAsset(TEXT("/Game/Meshes/Shape_Sphere"));
+	if (RocketAsset.Succeeded())
+	{
+		mesh->SetStaticMesh(RocketAsset.Object);
+	}
 	mesh->AttachTo(RootComponent);
+
+	// Default force applied to rocket
+	forceMagnitude = DEFAULT_FORCE_MAGNITUDE_TO_ROCKET;
+
+	currentIndex = 0;
 }
 
 void AEarth::OnConstruction(const FTransform& transform)
@@ -50,5 +62,16 @@ void AEarth::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
 	Super::SetupPlayerInputComponent(InputComponent);
 
+}
+
+void AEarth::NotifyEnemyDown()
+{
+	currentIndex = 0;
+	target = nullptr;
+}
+
+void AEarth::NotifyEnemyHit()
+{
+	currentIndex--;
 }
 

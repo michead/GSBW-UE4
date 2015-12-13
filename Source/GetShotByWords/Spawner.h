@@ -20,6 +20,20 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
-	
-	
+	void SpawnAsteroid();
+
+	const FTransform GetAsteroidInitialTransform();
+	const FVector GetAsteroidInitialLoc();
+	const FRotator GetAsteroidInitialRot();
+	const FVector GetAsteroidInitialScale();
+
+	FVector GetRandLocFromBounds(FVector a, FVector b);
+
+	float GetSpawnTimeout();
+	float GetForceMagnitude();
+
+	FTimerHandle timerHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	TArray<FVector> spawnBounds;
 };

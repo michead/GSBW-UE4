@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GetShotByWords.h"
+#include "Earth.h"
+#include "GameUtils.h"
 #include "Asteroid.h"
 
 
@@ -13,11 +15,15 @@ AAsteroid::AAsteroid()
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> RocketAsset(TEXT("/Game/Meshes/Shape_Sphere"));
+	if (RocketAsset.Succeeded())
+	{
+		mesh->SetStaticMesh(RocketAsset.Object);
+	}
 	mesh->AttachTo(RootComponent);
-	
-	FScriptDelegate hitDelegate;
-	hitDelegate.BindUFunction(this, TEXT("Hit"));
-	this->OnActorHit.AddUnique(hitDelegate);
+
+	mesh->SetSimulatePhysics(true);
+	mesh->SetEnableGravity(false);
 
 	// TODO To be removed
 	word = "ciao";
@@ -28,6 +34,7 @@ void AAsteroid::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	SetLifeSpan(ASTEROID_LIFESPAN);
 }
 
 // Called every frame
@@ -37,10 +44,17 @@ void AAsteroid::Tick( float DeltaTime )
 
 }
 
-void AAsteroid::Hit(class AActor* SelfActor, class AActor* OtherActor, FVector NormalImpulse, struct FHitResult Hit)
+void AAsteroid::NotifyRocketHit()
 {
-	check(GEngine);
+	word.RemoveAt(0);
+	Cast<AEarth>(GetWorld()->GetFirstPlayerController()->GetPawn())->NotifyEnemyHit();
 
-	GEngine->AddOnScreenDebugMessage(0, 0, FColor::Red, TEXT("Asteroid hit!"));
+	if (!word.Len()) NotifyDestroy();
+}
+
+void AAsteroid::NotifyDestroy()
+{
+	Cast<AEarth>(GetWorld()->GetFirstPlayerController()->GetPawn())->NotifyEnemyDown();
+	Destroy();
 }
 
