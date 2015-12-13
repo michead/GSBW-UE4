@@ -2,7 +2,3 @@
 
 #include "GetShotByWords.h"
 #include "GameUtils.h"
-
-
-
-

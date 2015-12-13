@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Object.h"
+#include "Asteroid.h"
 #include "GameUtils.generated.h"
 
 /**

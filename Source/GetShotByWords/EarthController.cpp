@@ -49,15 +49,28 @@ void AEarthController::ShootWord(TCHAR letter)
 
 bool AEarthController::LockTarget(TCHAR letter)
 {
+	AAsteroid* target = nullptr;
+	float distance = 100000000.f;
+
 	for (TActorIterator<AAsteroid> iter(GetWorld()); iter; ++iter)
 	{
 		if ((*iter)->word.GetCharArray()[0] == letter)
 		{
-			Cast<AEarth>(GetPawn())->target = *iter;
-			return true;
+			float newDistance = FVector::Dist(GetPawn()->GetActorLocation(), (*iter)->GetActorLocation());
+			if (newDistance < distance)
+			{
+				distance = newDistance;
+				target = *iter;
+			}
 		}
 	}
 
+	if (target)
+	{
+		Cast<AEarth>(GetPawn())->target = target;
+		return true;
+	}
+	
 	return false;
 }
 
