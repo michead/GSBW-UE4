@@ -12,11 +12,8 @@ ASpawner::ASpawner()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-
-	spawnBounds.Add(DEFAULT_UPPER_LEFT_BOUND);
-	spawnBounds.Add(DEFAULT_UPPER_RIGHT_BOUND);
-	spawnBounds.Add(DEFAULT_LOWER_LEFT_BOUND);
-	spawnBounds.Add(DEFAULT_LOWER_RIGHT_BOUND);
+	SetBounds();
+	LoadWords();
 }
 
 // Called when the game starts or when spawned
@@ -99,7 +96,27 @@ FVector ASpawner::GetRandLocFromBounds(FVector a, FVector b)
 
 FString ASpawner::GetWord()
 {
-	// TODO Just a stub
-	return "ciao";
+	check(words.Num())
+
+	int index = FMath::RandRange(0, words.Num() - 1);
+	return words[index];
+}
+
+void ASpawner::LoadWords()
+{
+	wordFile = FPaths::GameContentDir() + WORDS_FILE_RELATIVE_PATH;
+	wordsStr = "";
+	FFileHelper::LoadFileToString(wordsStr, *wordFile);
+	wordsStr.ParseIntoArray(words, _T("\n"), true);
+}
+
+void ASpawner::SetBounds()
+{
+	spawnBounds.Empty();
+
+	spawnBounds.Add(DEFAULT_UPPER_LEFT_BOUND);
+	spawnBounds.Add(DEFAULT_UPPER_RIGHT_BOUND);
+	spawnBounds.Add(DEFAULT_LOWER_LEFT_BOUND);
+	spawnBounds.Add(DEFAULT_LOWER_RIGHT_BOUND);
 }
 

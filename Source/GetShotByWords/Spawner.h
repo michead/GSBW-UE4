@@ -37,4 +37,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	TArray<FVector> spawnBounds;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	FString wordFile;
+
+	FString wordsStr;
+	TArray<FString> words;
+
+	UFUNCTION(BlueprintCallable, Category = Gameplay)
+	void LoadWords();
+
+	UFUNCTION(BlueprintCallable, Category = Gameplay)
+	void SetBounds();
 };

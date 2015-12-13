@@ -27,3 +27,4 @@ const FVector DEFAULT_LOWER_LEFT_BOUND = FVector(-600.f, -1000.f, 0);
 const FVector DEFAULT_LOWER_RIGHT_BOUND = FVector(-600.f, 1000.f, 0);
 const float DEFAULT_SPAWNER_FORCE_MAGNITUDE = 1000000.f;
 const float ASTEROID_LIFESPAN = 30.f;
+const FString WORDS_FILE_RELATIVE_PATH = "Data\\words.txt";
