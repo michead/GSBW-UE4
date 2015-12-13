@@ -75,3 +75,9 @@ void AEarth::NotifyEnemyHit()
 	currentIndex--;
 }
 
+void AEarth::SwitchTarget()
+{
+	target = nullptr;
+	currentIndex = 0;
+}
+

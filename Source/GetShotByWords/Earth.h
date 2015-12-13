@@ -43,6 +43,7 @@ public:
 
 	void NotifyEnemyHit();
 	void NotifyEnemyDown();
+	void SwitchTarget();
 
 	AAsteroid* target;
 	int currentIndex;

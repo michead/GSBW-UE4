@@ -30,6 +30,8 @@ class GETSHOTBYWORDS_API AEarthController : public APlayerController
 
 	bool CheckLetter(TCHAR letter);
 
+	void SwitchTarget();
+
 	// Mimic button down event
 	float lastVal;
 };

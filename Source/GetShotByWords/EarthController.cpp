@@ -20,6 +20,7 @@ void AEarthController::SetupInputComponent()
 	}
 
 	InputComponent->BindAxis("Alphabet", this, &AEarthController::HandleAlphaInput);
+	InputComponent->BindAction("SwitchTarget", EInputEvent::IE_Pressed, this, &AEarthController::SwitchTarget);
 }
 
 void AEarthController::HandleAlphaInput(float value)
@@ -97,4 +98,9 @@ bool AEarthController::CheckLetter(TCHAR letter)
 	AAsteroid* target = earth->target;
 
 	return target->word.Len() > 0 && target->word.GetCharArray()[earth->currentIndex] == letter;
+}
+
+void AEarthController::SwitchTarget()
+{
+	Cast<AEarth>(GetPawn())->SwitchTarget();
 }

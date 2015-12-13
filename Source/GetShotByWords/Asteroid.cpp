@@ -24,9 +24,6 @@ AAsteroid::AAsteroid()
 
 	mesh->SetSimulatePhysics(true);
 	mesh->SetEnableGravity(false);
-
-	// TODO To be removed
-	word = "ciao";
 }
 
 // Called when the game starts or when spawned

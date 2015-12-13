@@ -29,6 +29,7 @@ public:
 
 	FVector GetRandLocFromBounds(FVector a, FVector b);
 
+	FString GetWord();
 	float GetSpawnTimeout();
 	float GetForceMagnitude();
 

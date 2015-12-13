@@ -45,6 +45,8 @@ void ASpawner::SpawnAsteroid()
 	UStaticMeshComponent* meshComp = Cast<UStaticMeshComponent>(asteroid->GetComponentByClass(UStaticMeshComponent::StaticClass()));
 	meshComp->AddForce(direction * GetForceMagnitude());
 
+	asteroid->word = GetWord();
+
 	GetWorldTimerManager().ClearTimer(timerHandle);
 	GetWorldTimerManager().SetTimer(timerHandle, this, &ASpawner::SpawnAsteroid, GetSpawnTimeout());
 }
@@ -93,5 +95,11 @@ FVector ASpawner::GetRandLocFromBounds(FVector a, FVector b)
 {
 	float r = FMath::FRand();
 	return r * a + (1 - r) * b;
+}
+
+FString ASpawner::GetWord()
+{
+	// TODO Just a stub
+	return "ciao";
 }
 
