@@ -107,7 +107,7 @@ void ASpawner::LoadWords()
 	wordFile = FPaths::GameContentDir() + WORDS_FILE_RELATIVE_PATH;
 	wordsStr = "";
 	FFileHelper::LoadFileToString(wordsStr, *wordFile);
-	wordsStr.ParseIntoArray(words, _T("\n"), true);
+	wordsStr.ParseIntoArray(words, _T("\r\n"), true);
 }
 
 void ASpawner::SetBounds()

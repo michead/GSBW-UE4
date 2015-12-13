@@ -54,9 +54,11 @@ void AAsteroid::Tick( float DeltaTime )
 void AAsteroid::NotifyRocketHit()
 {
 	word.RemoveAt(0);
+	textComp->SetText(word);
+
 	Cast<AEarth>(GetWorld()->GetFirstPlayerController()->GetPawn())->NotifyEnemyHit();
 
-	if (!word.Len()) NotifyDestroy();
+	if (word.IsEmpty()) NotifyDestroy();
 }
 
 void AAsteroid::NotifyDestroy()
