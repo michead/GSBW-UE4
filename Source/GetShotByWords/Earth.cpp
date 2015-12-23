@@ -80,3 +80,8 @@ void AEarth::SwitchTarget()
 	currentIndex = 0;
 }
 
+float AEarth::GetEarthRadius()
+{
+	return mesh->GetCollisionShape().GetSphereRadius();
+}
+

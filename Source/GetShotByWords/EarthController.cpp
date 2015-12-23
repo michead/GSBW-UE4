@@ -86,13 +86,14 @@ void AEarthController::FireRocket(AAsteroid* target, TCHAR letter)
 	check(target);
 
 	AEarth* earth = Cast<AEarth>(GetPawn());
+	int earthRadius = earth->GetEarthRadius();
 
 	FVector earthLocation = earth->GetActorLocation();
 	FRotator earthRotation = earth->GetActorRotation();
 
 	FVector direction = target->GetActorLocation() - earthLocation;
 	direction.Normalize();
-	FVector spawnLocation = earthLocation + direction * ROCKET_SPAWN_LOCATION_OFFSET;
+	FVector spawnLocation = earthLocation + direction * earthRadius + ROCKET_SPAWN_LOCATION_OFFSET;
 
 	ARocket* rocket = Cast<ARocket>(GetWorld()->SpawnActor(ARocket::StaticClass(), &spawnLocation, &earthRotation));
 	rocket->target = target;

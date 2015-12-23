@@ -2,6 +2,7 @@
 
 #include "GetShotByWords.h"
 #include "Earth.h"
+#include "AsteroidExplosion.h"
 #include "GameUtils.h"
 #include "Asteroid.h"
 
@@ -64,18 +65,28 @@ void AAsteroid::NotifyRocketHit()
 void AAsteroid::NotifyDestroy()
 {
 	Cast<AEarth>(GetWorld()->GetFirstPlayerController()->GetPawn())->NotifyEnemyDown();
+	SpawnExplosion();
 	Destroy();
 }
 
 float AAsteroid::GetAsteroidRadius()
 {
-	// TODO Extend this
-	return 50.f;
+	return mesh->GetCollisionShape().GetSphereRadius();
 }
 
 void AAsteroid::SetWord(FString w)
 {
 	word = w;
 	textComp->SetText(word);
+}
+
+void AAsteroid::SpawnExplosion()
+{
+	const FTransform transform = GetTransform();
+	AAsteroidExplosion* explosion = GetWorld()->SpawnActorDeferred<AAsteroidExplosion>(AAsteroidExplosion::StaticClass(), transform);
+	
+	explosion->staticMesh = mesh;
+
+	UGameplayStatics::FinishSpawningActor(explosion, transform);
 }
 

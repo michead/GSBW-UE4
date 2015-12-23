@@ -41,6 +41,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
 	FRotator cameraRotation;
 
+	UFUNCTION(BlueprintCallable, Category = Gameplay)
+	float GetEarthRadius();
+
 	void NotifyEnemyHit();
 	void NotifyEnemyDown();
 	void SwitchTarget();

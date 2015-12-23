@@ -38,5 +38,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Gameplay)
 	void SetWord(FString w);
 
+	UFUNCTION(BlueprintCallable, Category = Gameplay)
+	void SpawnExplosion();
+
 	FString word;
 };
