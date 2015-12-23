@@ -25,13 +25,14 @@ const FVector DEFAULT_UPPER_LEFT_BOUND = FVector(600.f, -1000.f, 0);
 const FVector DEFAULT_UPPER_RIGHT_BOUND = FVector(600.f, 1000.f, 0);
 const FVector DEFAULT_LOWER_LEFT_BOUND = FVector(-600.f, -1000.f, 0);
 const FVector DEFAULT_LOWER_RIGHT_BOUND = FVector(-600.f, 1000.f, 0);
-const float DEFAULT_SPAWNER_FORCE_MAGNITUDE = 1000000.f;
+const float DEFAULT_SPAWNER_FORCE_MAGNITUDE = 10000.f;
 const float ASTEROID_LIFESPAN = 30.f;
 const FString WORDS_FILE_RELATIVE_PATH = "Data\\words.txt";
 const float EXPLOSION_DURATION = 4.f;
 const int ROCKET_DAMAGE_AMOUNT = 1000000000;
 const int ROCKET_IMPULSE_STRENGTH = 500;
 const float EXPLOSION_FADEOUT_SPEED = 0.5f;
+const int INITIAL_PLAYER_HEALTH = 100;
 
 enum GSBWState
 {

@@ -28,10 +28,10 @@ AEarth::AEarth()
 	}
 	mesh->AttachTo(RootComponent);
 
-	// Default force applied to rocket
 	forceMagnitude = DEFAULT_FORCE_MAGNITUDE_TO_ROCKET;
 
 	currentIndex = 0;
+	health = INITIAL_PLAYER_HEALTH;
 }
 
 void AEarth::OnConstruction(const FTransform& transform)
@@ -46,7 +46,6 @@ void AEarth::OnConstruction(const FTransform& transform)
 void AEarth::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -83,5 +82,24 @@ void AEarth::SwitchTarget()
 float AEarth::GetEarthRadius()
 {
 	return mesh->GetCollisionShape().GetSphereRadius();
+}
+
+void AEarth::NotifyAsteroidHit(int damage)
+{
+	health -= damage;
+	if (health <= 0)
+	{
+		health = 0;
+		EndGame();
+	}
+}
+
+void AEarth::EndGame()
+{
+	// TODO
+	check(GEngine);
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, "Game Over");
+
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
 }
 

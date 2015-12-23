@@ -20,6 +20,8 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rendering)
 	UStaticMeshComponent* mesh;
 
@@ -42,4 +44,5 @@ public:
 	void SpawnExplosion();
 
 	FString word;
+	int initialWordLen;
 };

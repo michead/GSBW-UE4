@@ -45,12 +45,10 @@ void AAsteroidExplosion::OnConstruction(const FTransform& transform)
 {
 	SetDestructibleMeshProps();
 
-
-
 	destructMesh->SetSimulatePhysics(true);
 	destructMesh->SetEnableGravity(false);
 
-	destructMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	destructMesh->SetCollisionProfileName("OverlapAll");
 }
 
 void AAsteroidExplosion::SetDestructibleMeshProps()

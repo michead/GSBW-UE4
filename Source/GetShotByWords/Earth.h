@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Asteroid.h"
+#include "GameplayHUD.h"
 #include "GameFramework/Pawn.h"
 #include "Earth.generated.h"
 
@@ -11,7 +12,7 @@ class GETSHOTBYWORDS_API AEarth : public APawn
 {
 	GENERATED_BODY()
 
-		float health;
+	int health;
 	bool isInputEnabled;
 
 public:
@@ -47,9 +48,12 @@ public:
 	void NotifyEnemyHit();
 	void NotifyEnemyDown();
 	void SwitchTarget();
+	void NotifyAsteroidHit(int damage);
+
+	UFUNCTION(BlueprintCallable, Category = Gameplay)
+	void EndGame();
 
 	AAsteroid* target;
 	int currentIndex;
-
 	float forceMagnitude;
 };

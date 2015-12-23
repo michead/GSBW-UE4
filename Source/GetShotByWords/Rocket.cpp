@@ -57,8 +57,6 @@ void ARocket::Fire()
 
 void ARocket::NotifyActorBeginOverlap(AActor* OtherActor)
 {
-	check(GEngine);
-
 	if (OtherActor == target && target->word.GetCharArray()[0] == letter)
 	{
 		target->NotifyRocketHit();

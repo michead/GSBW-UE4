@@ -23,6 +23,8 @@ AAsteroid::AAsteroid()
 	mesh->SetRelativeRotation(FRotator::ZeroRotator);
 	mesh->SetSimulatePhysics(true);
 	mesh->SetEnableGravity(false);
+	mesh->SetCollisionProfileName("OverlapAll");
+	mesh->bGenerateOverlapEvents = true;
 
 	RootComponent = mesh;
 
@@ -79,6 +81,7 @@ void AAsteroid::SetWord(FString w)
 {
 	word = w;
 	textComp->SetText(word);
+	initialWordLen = word.Len();
 }
 
 void AAsteroid::SpawnExplosion()
@@ -91,3 +94,14 @@ void AAsteroid::SpawnExplosion()
 	UGameplayStatics::FinishSpawningActor(explosion, transform);
 }
 
+void AAsteroid::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	AEarth* earth = Cast<AEarth>(OtherActor);
+
+	if (earth)
+	{
+		earth->NotifyAsteroidHit(initialWordLen);
+		SpawnExplosion();
+		Destroy();
+	}
+}
