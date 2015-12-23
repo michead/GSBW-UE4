@@ -22,13 +22,16 @@ public:
 
 	virtual void OnConstruction(const FTransform& transform) override;
 
-	void AAsteroidExplosion::GetAndSetDestructibleMesh();
+	void AAsteroidExplosion::SetDestructibleMeshProps();
 
 	void Explode();
+
+	void FadeOut(float DeltaTime);
 
 	FVector GetImpactLocation();
 	FVector GetImpulseDirection();
 
 	UStaticMeshComponent* staticMesh;
 	UDestructibleComponent* destructMesh;
+	UMaterialInstanceDynamic* dynamicMaterial;
 };

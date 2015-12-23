@@ -35,6 +35,7 @@ AAsteroid::AAsteroid()
 	textComp->HorizontalAlignment = EHorizTextAligment::EHTA_Center;
 	textComp->SetXScale(2);
 	textComp->SetYScale(2);
+	textComp->SetMobility(EComponentMobility::Movable);
 }
 
 // Called when the game starts or when spawned

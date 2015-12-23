@@ -11,7 +11,16 @@ AAsteroidExplosion::AAsteroidExplosion()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	RootComponent = CreateDefaultSubobject<USceneComponent>("RootComponent");
+	destructMesh = CreateDefaultSubobject <UDestructibleComponent>("DestructibleMesh");
+
+	FString meshPath = "/Game/Meshes/D_Shape_Sphere";
+	static ConstructorHelpers::FObjectFinder<UDestructibleMesh> AsteroidAsset(*meshPath);
+	if (AsteroidAsset.Succeeded())
+	{
+		destructMesh->SetDestructibleMesh(AsteroidAsset.Object);
+	}
+
+	RootComponent = destructMesh;
 }
 
 // Called when the game starts or when spawned
@@ -20,6 +29,7 @@ void AAsteroidExplosion::BeginPlay()
 	Super::BeginPlay();
 	
 	SetLifeSpan(EXPLOSION_DURATION);
+
 	Explode();
 }
 
@@ -28,14 +38,14 @@ void AAsteroidExplosion::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 
+	FadeOut(DeltaTime);
 }
 
 void AAsteroidExplosion::OnConstruction(const FTransform& transform)
 {
-	GetAndSetDestructibleMesh();
+	SetDestructibleMeshProps();
 
-	destructMesh->SetRelativeLocation(FVector::ZeroVector);
-	destructMesh->AttachTo(RootComponent);
+
 
 	destructMesh->SetSimulatePhysics(true);
 	destructMesh->SetEnableGravity(false);
@@ -43,19 +53,15 @@ void AAsteroidExplosion::OnConstruction(const FTransform& transform)
 	destructMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 }
 
-void AAsteroidExplosion::GetAndSetDestructibleMesh()
+void AAsteroidExplosion::SetDestructibleMeshProps()
 {
 	float radius = staticMesh->GetCollisionShape().GetSphereRadius();
-	FString meshPath = "/Game/Meshes/D_Shape_Sphere_";
-	// meshPath.AppendInt((int)radius);
+	
+	// TODO Set scale
+	// destructMesh->SetWorldScale3D(FVector(radius));
 
-	static ConstructorHelpers::FObjectFinder<UDestructibleMesh> AsteroidAsset(*meshPath);
-	if (AsteroidAsset.Succeeded())
-	{
-		destructMesh->SetDestructibleMesh(AsteroidAsset.Object);
-	}
-
-	destructMesh->SetMaterial(0, staticMesh->GetMaterial(0)->GetMaterial());
+	dynamicMaterial = UMaterialInstanceDynamic::Create(staticMesh->GetMaterial(0)->GetMaterial(), this);
+	destructMesh->SetMaterial(0, dynamicMaterial);
 }
 
 void AAsteroidExplosion::Explode()
@@ -75,5 +81,12 @@ FVector AAsteroidExplosion::GetImpulseDirection()
 	direction.Normalize();
 
 	return direction;
+}
+
+void AAsteroidExplosion::FadeOut(float DeltaTime)
+{
+	float currentOpacity;
+	dynamicMaterial->GetScalarParameterValue("Opacity", currentOpacity);
+	dynamicMaterial->SetScalarParameterValue("Opacity", currentOpacity - DeltaTime * EXPLOSION_FADEOUT_SPEED);
 }
 
