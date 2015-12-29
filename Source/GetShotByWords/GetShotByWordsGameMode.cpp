@@ -10,6 +10,8 @@ AGetShotByWordsGameMode::AGetShotByWordsGameMode()
 {
 	DefaultPawnClass = AEarth::StaticClass();
 	PlayerControllerClass = AEarthController::StaticClass();
+	static ConstructorHelpers::FClassFinder <AHUD> GSBWHUD_BP(TEXT("/Game/Blueprints/GSBWHUD_BP"));
+	HUDClass = (UClass*)GSBWHUD_BP.Class;
 }
 
 void AGetShotByWordsGameMode::SetGamePause(bool isGamePaused)

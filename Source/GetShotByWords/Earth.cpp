@@ -30,6 +30,7 @@ AEarth::AEarth()
 
 	forceMagnitude = DEFAULT_FORCE_MAGNITUDE_TO_ROCKET;
 
+	score = 0;
 	currentIndex = 0;
 	health = INITIAL_PLAYER_HEALTH;
 }
@@ -46,6 +47,8 @@ void AEarth::OnConstruction(const FTransform& transform)
 void AEarth::BeginPlay()
 {
 	Super::BeginPlay();
+
+	initialHealth = health;
 }
 
 // Called every frame
@@ -99,6 +102,8 @@ void AEarth::EndGame()
 	// TODO
 	check(GEngine);
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, "Game Over");
+
+	SpawnExplosion(GetWorld(), GetTransform(), mesh);
 
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 }

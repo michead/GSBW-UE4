@@ -68,7 +68,7 @@ void AAsteroid::NotifyRocketHit()
 void AAsteroid::NotifyDestroy()
 {
 	Cast<AEarth>(GetWorld()->GetFirstPlayerController()->GetPawn())->NotifyEnemyDown();
-	SpawnExplosion();
+	SpawnExplosion(GetWorld(), GetTransform(), mesh);
 	Destroy();
 }
 
@@ -84,16 +84,6 @@ void AAsteroid::SetWord(FString w)
 	initialWordLen = word.Len();
 }
 
-void AAsteroid::SpawnExplosion()
-{
-	const FTransform transform = GetTransform();
-	AAsteroidExplosion* explosion = GetWorld()->SpawnActorDeferred<AAsteroidExplosion>(AAsteroidExplosion::StaticClass(), transform);
-	
-	explosion->staticMesh = mesh;
-
-	UGameplayStatics::FinishSpawningActor(explosion, transform);
-}
-
 void AAsteroid::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	AEarth* earth = Cast<AEarth>(OtherActor);
@@ -101,7 +91,7 @@ void AAsteroid::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (earth)
 	{
 		earth->NotifyAsteroidHit(initialWordLen);
-		SpawnExplosion();
+		SpawnExplosion(GetWorld(), GetTransform(), mesh);
 		Destroy();
 	}
 }

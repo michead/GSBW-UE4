@@ -34,6 +34,8 @@ const int ROCKET_IMPULSE_STRENGTH = 500;
 const float EXPLOSION_FADEOUT_SPEED = 0.5f;
 const int INITIAL_PLAYER_HEALTH = 100;
 
+void SpawnExplosion(UWorld* world, FTransform tranform, UStaticMeshComponent* mesh);
+
 enum GSBWState
 {
 	EASY,

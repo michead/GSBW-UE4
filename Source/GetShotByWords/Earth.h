@@ -12,7 +12,6 @@ class GETSHOTBYWORDS_API AEarth : public APawn
 {
 	GENERATED_BODY()
 
-	int health;
 	bool isInputEnabled;
 
 public:
@@ -54,6 +53,14 @@ public:
 	void EndGame();
 
 	AAsteroid* target;
-	int currentIndex;
+	int8 currentIndex;
 	float forceMagnitude;
+
+	UPROPERTY(BlueprintReadOnly, Category = Gameplay)
+	int32 health;
+
+	UPROPERTY(BlueprintReadWrite, Category = Gameplay)
+	int32 initialHealth;
+
+	int32 score;
 };
