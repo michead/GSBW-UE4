@@ -22,7 +22,7 @@ public:
 
 	virtual void OnConstruction(const FTransform& transform) override;
 
-	void AAsteroidExplosion::SetDestructibleMeshProps();
+	void SetDestructibleMeshProps();
 
 	void Explode();
 
