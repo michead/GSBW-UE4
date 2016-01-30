@@ -20,8 +20,8 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
     
-    virtual void OnCharTyped();
-    virtual void OnWordTyped();
+    virtual void OnCharTyped() PURE_VIRTUAL(ATypableActor::OnCharTyped,;);
+    virtual void OnWordTyped() PURE_VIRTUAL(ATypableActor::OnWordTyped,;);
     
     virtual FString GetWord();
     

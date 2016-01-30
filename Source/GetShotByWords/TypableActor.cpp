@@ -26,16 +26,6 @@ void ATypableActor::Tick( float DeltaTime )
 
 }
 
-void ATypableActor::OnCharTyped()
-{
-    
-}
-
-void ATypableActor::OnWordTyped()
-{
-    
-}
-
 FString ATypableActor::GetWord()
 {
     return word;

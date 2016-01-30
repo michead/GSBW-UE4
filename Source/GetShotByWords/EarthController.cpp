@@ -42,9 +42,14 @@ void AEarthController::ShootWord(TCHAR letter)
 	AAsteroid* target = Cast<AEarth>(GetPawn())->target;
 	
 	if (!target && !LockTarget(letter)) return;
-	if (!CheckLetter(letter)) return;
-
-	FireRocket(Cast<AEarth>(GetPawn())->target, letter);
+	if (!CheckLetter(letter))
+    {
+        GetWorld()->GetActorCount();
+    }
+    else
+    {
+    	FireRocket(Cast<AEarth>(GetPawn())->target, letter);
+    }
 }
 
 bool AEarthController::LockTarget(TCHAR letter)
