@@ -15,7 +15,7 @@ enum class EGSBWDifficulty : uint8 {
   NORMAL,
   HARD,
   BARUCH,
-  NUM_DIFFICULTIES // 4
+  NUM_DIFFICULTIES
 };
 
 /**
@@ -33,8 +33,9 @@ class GSBW_API AGSBWGameMode : public AGameMode
 
 private:
   void StartChangeDifficultyCoroutine();
-  void ChangeDifficulty();
+  void BumpDifficulty();
   float GetCurrentDifficultyDuration();
 
   FTimerHandle TimerHandle;
+  EGSBWDifficulty currentDifficulty;
 };

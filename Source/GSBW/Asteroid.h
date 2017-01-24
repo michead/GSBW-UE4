@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "GSBWCommon.h"
 #include "AsteroidStructs.h"
 #include "Asteroid.generated.h"
 
@@ -25,6 +26,11 @@ public:
   virtual void OnEarthHit(const FHitResult& hit);
   virtual void OnRocketHit(const FHitResult& hit);
   virtual void Explode(const FHitResult& hit);
+  
+  // Asteroid special actions
+  virtual void OnEarthHitAction() {}
+  virtual void OnRocketHitAction() {}
+  virtual void OnExplodeAction() PURE_VIRTUAL
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
   FString word;

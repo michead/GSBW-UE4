@@ -9,16 +9,18 @@ void AGSBWGameMode::InitGame(const FString& MapName, const FString& Options, FSt
 }
 
 void AGSBWGameMode::StartChangeDifficultyCoroutine() {
+  currentDifficulty = EGSBWDifficulty::EASY;
   GetWorld()->GetTimerManager().SetTimer(
     TimerHandle,
     this,
-    &AGSBWGameMode::ChangeDifficulty,
+    &AGSBWGameMode::BumpDifficulty,
     GetCurrentDifficultyDuration(),
     true);
 }
 
-void AGSBWGameMode::ChangeDifficulty() {
-
+void AGSBWGameMode::BumpDifficulty() {
+  check(static_cast<uint8>(currentDifficulty) < (static_cast<uint8>(EGSBWDifficulty::NUM_DIFFICULTIES) - 1));
+  currentDifficulty = static_cast<EGSBWDifficulty>(static_cast<uint8>(currentDifficulty) + 1);
 }
 
 float AGSBWGameMode::GetCurrentDifficultyDuration() {
