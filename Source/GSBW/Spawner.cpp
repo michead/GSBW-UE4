@@ -16,13 +16,37 @@ ASpawner::ASpawner()
 void ASpawner::BeginPlay()
 {
 	Super::BeginPlay();
-	
+    StartSpawnCoroutine();
 }
 
 // Called every frame
 void ASpawner::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
+    ComputeSpawnerBounds();
+}
+
+void ASpawner::StartSpawnCoroutine() {
+  GetWorld()->GetTimerManager().SetTimer(
+    TimerHandle,
+    this,
+    &ASpawner::Spawn,
+    GetCurrentDifficultySpawnInterval(),
+    true);
+}
+
+void ASpawner::Spawn() {
 
 }
 
+void ASpawner::ComputeSpawnerBounds() {
+  const FVector2D viewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+  Bounds.Add(ScreenSpaceToWorldSpace(GetWorld(), 0, 0));
+  Bounds.Add(ScreenSpaceToWorldSpace(GetWorld(), viewportSize.Y, 0));
+  Bounds.Add(ScreenSpaceToWorldSpace(GetWorld(), viewportSize.X, viewportSize.Y));
+  Bounds.Add(ScreenSpaceToWorldSpace(GetWorld(), viewportSize.X, 0));
+}
+
+float ASpawner::GetCurrentDifficultySpawnInterval() {
+  return 2.f;
+}

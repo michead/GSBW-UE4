@@ -10,7 +10,7 @@
  *
  */
 UENUM()
-enum class EGSBWDifficulty : uint8 {
+enum class EDifficulty : uint8 {
   EASY,
   NORMAL,
   HARD,
@@ -32,10 +32,10 @@ class GSBW_API AGSBWGameMode : public AGameMode
   TArray<float> DifficultyDurations;
 
 private:
-  void StartChangeDifficultyCoroutine();
+  void StartBumpDifficultyCoroutine();
   void BumpDifficulty();
   float GetCurrentDifficultyDuration();
 
   FTimerHandle TimerHandle;
-  EGSBWDifficulty currentDifficulty;
+  EDifficulty currentDifficulty;
 };
