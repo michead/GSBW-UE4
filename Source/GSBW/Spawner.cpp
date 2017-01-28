@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GSBW.h"
+#include "GSBWGameMode.h"
 #include "Spawner.h"
 
 
@@ -36,7 +37,15 @@ void ASpawner::StartSpawnCoroutine() {
 }
 
 void ASpawner::Spawn() {
+  Spawn(GetRandomAsteroidTypeForCurrentDifficulty());
+}
 
+void ASpawner::Spawn(EAsteroidType AsteroidType) {
+  switch (AsteroidType) {
+  case EAsteroidType::BASE:
+  default:
+    break;
+  }
 }
 
 void ASpawner::ComputeSpawnerBounds() {
@@ -49,4 +58,8 @@ void ASpawner::ComputeSpawnerBounds() {
 
 float ASpawner::GetCurrentDifficultySpawnInterval() {
   return 2.f;
+}
+
+EAsteroidType ASpawner::GetRandomAsteroidTypeForCurrentDifficulty() {
+  return EAsteroidType::BASE;
 }
