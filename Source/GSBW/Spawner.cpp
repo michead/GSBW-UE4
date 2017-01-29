@@ -11,15 +11,15 @@ ASpawner::ASpawner()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-    static ConstructorHelpers::FObjectFinder<UBlueprint> BaseAsteroidBP(TEXT("Blueprints/BP_BasicAsteroid"));
-    static ConstructorHelpers::FObjectFinder<UBlueprint> SlowAsteroidBP(TEXT("Blueprints/BP_SlowAsteroid"));
-    static ConstructorHelpers::FObjectFinder<UBlueprint> FreezeAsteroidBP(TEXT("Blueprints/BP_FreezeAsteroid"));
-    static ConstructorHelpers::FObjectFinder<UBlueprint> BombAsteroidBP(TEXT("Blueprints/BP_BombAsteroid"));
+    static ConstructorHelpers::FObjectFinder<UBlueprint> BasicAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_BasicAsteroid.BP_BasicAsteroid'"));
+    static ConstructorHelpers::FObjectFinder<UBlueprint> SlowAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_SlowAsteroid.BP_SlowAsteroid'"));
+    static ConstructorHelpers::FObjectFinder<UBlueprint> FreezeAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_FreezeAsteroid.BP_FreezeAsteroid'"));
+    static ConstructorHelpers::FObjectFinder<UBlueprint> BombAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_BombAsteroid.BP_BombAsteroid'"));
 
-    BPBaseAsteroid = BaseAsteroidBP.Object;
-    BPSlowAsteroid = SlowAsteroidBP.Object;
-    BPFreezeAsteroid = FreezeAsteroidBP.Object;
-    BPBombAsteroid = BombAsteroidBP.Object;
+    BasicAsteroidBPClass = BasicAsteroidBP.Object->GetClass();
+    SlowAsteroidBPClass = SlowAsteroidBP.Object->GetClass();
+    FreezeAsteroidBPClass = FreezeAsteroidBP.Object->GetClass();
+    BombAsteroidBPClass = BombAsteroidBP.Object->GetClass();
 }
 
 // Called when the game starts or when spawned
@@ -53,17 +53,17 @@ void ASpawner::Spawn(EAsteroidType AsteroidType) {
   UClass* asteroidClass;
   switch (AsteroidType) {
   case EAsteroidType::SLOW:
-    asteroidClass = BPSlowAsteroid->GetClass();
+    asteroidClass = SlowAsteroidBPClass;
     break;
   case EAsteroidType::FREEZE:
-    asteroidClass = BPFreezeAsteroid->GetClass();
+    asteroidClass = FreezeAsteroidBPClass;
     break;
   case EAsteroidType::BOMB:
-    asteroidClass = BPBombAsteroid->GetClass();
+    asteroidClass = BombAsteroidBPClass;
     break;
   case EAsteroidType::BASE:
   default:
-    asteroidClass = BPBaseAsteroid->GetClass();
+    asteroidClass = BasicAsteroidBPClass;
     break;
   }
   GetWorld()->SpawnActor(asteroidClass);
