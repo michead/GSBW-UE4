@@ -34,4 +34,8 @@ private:
   void ComputeSpawnerBounds();
 
   FTimerHandle TimerHandle;
+  UBlueprint* BPBaseAsteroid;
+  UBlueprint* BPSlowAsteroid;
+  UBlueprint* BPFreezeAsteroid;
+  UBlueprint* BPBombAsteroid;
 };

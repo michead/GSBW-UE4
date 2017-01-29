@@ -11,6 +11,15 @@ ASpawner::ASpawner()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+    static ConstructorHelpers::FObjectFinder<UBlueprint> BaseAsteroidBP(TEXT("Blueprints/BP_BasicAsteroid"));
+    static ConstructorHelpers::FObjectFinder<UBlueprint> SlowAsteroidBP(TEXT("Blueprints/BP_SlowAsteroid"));
+    static ConstructorHelpers::FObjectFinder<UBlueprint> FreezeAsteroidBP(TEXT("Blueprints/BP_FreezeAsteroid"));
+    static ConstructorHelpers::FObjectFinder<UBlueprint> BombAsteroidBP(TEXT("Blueprints/BP_BombAsteroid"));
+
+    BPBaseAsteroid = BaseAsteroidBP.Object;
+    BPSlowAsteroid = SlowAsteroidBP.Object;
+    BPFreezeAsteroid = FreezeAsteroidBP.Object;
+    BPBombAsteroid = BombAsteroidBP.Object;
 }
 
 // Called when the game starts or when spawned
@@ -41,11 +50,23 @@ void ASpawner::Spawn() {
 }
 
 void ASpawner::Spawn(EAsteroidType AsteroidType) {
+  UClass* asteroidClass;
   switch (AsteroidType) {
+  case EAsteroidType::SLOW:
+    asteroidClass = BPSlowAsteroid->GetClass();
+    break;
+  case EAsteroidType::FREEZE:
+    asteroidClass = BPFreezeAsteroid->GetClass();
+    break;
+  case EAsteroidType::BOMB:
+    asteroidClass = BPBombAsteroid->GetClass();
+    break;
   case EAsteroidType::BASE:
   default:
+    asteroidClass = BPBaseAsteroid->GetClass();
     break;
   }
+  GetWorld()->SpawnActor(asteroidClass);
 }
 
 void ASpawner::ComputeSpawnerBounds() {
