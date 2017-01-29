@@ -34,7 +34,7 @@ private:
   void ComputeSpawnerBounds();
 
   FTimerHandle TimerHandle;
-  UClass* BasicAsteroidBPClass;
+  UClass* BaseAsteroidBPClass;
   UClass* SlowAsteroidBPClass;
   UClass* FreezeAsteroidBPClass;
   UClass* BombAsteroidBPClass;

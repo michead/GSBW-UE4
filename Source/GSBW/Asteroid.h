@@ -33,11 +33,17 @@ public:
   virtual void OnExplodeAction() PURE_VIRTUAL
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
-  FString word;
+  FString Word;
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
-  EAsteroidType type;
+  EAsteroidType Type;
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
-  float speed;
+  float Speed;
+
+  // Returns current asteroid word (which might be truncated wrt the original one)
+  FString GetWord() const;
+
+protected:
+  FString WordToDisplay;
 };

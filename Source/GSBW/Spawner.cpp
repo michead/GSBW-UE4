@@ -11,12 +11,12 @@ ASpawner::ASpawner()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-    static ConstructorHelpers::FObjectFinder<UBlueprint> BasicAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_BasicAsteroid.BP_BasicAsteroid'"));
+    static ConstructorHelpers::FObjectFinder<UBlueprint> BaseAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_BaseAsteroid.BP_BaseAsteroid'"));
     static ConstructorHelpers::FObjectFinder<UBlueprint> SlowAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_SlowAsteroid.BP_SlowAsteroid'"));
     static ConstructorHelpers::FObjectFinder<UBlueprint> FreezeAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_FreezeAsteroid.BP_FreezeAsteroid'"));
     static ConstructorHelpers::FObjectFinder<UBlueprint> BombAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_BombAsteroid.BP_BombAsteroid'"));
 
-    BasicAsteroidBPClass = BasicAsteroidBP.Object->GetClass();
+    BaseAsteroidBPClass = BaseAsteroidBP.Object->GetClass();
     SlowAsteroidBPClass = SlowAsteroidBP.Object->GetClass();
     FreezeAsteroidBPClass = FreezeAsteroidBP.Object->GetClass();
     BombAsteroidBPClass = BombAsteroidBP.Object->GetClass();
@@ -63,7 +63,7 @@ void ASpawner::Spawn(EAsteroidType AsteroidType) {
     break;
   case EAsteroidType::BASE:
   default:
-    asteroidClass = BasicAsteroidBPClass;
+    asteroidClass = BaseAsteroidBPClass;
     break;
   }
   GetWorld()->SpawnActor(asteroidClass);
@@ -71,10 +71,10 @@ void ASpawner::Spawn(EAsteroidType AsteroidType) {
 
 void ASpawner::ComputeSpawnerBounds() {
   const FVector2D viewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
-  Bounds.Add(ScreenSpaceToWorldSpace(GetWorld(), 0, 0));
-  Bounds.Add(ScreenSpaceToWorldSpace(GetWorld(), viewportSize.Y, 0));
-  Bounds.Add(ScreenSpaceToWorldSpace(GetWorld(), viewportSize.X, viewportSize.Y));
-  Bounds.Add(ScreenSpaceToWorldSpace(GetWorld(), viewportSize.X, 0));
+  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), 0, 0));
+  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), viewportSize.Y, 0));
+  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), viewportSize.X, viewportSize.Y));
+  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), viewportSize.X, 0));
 }
 
 float ASpawner::GetCurrentDifficultySpawnInterval() {

@@ -14,7 +14,7 @@ AAsteroid::AAsteroid() {
 // Called when the game starts or when spawned
 void AAsteroid::BeginPlay() {
   Super::BeginPlay();
-
+  
 }
 
 // Called every frame
@@ -24,9 +24,11 @@ void AAsteroid::Tick(float DeltaTime) {
 }
 
 void AAsteroid::Init(const FAsteroidInitProps& props) {
-  type = props.type;
-  word = props.word;
-  speed = props.speed;
+  Type = props.type;
+  Word = props.word;
+  Speed = props.speed;
+
+  WordToDisplay = Word;
 }
 
 void AAsteroid::OnEarthHit(const FHitResult& hit) {
@@ -39,4 +41,8 @@ void AAsteroid::OnRocketHit(const FHitResult& hit) {
 
 void AAsteroid::Explode(const FHitResult& hit) {
 
+}
+
+FString AAsteroid::GetWord() const {
+  return WordToDisplay;
 }
