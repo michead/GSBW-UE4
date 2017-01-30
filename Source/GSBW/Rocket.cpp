@@ -27,5 +27,8 @@ void ARocket::Tick( float DeltaTime )
 }
 
 void ARocket::Init(const FRocketInitProps& props) {
-
+  Letter = props.letter;
+  Type = props.type;
+  Speed = props.speed;
+  Target = props.target;
 }

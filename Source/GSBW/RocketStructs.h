@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Engine.h"
+#include "Asteroid.h"
 #include "RocketStructs.generated.h"
 
 /**
@@ -24,4 +25,6 @@ struct FRocketInitProps {
   FString letter;
   UPROPERTY()
   float speed;
+  UPROPERTY()
+  AAsteroid* target;
 };

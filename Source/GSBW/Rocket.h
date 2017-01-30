@@ -24,4 +24,15 @@ public:
     // Asteroid virtual methods
     virtual void Init(const FRocketInitProps& props);
 	
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CPP_Gameplay)
+    FString Letter;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CPP_Gameplay)
+    ERocketType Type;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CPP_Gameplay)
+    float Speed;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CPP_Gameplay)
+    AAsteroid* Target;
 };
