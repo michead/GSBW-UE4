@@ -2,6 +2,7 @@
 
 #include "GSBW.h"
 #include "GSBWGameMode.h"
+#include "Asteroid.h"
 #include "Spawner.h"
 
 
@@ -51,6 +52,7 @@ void ASpawner::Spawn() {
 
 void ASpawner::Spawn(EAsteroidType AsteroidType) {
   UClass* asteroidClass;
+  
   switch (AsteroidType) {
   case EAsteroidType::SLOW:
     asteroidClass = SlowAsteroidBPClass;
@@ -66,7 +68,9 @@ void ASpawner::Spawn(EAsteroidType AsteroidType) {
     asteroidClass = BaseAsteroidBPClass;
     break;
   }
-  GetWorld()->SpawnActor(asteroidClass);
+
+  AAsteroid* asteroid = Cast<AAsteroid>(GetWorld()->SpawnActor(asteroidClass));
+  asteroid->Init(FAsteroidInitProps());
 }
 
 void ASpawner::ComputeSpawnerBounds() {

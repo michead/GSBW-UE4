@@ -3,6 +3,7 @@
 #include "GSBW.h"
 #include "GSBWCommon.h"
 #include "GSBWUtils.h"
+#include "Rocket.h"
 #include "Earth.h"
 
 
@@ -105,7 +106,8 @@ bool AEarth::ShootTarget(FString& Letters) {
 }
 
 void AEarth::LaunchRocket(AAsteroid* target, const FString& letter) {
-
+  ARocket* rocket = Cast<ARocket>(GetWorld()->SpawnActor(BaseRocketBPClass));
+  rocket->Init(FRocketInitProps());
 }
 
 void AEarth::OnTargetHit(AAsteroid& Asteroid) {
