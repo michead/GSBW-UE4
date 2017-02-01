@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GSBW.h"
+#include "Rocket.h"
+#include "GSBWUtils.h"
 #include "Asteroid.h"
 
 
@@ -36,7 +38,14 @@ void AAsteroid::OnEarthHit(const FHitResult& hit) {
 }
 
 void AAsteroid::OnRocketHit(const FHitResult& hit) {
-
+  ARocket* rocket = Cast<ARocket>(hit.GetActor());
+  check(rocket->Letter.Equals(GSBWUtils::GetFirstChar(Word)));
+  
+  Word.RemoveAt(0);
+  
+  if (Word.IsEmpty()) {
+    Explode(hit);
+  }
 }
 
 void AAsteroid::Explode(const FHitResult& hit) {

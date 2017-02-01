@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine.h"
+#include "GlobalEventHandler.h"
 
 namespace GSBWUtils {
   inline FVector ScreenSpaceToWorldSpace(UWorld* world, uint8 x, uint8 y) {
@@ -31,5 +32,12 @@ namespace GSBWUtils {
       if (!str1.Contains(c + "")) str2.RemoveAt(i);
       i++;
     }
+  }
+
+  inline AGlobalEventHandler* GetEventHandler(UWorld* world) {
+    TArray<AActor*> actors;
+    UGameplayStatics::GetAllActorsOfClass(world, AGlobalEventHandler::StaticClass(), actors);
+    check(actors.Num() == 1);
+    return Cast<AGlobalEventHandler>(actors[0]);
   }
 }

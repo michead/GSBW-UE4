@@ -35,4 +35,6 @@ public:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CPP_Gameplay)
     AAsteroid* Target;
+
+
 };
