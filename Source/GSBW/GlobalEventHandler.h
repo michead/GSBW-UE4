@@ -35,6 +35,6 @@ public:
     // Wraps delegates of GSBW events
     UGlobalEventHandlerComponent* EventHandler;
 
-    void BroadcastEvent(EGSBWEvent ev, GSBWEventPayload& payload);
+    void BroadcastEvent(EGSBWEvent ev, GSBWEventPayload* payload = nullptr);
     void SubscribeToEvent(EGSBWEvent ev, AActor* subscriber, GSBWEventCallback callback);
 };

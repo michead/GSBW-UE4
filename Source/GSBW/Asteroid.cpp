@@ -38,6 +38,8 @@ void AAsteroid::OnEarthHit(const FHitResult& hit) {
 }
 
 void AAsteroid::OnRocketHit(const FHitResult& hit) {
+  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::ASTEROID_HIT);
+
   ARocket* rocket = Cast<ARocket>(hit.GetActor());
   check(rocket->Letter.Equals(GSBWUtils::GetFirstChar(Word)));
   
@@ -49,7 +51,7 @@ void AAsteroid::OnRocketHit(const FHitResult& hit) {
 }
 
 void AAsteroid::Explode(const FHitResult& hit) {
-
+  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::ASTEROID_DOWN);
 }
 
 FString AAsteroid::GetWord() const {

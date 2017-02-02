@@ -27,7 +27,7 @@ void AGlobalEventHandler::Tick( float DeltaTime )
 
 }
 
-void AGlobalEventHandler::BroadcastEvent(EGSBWEvent ev, GSBWEventPayload& payload) {
+void AGlobalEventHandler::BroadcastEvent(EGSBWEvent ev, GSBWEventPayload* payload) {
   switch (ev) {
   case EGSBWEvent::ASTEROID_HIT:
     EventHandler->OnAsteroidHit.Broadcast(); break;
