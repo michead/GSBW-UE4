@@ -45,5 +45,9 @@ public:
   FString GetWord() const;
 
 protected:
+  void Disappear();
+
+  UDestructibleComponent* DestructibleComponent;
   FString WordToDisplay;
+  FTimerHandle TimerHandle;
 };

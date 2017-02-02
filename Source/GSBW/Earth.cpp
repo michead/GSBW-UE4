@@ -105,9 +105,11 @@ bool AEarth::ShootTarget(FString& Letters) {
   return ret;
 }
 
-void AEarth::LaunchRocket(AAsteroid* target, const FString& letter) {
+void AEarth::LaunchRocket(AAsteroid* _target, const FString& letter) {
   ARocket* rocket = Cast<ARocket>(GetWorld()->SpawnActor(BaseRocketBPClass));
-  rocket->Init(FRocketInitProps());
+  FRocketInitProps props;
+  props.target = _target;
+  rocket->Init(props);
 }
 
 void AEarth::OnTargetHit(AAsteroid& Asteroid) {
