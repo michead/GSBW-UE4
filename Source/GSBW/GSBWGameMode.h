@@ -26,6 +26,8 @@ class GSBW_API AGSBWGameMode : public AGameMode
 {
   GENERATED_BODY()
 
+  AGSBWGameMode();
+
   virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 
   UPROPERTY(EditAnywhere, Category=CPP_Gameplay)

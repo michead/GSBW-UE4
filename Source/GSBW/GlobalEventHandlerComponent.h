@@ -23,7 +23,11 @@ public:
 
     DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnAsteroidHit);
     DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnAsteroidDown);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnEarthHit);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnEarthDown);
     
     FLevelEventDelegate_OnAsteroidHit OnAsteroidHit;
     FLevelEventDelegate_OnAsteroidDown OnAsteroidDown;
+    FLevelEventDelegate_OnEarthHit OnEarthHit;
+    FLevelEventDelegate_OnEarthDown OnEarthDown;
 };

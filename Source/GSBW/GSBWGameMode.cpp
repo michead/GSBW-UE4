@@ -1,8 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GSBW.h"
+#include "GSBWGameState.h"
+#include "GSBWHUD.h"
+#include "Earth.h"
 #include "GSBWGameMode.h"
 
+
+AGSBWGameMode::AGSBWGameMode() {
+  DefaultPawnClass = AEarth::StaticClass();
+  GameStateClass = AGSBWGameState::StaticClass();
+  HUDClass = AGSBWHUD::StaticClass();
+}
 
 void AGSBWGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) {
   StartBumpDifficultyCoroutine();
