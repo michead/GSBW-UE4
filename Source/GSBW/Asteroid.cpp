@@ -13,8 +13,11 @@ AAsteroid::AAsteroid() {
   PrimaryActorTick.bCanEverTick = true;
 
   // Attach Destructible Mesh as Root Component
-  DestructibleComponent = CreateDefaultSubobject<UDestructibleComponent>(TEXT("RootComponent"));
+  DestructibleComponent = CreateDefaultSubobject<UDestructibleComponent>(TEXT("DestructibleComponent"));
   RootComponent = DestructibleComponent;
+
+  TextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextRenderComponent"));
+  TextRenderComponent->AttachTo(RootComponent);
 }
 
 // Called when the game starts or when spawned

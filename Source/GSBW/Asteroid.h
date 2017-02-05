@@ -48,6 +48,7 @@ protected:
   void Disappear();
 
   UDestructibleComponent* DestructibleComponent;
+  UTextRenderComponent* TextRenderComponent;
   FString WordToDisplay;
   FTimerHandle TimerHandle;
 };
