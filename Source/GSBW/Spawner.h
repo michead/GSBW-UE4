@@ -32,6 +32,9 @@ private:
   float GetCurrentDifficultySpawnInterval();
   EAsteroidType GetRandomAsteroidTypeForCurrentDifficulty();
   void ComputeSpawnerBounds();
+  void InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type);
+  FString PickAsteroidWord();
+  float PickAsteroidSpeed();
 
   FTimerHandle TimerHandle;
   UClass* BaseAsteroidBPClass;

@@ -70,7 +70,25 @@ void ASpawner::Spawn(EAsteroidType AsteroidType) {
   }
 
   AAsteroid* asteroid = Cast<AAsteroid>(GetWorld()->SpawnActor(asteroidClass));
-  asteroid->Init(FAsteroidInitProps());
+  FAsteroidInitProps props;
+  InitAsteroidProps(props, AsteroidType);
+  asteroid->Init(props);
+}
+
+void ASpawner::InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type) {
+  Props.type = Type;
+  Props.word = PickAsteroidWord();
+  Props.speed = PickAsteroidSpeed();
+}
+
+FString ASpawner::PickAsteroidWord() {
+  // TODO: This is just a stub
+  return "test";
+}
+
+float ASpawner::PickAsteroidSpeed() {
+  // TODO: This is just a stub
+  return 100.f;
 }
 
 void ASpawner::ComputeSpawnerBounds() {
