@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "Asteroid.h"
 #include "AsteroidStructs.h"
 #include "GSBWUtils.h"
 #include "Spawner.generated.h"
@@ -30,6 +31,7 @@ private:
   void Spawn();
   void Spawn(EAsteroidType AsteroidType);
   float GetCurrentDifficultySpawnInterval();
+  FVector GetRandomAsteroidLocation();
   EAsteroidType GetRandomAsteroidTypeForCurrentDifficulty();
   void ComputeSpawnerBounds();
   void InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type);
@@ -37,8 +39,8 @@ private:
   float PickAsteroidSpeed();
 
   FTimerHandle TimerHandle;
-  UClass* BaseAsteroidBPClass;
-  UClass* SlowAsteroidBPClass;
-  UClass* FreezeAsteroidBPClass;
-  UClass* BombAsteroidBPClass;
+  TSubclassOf<class AAsteroid> BaseAsteroidBPClass;
+  TSubclassOf<class AAsteroid> SlowAsteroidBPClass;
+  TSubclassOf<class AAsteroid> FreezeAsteroidBPClass;
+  TSubclassOf<class AAsteroid> BombAsteroidBPClass;
 };

@@ -29,6 +29,7 @@ class GSBW_API AGSBWGameMode : public AGameMode
   AGSBWGameMode();
 
   virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
+  virtual void HandleMatchHasStarted() override;
 
   UPROPERTY(EditAnywhere, Category=CPP_Gameplay)
   TArray<float> DifficultyDurations;
@@ -39,5 +40,5 @@ private:
   float GetCurrentDifficultyDuration();
 
   FTimerHandle TimerHandle;
-  EDifficulty currentDifficulty;
+  EDifficulty CurrentDifficulty;
 };

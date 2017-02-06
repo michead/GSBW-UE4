@@ -26,8 +26,7 @@ AEarth::AEarth()
 }
 
 void AEarth::OnConstruction(const FTransform& Transform) {
-  check(Mesh);
-  DestructibleComponent->SetDestructibleMesh(Mesh);
+  DestructibleComponent->SetDestructibleMesh(DestructibleMesh);
 }
 
 void AEarth::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
@@ -52,7 +51,12 @@ void AEarth::Tick( float DeltaTime )
 }
 
 void AEarth::HandleInput(float AxisScale) {
-  FString letter = Alphabet[AxisScale];
+  // No button has been pressed
+  if (!AxisScale) {
+    return;
+  }
+
+  FString letter = Alphabet[AxisScale - 1];
   
   // Target currently locked and not destroyed
   if (target) {

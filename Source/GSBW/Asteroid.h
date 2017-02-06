@@ -21,6 +21,8 @@ public:
   // Called every frame
   virtual void Tick(float DeltaSeconds) override;
 
+  virtual void OnConstruction(const FTransform& Transform) override;
+
   // Asteroid virtual methods
   virtual void Init(const FAsteroidInitProps& props);
   virtual void OnEarthHit(const FHitResult& hit);
@@ -30,7 +32,13 @@ public:
   // Asteroid special actions
   virtual void OnEarthHitAction() {}
   virtual void OnRocketHitAction() {}
-  virtual void OnExplodeAction() PURE_VIRTUAL
+  virtual void OnExplodeAction() {} // PURE_VIRTUAL
+
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
+  UDestructibleMesh* DestructibleMesh;
+
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Gameplay)
+  UTextRenderComponent* TextRenderComponent;
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
   FString Word;
@@ -48,7 +56,6 @@ protected:
   void Disappear();
 
   UDestructibleComponent* DestructibleComponent;
-  UTextRenderComponent* TextRenderComponent;
   FString WordToDisplay;
   FTimerHandle TimerHandle;
 };

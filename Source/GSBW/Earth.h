@@ -27,8 +27,8 @@ public:
   // Called when rocket hits target
   void OnTargetHit(AAsteroid& Asteroid);
 
-  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Rendering)
-  UDestructibleMesh* Mesh;
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
+  UDestructibleMesh* DestructibleMesh;
 
 private:
   // Binding for player input

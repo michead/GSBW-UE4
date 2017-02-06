@@ -2,7 +2,6 @@
 
 #include "GSBW.h"
 #include "GSBWGameMode.h"
-#include "Asteroid.h"
 #include "Spawner.h"
 
 
@@ -17,10 +16,10 @@ ASpawner::ASpawner()
     static ConstructorHelpers::FObjectFinder<UBlueprint> FreezeAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_FreezeAsteroid.BP_FreezeAsteroid'"));
     static ConstructorHelpers::FObjectFinder<UBlueprint> BombAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_BombAsteroid.BP_BombAsteroid'"));
 
-    BaseAsteroidBPClass = BaseAsteroidBP.Object->GetClass();
-    SlowAsteroidBPClass = SlowAsteroidBP.Object->GetClass();
-    FreezeAsteroidBPClass = FreezeAsteroidBP.Object->GetClass();
-    BombAsteroidBPClass = BombAsteroidBP.Object->GetClass();
+    BaseAsteroidBPClass = (UClass*)BaseAsteroidBP.Object->GeneratedClass;
+    SlowAsteroidBPClass = (UClass*)SlowAsteroidBP.Object->GeneratedClass;
+    FreezeAsteroidBPClass = (UClass*)FreezeAsteroidBP.Object->GeneratedClass;
+    BombAsteroidBPClass = (UClass*)BombAsteroidBP.Object->GeneratedClass;
 }
 
 // Called when the game starts or when spawned
@@ -69,7 +68,9 @@ void ASpawner::Spawn(EAsteroidType AsteroidType) {
     break;
   }
 
-  AAsteroid* asteroid = Cast<AAsteroid>(GetWorld()->SpawnActor(asteroidClass));
+  FTransform transform;
+  transform.SetLocation(GetRandomAsteroidLocation());
+  AAsteroid* asteroid = GetWorld()->SpawnActor<AAsteroid>(asteroidClass, transform);
   FAsteroidInitProps props;
   InitAsteroidProps(props, AsteroidType);
   asteroid->Init(props);
@@ -79,6 +80,14 @@ void ASpawner::InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type) 
   Props.type = Type;
   Props.word = PickAsteroidWord();
   Props.speed = PickAsteroidSpeed();
+}
+
+FVector ASpawner::GetRandomAsteroidLocation() {
+  float r = FMath::FRand() * 4, r2 = FMath::FRand();
+  if (r <= 1) return FMath::Lerp(Bounds[0], Bounds[1], r2);
+  else if (r <= 2) return FMath::Lerp(Bounds[1], Bounds[2], r2);
+  else if (r <= 3) return FMath::Lerp(Bounds[2], Bounds[3], r2);
+  else return FMath::Lerp(Bounds[3], Bounds[0], r2);
 }
 
 FString ASpawner::PickAsteroidWord() {

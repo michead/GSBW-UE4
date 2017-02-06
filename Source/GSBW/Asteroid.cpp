@@ -13,11 +13,15 @@ AAsteroid::AAsteroid() {
   PrimaryActorTick.bCanEverTick = true;
 
   // Attach Destructible Mesh as Root Component
-  DestructibleComponent = CreateDefaultSubobject<UDestructibleComponent>(TEXT("DestructibleComponent"));
+  DestructibleComponent = CreateDefaultSubobject<UDestructibleComponent>(TEXT("RootComponent"));
   RootComponent = DestructibleComponent;
 
   TextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextRenderComponent"));
-  TextRenderComponent->AttachTo(RootComponent);
+}
+
+void AAsteroid::OnConstruction(const FTransform& Transform) {
+  DestructibleComponent->SetDestructibleMesh(DestructibleMesh);
+  TextRenderComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +34,8 @@ void AAsteroid::BeginPlay() {
 void AAsteroid::Tick(float DeltaTime) {
   Super::Tick(DeltaTime);
 
+  // Update word
+  TextRenderComponent->Text = FText::FromString(WordToDisplay);
 }
 
 void AAsteroid::Init(const FAsteroidInitProps& props) {
@@ -48,11 +54,11 @@ void AAsteroid::OnRocketHit(const FHitResult& hit) {
   GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::ASTEROID_HIT);
 
   ARocket* rocket = Cast<ARocket>(hit.GetActor());
-  check(rocket->Letter.Equals(GSBWUtils::GetFirstChar(Word)));
+  check(rocket->Letter.Equals(GSBWUtils::GetFirstChar(WordToDisplay)));
   
-  Word.RemoveAt(0);
+  WordToDisplay.RemoveAt(0);
   
-  if (Word.IsEmpty()) {
+  if (WordToDisplay.IsEmpty()) {
     Explode(hit);
   }
 }

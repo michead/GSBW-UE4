@@ -9,16 +9,20 @@
 
 AGSBWGameMode::AGSBWGameMode() {
   DefaultPawnClass = AEarth::StaticClass();
-  GameStateClass = AGSBWGameState::StaticClass();
   HUDClass = AGSBWHUD::StaticClass();
 }
 
 void AGSBWGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) {
+  Super::InitGame(MapName, Options, ErrorMessage);
+}
+
+void AGSBWGameMode::HandleMatchHasStarted() {
+  Super::HandleMatchHasStarted();
   StartBumpDifficultyCoroutine();
 }
 
 void AGSBWGameMode::StartBumpDifficultyCoroutine() {
-  currentDifficulty = EDifficulty::EASY;
+  CurrentDifficulty = EDifficulty::EASY;
   GetWorld()->GetTimerManager().SetTimer(
     TimerHandle,
     this,
@@ -28,7 +32,7 @@ void AGSBWGameMode::StartBumpDifficultyCoroutine() {
 }
 
 void AGSBWGameMode::BumpDifficulty() {
-  currentDifficulty = static_cast<EDifficulty>(static_cast<uint8>(currentDifficulty) + 1);
+  CurrentDifficulty = static_cast<EDifficulty>(static_cast<uint8>(CurrentDifficulty) + 1);
 }
 
 float AGSBWGameMode::GetCurrentDifficultyDuration() {
