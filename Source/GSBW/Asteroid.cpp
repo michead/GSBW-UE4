@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GSBW.h"
+#include "Earth.h"
 #include "Rocket.h"
 #include "GSBWCommon.h"
 #include "GSBWUtils.h"
@@ -21,13 +22,22 @@ AAsteroid::AAsteroid() {
 
 void AAsteroid::OnConstruction(const FTransform& Transform) {
   DestructibleComponent->SetDestructibleMesh(DestructibleMesh);
+  DestructibleComponent->SetEnableGravity(false);
   TextRenderComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 // Called when the game starts or when spawned
 void AAsteroid::BeginPlay() {
   Super::BeginPlay();
+
+  TArray<AActor*> actors;
+  UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEarth::StaticClass(), actors);
   
+  FVector direction = (actors[0]->GetActorLocation() - GetActorLocation());
+  direction.Normalize();
+
+  // Self-apply force
+  DestructibleComponent->AddImpulse(direction * Speed);
 }
 
 // Called every frame

@@ -27,6 +27,9 @@ public:
   // Called when rocket hits target
   void OnTargetHit(AAsteroid& Asteroid);
 
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Camera)
+  UCameraComponent* Camera;
+
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
   UDestructibleMesh* DestructibleMesh;
 

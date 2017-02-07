@@ -23,6 +23,9 @@ AEarth::AEarth()
     // Reference(s) to rocket's BP class(es)
     static ConstructorHelpers::FObjectFinder<UBlueprint> BaseRocketBP(TEXT("Blueprint'/Game/Blueprints/BP_BaseRocket.BP_BaseRocket'"));
     BaseRocketBPClass = BaseRocketBP.Object->GetClass();
+
+    Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+    Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 void AEarth::OnConstruction(const FTransform& Transform) {

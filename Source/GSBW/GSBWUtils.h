@@ -3,11 +3,14 @@
 #include "Engine.h"
 #include "GlobalEventHandler.h"
 
+#define LINE_LEN 100000
+
 namespace GSBWUtils {
-  inline FVector ScreenSpaceToWorldSpace(UWorld* world, uint8 x, uint8 y) {
+  inline FVector ScreenSpaceToWorldSpace(UWorld* world, uint8 x, uint8 y, float z) {
     FVector worldLocation, worldDirection;
     world->GetFirstPlayerController()->DeprojectScreenPositionToWorld(x, y, worldLocation, worldDirection);
-    return worldLocation;
+    FPlane plane{ FVector(0, 0, z), FVector(0, 0, 1) };
+    return FMath::LinePlaneIntersection(worldLocation, worldLocation + worldDirection * LINE_LEN, plane);
   }
 
   inline FString GetCharAt(const FString& str, uint8 index) {
