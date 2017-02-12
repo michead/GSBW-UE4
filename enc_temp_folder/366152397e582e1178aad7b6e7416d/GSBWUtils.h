@@ -4,16 +4,21 @@
 #include "GlobalEventHandler.h"
 
 #define LINE_LEN        100000
-#define S2W_MULTIPLIER  10
+#define S2W_MULTIPLIER  1
 
 namespace GSBWUtils {
-  inline FVector ScreenSpaceToWorldSpace(UWorld* world, uint8 x, uint8 y, float z) {
+  inline FVector ScreenSpaceToWorldSpace(const UWorld* world, const FVector2D& viewportSize, uint8 x, uint8 y, float z) {
     // FIXE: This is the proper way to implement this, but, alas, it does not work
-    FVector worldLocation, worldDirection;
-    APlayerController* controller = UGameplayStatics::GetPlayerController(world, 0);
-    check(controller->DeprojectScreenPositionToWorld(x, y, worldLocation, worldDirection));
-    FPlane plane{ FVector(0, 0, z), FVector(0, 0, 1) };
-    return FMath::LinePlaneIntersection(worldLocation, worldLocation + worldDirection * LINE_LEN, plane);
+    // FVector worldLocation, worldDirection;
+    // APlayerController* controller = UGameplayStatics::GetPlayerController(world, 0);
+    // check(controller->DeprojectScreenPositionToWorld(x, y, worldLocation, worldDirection));
+    // FPlane plane{ FVector(0, 0, z), FVector(0, 0, 1) };
+    // return FMath::LinePlaneIntersection(worldLocation, worldLocation + worldDirection * LINE_LEN, plane);
+
+    float xF = x - (viewportSize.X * 0.5f);
+    float yF = y - (viewportSize.Y * 0.5f);
+
+    return FVector(xF * S2W_MULTIPLIER, yF * S2W_MULTIPLIER, z);
   }
 
   inline FString GetCharAt(const FString& str, uint8 index) {

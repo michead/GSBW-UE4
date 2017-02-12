@@ -38,7 +38,7 @@ private:
   FString PickAsteroidWord();
   float PickAsteroidSpeed();
 
-  FTimerHandle TimerHandle;
+  FTimerHandle TimerHandle_0, TimerHandle_1;
   TSubclassOf<class AAsteroid> BaseAsteroidBPClass;
   TSubclassOf<class AAsteroid> SlowAsteroidBPClass;
   TSubclassOf<class AAsteroid> FreezeAsteroidBPClass;

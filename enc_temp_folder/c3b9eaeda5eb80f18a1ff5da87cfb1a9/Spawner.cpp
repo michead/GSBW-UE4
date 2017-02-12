@@ -37,8 +37,15 @@ void ASpawner::Tick( float DeltaTime )
 }
 
 void ASpawner::StartSpawnCoroutine() {
+  // GetWorld()->GetTimerManager().SetTimer(
+  //   TimerHandle_0,
+  //   this,
+  //   &ASpawner::ComputeSpawnerBounds,
+  //   GetCurrentDifficultySpawnInterval() * 0.5f,
+  //   false);
+
   GetWorld()->GetTimerManager().SetTimer(
-    TimerHandle,
+    TimerHandle_1,
     this,
     &ASpawner::Spawn,
     GetCurrentDifficultySpawnInterval(),
@@ -103,10 +110,10 @@ float ASpawner::PickAsteroidSpeed() {
 void ASpawner::ComputeSpawnerBounds() {
   const FVector2D viewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
   Bounds.Empty();
-  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), 0, 0, 0));
-  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), 0, viewportSize.Y, 0));
-  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), viewportSize.X, viewportSize.Y, 0));
-  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), viewportSize.X, 0, 0));
+  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), viewportSize, 0, 0, 0));
+  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), viewportSize, 0, viewportSize.Y, 0));
+  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), viewportSize, viewportSize.X, viewportSize.Y, 0));
+  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), viewportSize, viewportSize.X, 0, 0));
 }
 
 float ASpawner::GetCurrentDifficultySpawnInterval() {
