@@ -35,6 +35,9 @@ public:
   virtual void OnExplodeAction() {} // PURE_VIRTUAL
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
+  UStaticMesh* StaticMesh;
+
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
   UDestructibleMesh* DestructibleMesh;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Gameplay)
@@ -53,8 +56,10 @@ public:
   FString GetWord() const;
 
 protected:
+  void ApplyImpulse();
   void Disappear();
 
+  UStaticMeshComponent* StaticMeshComponent;
   UDestructibleComponent* DestructibleComponent;
   FString WordToDisplay;
   FTimerHandle TimerHandle;

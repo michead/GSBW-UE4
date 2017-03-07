@@ -13,31 +13,27 @@ AAsteroid::AAsteroid() {
   // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
   PrimaryActorTick.bCanEverTick = true;
 
-  // Attach Destructible Mesh as Root Component
-  DestructibleComponent = CreateDefaultSubobject<UDestructibleComponent>(TEXT("RootComponent"));
-  RootComponent = DestructibleComponent;
+  StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RootComponent"));
+  StaticMeshComponent->SetEnableGravity(false);
+  StaticMeshComponent->SetSimulatePhysics(true);
+  RootComponent = StaticMeshComponent;
+  
+  DestructibleComponent = CreateDefaultSubobject<UDestructibleComponent>(TEXT("DestructibleComponent"));
+  DestructibleComponent->SetEnableGravity(false);
+  DestructibleComponent->SetSimulatePhysics(true);
 
   TextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextRenderComponent"));
 }
 
 void AAsteroid::OnConstruction(const FTransform& Transform) {
+  StaticMeshComponent->SetStaticMesh(StaticMesh);
   DestructibleComponent->SetDestructibleMesh(DestructibleMesh);
-  DestructibleComponent->SetEnableGravity(false);
   TextRenderComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 // Called when the game starts or when spawned
 void AAsteroid::BeginPlay() {
   Super::BeginPlay();
-
-  TArray<AActor*> actors;
-  UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEarth::StaticClass(), actors);
-  
-  FVector direction = (actors[0]->GetActorLocation() - GetActorLocation());
-  direction.Normalize();
-
-  // Self-apply force
-  DestructibleComponent->AddImpulse(direction * Speed);
 }
 
 // Called every frame
@@ -54,6 +50,19 @@ void AAsteroid::Init(const FAsteroidInitProps& props) {
   Speed = props.speed;
 
   WordToDisplay = Word;
+
+  ApplyImpulse();
+}
+
+void AAsteroid::ApplyImpulse() {
+  TArray<AActor*> actors;
+  UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEarth::StaticClass(), actors);
+
+  FVector direction = (actors[0]->GetActorLocation() - GetActorLocation());
+  direction.Normalize();
+
+  // Self-apply impulse
+  StaticMeshComponent->AddImpulse(direction * Speed);
 }
 
 void AAsteroid::OnEarthHit(const FHitResult& hit) {
