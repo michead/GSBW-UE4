@@ -22,7 +22,7 @@ AEarth::AEarth()
 
     // Reference(s) to rocket's BP class(es)
     static ConstructorHelpers::FObjectFinder<UBlueprint> BaseRocketBP(TEXT("Blueprint'/Game/Blueprints/BP_BaseRocket.BP_BaseRocket'"));
-    BaseRocketBPClass = BaseRocketBP.Object->GetClass();
+    BaseRocketBPClass = (UClass*)BaseRocketBP.Object->GeneratedClass;
 
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
     Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
@@ -81,7 +81,7 @@ bool AEarth::AcquireTarget(FString& InputLetters) {
     AAsteroid* asteroid = Cast<AAsteroid>(actor);
     
     // Maybe we could compute this only once we know that 'StartsWith' condition is satisfied
-    FVector distVec = GetActorLocation() - tentativeTarget->GetActorLocation();
+    FVector distVec = GetActorLocation() - asteroid->GetActorLocation();
     float tmpSqrdDist = FVector::DotProduct(distVec, distVec);
 
     if (GSBWUtils::ContainsAnyOf(asteroid->GetWord(), InputLetters) && tmpSqrdDist < sqrdDistance) {
@@ -113,7 +113,11 @@ bool AEarth::ShootTarget(FString& Letters) {
 }
 
 void AEarth::LaunchRocket(AAsteroid* _target, const FString& letter) {
-  ARocket* rocket = Cast<ARocket>(GetWorld()->SpawnActor(BaseRocketBPClass));
+  FTransform transform;
+  FVector targetDir = _target->GetActorLocation() - GetActorLocation();
+  targetDir.Normalize();
+  transform.SetLocation(GetActorLocation() + 30 * targetDir);
+  ARocket* rocket = GetWorld()->SpawnActor<ARocket>(BaseRocketBPClass, transform);
   FRocketInitProps props;
   props.target = _target;
   rocket->Init(props);
