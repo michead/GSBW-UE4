@@ -25,8 +25,6 @@ public:
 
   // Asteroid virtual methods
   virtual void Init(const FAsteroidInitProps& props);
-  virtual void OnEarthHit(const FHitResult& hit);
-  virtual void OnRocketHit(const FHitResult& hit);
   virtual void Explode(const FHitResult& hit);
   
   // Asteroid special actions
@@ -58,6 +56,9 @@ public:
 protected:
   void ApplyImpulse();
   void Disappear();
+  void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+  virtual void OnEarthHit(const FHitResult& hit);
+  virtual void OnRocketHit(const FHitResult& hit);
 
   UStaticMeshComponent* StaticMeshComponent;
   UDestructibleComponent* DestructibleComponent;

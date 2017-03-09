@@ -70,3 +70,6 @@ DerivedDataCache/*
 
 # UE4 Starter Content
 Content/StarterContent/*
+
+# Workspace Configuration
+.vs
