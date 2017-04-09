@@ -26,17 +26,17 @@ namespace GSBWUtils {
   }
 
   inline bool ContainsAnyOf(const FString& str1, const FString& str2) {
-    for (TCHAR c : str2) {
-      if (str1.Contains(c+"")) return true;
+    for (int32 i = 0; i < str2.Len(); i++) {
+      FString currChar = str2.Mid(i, 1);
+      if (str1.Contains(currChar)) return true;
     }
     return false;
   }
 
   inline void KeepContainedChars(const FString& str1, FString& str2) {
-    uint8 i = 0;
-    for (TCHAR c : str2) {
-      if (!str1.Contains(c + "")) str2.RemoveAt(i);
-      i++;
+    for (int32 i = 0; i < str2.Len(); i++) {
+      FString currChar = str2.Mid(i, 1);
+      if (!str1.Contains(currChar)) str2.RemoveAt(i);
     }
   }
 

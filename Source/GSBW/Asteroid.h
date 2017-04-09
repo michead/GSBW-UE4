@@ -56,9 +56,17 @@ public:
 protected:
   void ApplyImpulse();
   void Disappear();
-  void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
   virtual void OnEarthHit(const FHitResult& hit);
   virtual void OnRocketHit(const FHitResult& hit);
+
+  UFUNCTION()
+  void OnOverlapBegin(
+    class UPrimitiveComponent* OverlappedComp,
+    class AActor* OtherActor,
+    class UPrimitiveComponent* OtherComp,
+    int32 OtherBodyIndex,
+    bool bFromSweep,
+    const FHitResult& SweepResult);
 
   UStaticMeshComponent* StaticMeshComponent;
   UDestructibleComponent* DestructibleComponent;
