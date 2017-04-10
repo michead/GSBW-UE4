@@ -108,8 +108,9 @@ void AEarth::ShootTarget(FString& Letters) {
   while (!Letters.IsEmpty()) {
     FString letter = GSBWUtils::GetFirstChar(Letters);
     FString currentWord = target.originalWord.Mid(target.rocketCount);
-    check(currentWord.StartsWith(letter));
-    LaunchRocket();
+    if (currentWord.StartsWith(letter)) {
+      LaunchRocket();
+    }
     Letters.RemoveAt(0);
   }
 }
