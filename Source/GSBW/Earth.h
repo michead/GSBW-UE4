@@ -4,6 +4,7 @@
 
 #include "GameFramework/Actor.h"
 #include "Asteroid.h"
+#include "EarthStructs.h"
 #include "Earth.generated.h"
 
 UCLASS()
@@ -39,11 +40,11 @@ private:
   // Returns true if target has been acquired
   bool AcquireTarget(FString& InputLetters);
   // Returns true if rocket has been shot to target
-  bool ShootTarget(FString& InputLetters);
-  void LaunchRocket(AAsteroid* Target, const FString& letter);
+  void ShootTarget(FString& InputLetters);
+  void LaunchRocket();
 
   UDestructibleComponent* DestructibleComponent;
   TArray<FString> Alphabet;
-  AAsteroid* target;
+  FTarget target;
   UClass* BaseRocketBPClass;
 };

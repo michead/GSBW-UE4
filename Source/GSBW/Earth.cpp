@@ -62,7 +62,7 @@ void AEarth::HandleInput(float AxisScale) {
   FString letter = Alphabet[AxisScale - 1];
   
   // Target currently locked and not destroyed
-  if (target) {
+  if (target.ref) {
   SHOOT_TARGET:
     ShootTarget(letter);
   } else if (AcquireTarget(letter)) {
@@ -90,37 +90,53 @@ bool AEarth::AcquireTarget(FString& InputLetters) {
     }
   }
 
-  target = tentativeTarget;
+  if (tentativeTarget) {
+    target.ref = tentativeTarget;
+    target.originalWord = tentativeTarget->GetWord();
+    target.rocketCount = 0;
+    
+    return true;
+  }
 
-  // Coerce to bool
-  return !!target;
+  return false;
 }
 
-bool AEarth::ShootTarget(FString& Letters) {
-  GSBWUtils::KeepContainedChars(target->GetWord(), Letters);
-  bool ret = !Letters.IsEmpty();
+void AEarth::ShootTarget(FString& Letters) {
+  GSBWUtils::KeepContainedChars(target.ref->GetWord(), Letters);
   short wIndex = 0;
 
   while (!Letters.IsEmpty()) {
     FString letter = GSBWUtils::GetFirstChar(Letters);
-    if (target->GetWord().StartsWith(letter)) {
-      LaunchRocket(target, letter);
-      Letters.RemoveAt(0);
-    }
+    FString currentWord = target.originalWord.Mid(target.rocketCount);
+    check(currentWord.StartsWith(letter));
+    LaunchRocket();
+    Letters.RemoveAt(0);
   }
-
-  return ret;
 }
 
-void AEarth::LaunchRocket(AAsteroid* _target, const FString& letter) {
+void AEarth::LaunchRocket() {
+  check(target.ref);
+
   FTransform transform;
-  FVector targetDir = _target->GetActorLocation() - GetActorLocation();
+  FVector targetDir = target.ref->GetActorLocation() - GetActorLocation();
   targetDir.Normalize();
   transform.SetLocation(GetActorLocation() + 30 * targetDir);
   ARocket* rocket = GetWorld()->SpawnActor<ARocket>(BaseRocketBPClass, transform);
+  
   FRocketInitProps props;
-  props.target = _target;
+  props.target = target.ref;
+  props.letter = target.originalWord.Mid(target.rocketCount, 1);
+  
   rocket->Init(props);
+  
+  target.rocketCount++;
+
+  // If all needed rockets to take the asteroid down are on their way,
+  // then target reference can be safely set to nullptr in order to start
+  // hitting another asteroid
+  if (target.rocketCount == target.originalWord.Len()) {
+    target = {};
+  }
 }
 
 void AEarth::OnTargetHit(AAsteroid& Asteroid) {

@@ -17,7 +17,7 @@ namespace GSBWUtils {
   }
 
   inline FString GetCharAt(const FString& str, uint8 index) {
-    return FString(str[index] + "");
+    return str.Mid(index, 1);
   }
 
   // For convenience, since our use cases mainly involve the first char
