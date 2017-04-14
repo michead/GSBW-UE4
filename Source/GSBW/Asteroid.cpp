@@ -17,6 +17,8 @@ AAsteroid::AAsteroid() {
   StaticMeshComponent->SetEnableGravity(false);
   StaticMeshComponent->SetSimulatePhysics(true);
   StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &AAsteroid::OnOverlapBegin);
+  StaticMeshComponent->bGenerateOverlapEvents = true;
+  StaticMeshComponent->SetCollisionProfileName(FName("OverlapAll"));
   RootComponent = StaticMeshComponent;
   
   DestructibleComponent = CreateDefaultSubobject<UDestructibleComponent>(TEXT("DestructibleComponent"));
@@ -66,10 +68,11 @@ void AAsteroid::ApplyImpulse() {
   StaticMeshComponent->AddImpulse(direction * Speed);
 }
 
-void AAsteroid::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
+void AAsteroid::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+                               class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
 	if (Cast<AEarth>(OtherActor)) {
 		OnEarthHit(SweepResult);
-	} else {
+	} else if (Cast<ARocket>(OtherActor)) {
 		OnRocketHit(SweepResult);
 	}
 }

@@ -2,7 +2,6 @@
 
 #include "GSBW.h"
 #include "Rocket.h"
-#include "Earth.h"
 
 
 // Sets default values
@@ -13,9 +12,9 @@ ARocket::ARocket() {
   StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RootComponent"));
   StaticMeshComponent->SetEnableGravity(false);
   StaticMeshComponent->SetSimulatePhysics(true);
-  StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &ARocket::OnOverlapBegin);
-  StaticMeshComponent->bGenerateOverlapEvents = true;
-  StaticMeshComponent->SetCollisionProfileName(FName("OverlapAll"));
+  // StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &ARocket::OnOverlapBegin);
+  // StaticMeshComponent->bGenerateOverlapEvents = true;
+  // StaticMeshComponent->SetCollisionProfileName(FName("OverlapAll"));
   RootComponent = StaticMeshComponent;
 }
 
@@ -52,11 +51,7 @@ void ARocket::ApplyImpulse() {
 
 void ARocket::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
                              class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-  
-  if (Cast<AAsteroid>(OtherActor) ||
-      Cast<AEarth>(OtherActor)) {
-    Explode(SweepResult);
-  }
+  Explode(SweepResult);
 }
 
 void ARocket::Explode(const FHitResult& hit) {

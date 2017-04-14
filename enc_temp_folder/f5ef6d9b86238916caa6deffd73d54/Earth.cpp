@@ -122,12 +122,15 @@ void AEarth::LaunchRocket() {
   FVector targetDir = target.ref->GetActorLocation() - GetActorLocation();
   targetDir.Normalize();
   transform.SetLocation(GetActorLocation() + 30 * targetDir);
-  ARocket* rocket = GetWorld()->SpawnActor<ARocket>(BaseRocketBPClass, transform);
+  FActorSpawnParameters params{};
+  // params.bNoFail = true;
+  // params.bNoCollisionFail = true;
+  ARocket* rocket = GetWorld()->SpawnActor<ARocket>(BaseRocketBPClass, transform, params);
   
   FRocketInitProps props;
   props.target = target.ref;
   props.letter = target.originalWord.Mid(target.rocketCount, 1);
-  props.speed = 10000.f;
+  props.speed = 5000.f;
   
   rocket->Init(props);
   
