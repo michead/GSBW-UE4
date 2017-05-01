@@ -59,5 +59,13 @@ void ARocket::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AA
 }
 
 void ARocket::Explode(const FHitResult& hit) {
+  if (ExplosionClass) {
+    // Spawn explosion actor
+    GetWorld()->SpawnActor<AExplosion>(ExplosionClass);
+  }
+  Disappear();
+}
+
+void ARocket::Disappear() {
   Destroy();
 }

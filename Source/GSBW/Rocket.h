@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "Explosion.h"
 #include "RocketStructs.h"
 #include "Rocket.generated.h"
 
@@ -41,9 +42,13 @@ public:
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
   AAsteroid* Target;
 
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
+  TSubclassOf<AExplosion> ExplosionClass;
+
 protected:
   void ApplyImpulse();
   void Explode(const FHitResult& hit);
+  void Disappear();
 
   UFUNCTION()
   void OnOverlapBegin(

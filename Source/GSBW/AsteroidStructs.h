@@ -28,3 +28,13 @@ struct FAsteroidInitProps {
   UPROPERTY()
   float speed;
 };
+
+USTRUCT(BlueprintType)
+struct FAsteroidExplosionInitProps {
+  GENERATED_BODY()
+
+  UPROPERTY()
+  UDestructibleMesh* mesh;
+  UPROPERTY()
+  FHitResult hit;
+};

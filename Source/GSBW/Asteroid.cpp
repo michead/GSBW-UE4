@@ -5,6 +5,7 @@
 #include "Rocket.h"
 #include "GSBWCommon.h"
 #include "GSBWUtils.h"
+#include "AsteroidExplosion.h"
 #include "Asteroid.h"
 
 
@@ -19,18 +20,13 @@ AAsteroid::AAsteroid() {
   StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &AAsteroid::OnOverlapBegin);
   StaticMeshComponent->bGenerateOverlapEvents = true;
   StaticMeshComponent->SetCollisionProfileName(FName("OverlapAll"));
-  RootComponent = StaticMeshComponent;
-  
-  DestructibleComponent = CreateDefaultSubobject<UDestructibleComponent>(TEXT("DestructibleComponent"));
-  DestructibleComponent->SetEnableGravity(false);
-  DestructibleComponent->SetSimulatePhysics(true);
+  SetRootComponent(StaticMeshComponent);
 
   TextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextRenderComponent"));
 }
 
 void AAsteroid::OnConstruction(const FTransform& Transform) {
   StaticMeshComponent->SetStaticMesh(StaticMesh);
-  DestructibleComponent->SetDestructibleMesh(DestructibleMesh);
   TextRenderComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
@@ -71,38 +67,41 @@ void AAsteroid::ApplyImpulse() {
 void AAsteroid::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
                                class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
 	if (Cast<AEarth>(OtherActor)) {
-		OnEarthHit(SweepResult);
+		OnEarthHit(OtherActor, SweepResult);
 	} else if (Cast<ARocket>(OtherActor)) {
-		OnRocketHit(SweepResult);
+		OnRocketHit(OtherActor, SweepResult);
 	}
 }
 
-void AAsteroid::OnEarthHit(const FHitResult& hit) {
+void AAsteroid::OnEarthHit(class AActor* Actor, const FHitResult& Hit) {
 
 }
 
-void AAsteroid::OnRocketHit(const FHitResult& hit) {
-  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::ASTEROID_HIT);
+void AAsteroid::OnRocketHit(class AActor* Actor, const FHitResult& Hit) {
+  FString rocketLetter = Cast<ARocket>(Actor)->Letter;
+  if (!rocketLetter.Equals(GSBWUtils::GetFirstChar(WordToDisplay))) {
+    // Letter field in rocket object does not match asteroid's first letter, do nothing
+    return;
+  }
 
-  ARocket* rocket = Cast<ARocket>(hit.GetActor());
-  check(rocket->Letter.Equals(GSBWUtils::GetFirstChar(WordToDisplay)));
-  
+  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::ASTEROID_HIT);
   WordToDisplay.RemoveAt(0);
   
   if (WordToDisplay.IsEmpty()) {
-    Explode(hit);
+    Explode(Hit);
   }
 }
 
-void AAsteroid::Explode(const FHitResult& hit) {
-  // Swap static mesh with destructible mesh
-  SetRootComponent(DestructibleComponent);
-
+void AAsteroid::Explode(const FHitResult& Hit) {
+  // Notify other actors about event
   GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::ASTEROID_DOWN);
-  DestructibleComponent->ApplyDamage(ROCKET_HIT_DAMAGE_AMOUNT, hit.ImpactPoint, -hit.ImpactNormal, ROCKET_HIT_IMPULSE_STRENGTH);
 
-  const FTimerDelegate DisappearDelegate = FTimerDelegate::CreateUObject(this, &AAsteroid::Disappear);
-  GetWorldTimerManager().SetTimer(TimerHandle, DisappearDelegate, ASTEROID_EXPLOSION_DURATION, false);
+  // Spawn explosion
+  AAsteroidExplosion* explosion = GetWorld()->SpawnActor<AAsteroidExplosion>(GetActorLocation(), GetActorRotation());
+  explosion->Init({ DestructibleMesh, Hit });
+
+  // Destroy static mesh
+  Disappear();
 }
 
 FString AAsteroid::GetWord() const {

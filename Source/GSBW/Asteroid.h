@@ -32,6 +32,9 @@ public:
   virtual void OnExplodeAction() {} // PURE_VIRTUAL
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
+  UStaticMeshComponent* StaticMeshComponent;
+
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
   UStaticMesh* StaticMesh;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
@@ -58,8 +61,8 @@ protected:
   // Asteroid protected virtual methods
   virtual void Disappear();
   virtual void Explode(const FHitResult& hit);
-  virtual void OnEarthHit(const FHitResult& hit);
-  virtual void OnRocketHit(const FHitResult& hit);
+  virtual void OnEarthHit(class AActor* Actor, const FHitResult& hit);
+  virtual void OnRocketHit(class AActor* Actor, const FHitResult& hit);
 
   UFUNCTION()
   void OnOverlapBegin(
@@ -70,8 +73,5 @@ protected:
     bool bFromSweep,
     const FHitResult& SweepResult);
 
-  UStaticMeshComponent* StaticMeshComponent;
-  UDestructibleComponent* DestructibleComponent;
   FString WordToDisplay;
-  FTimerHandle TimerHandle;
 };

@@ -97,7 +97,7 @@ FString ASpawner::PickAsteroidWord() {
 
 float ASpawner::PickAsteroidSpeed() {
   // TODO: This is just a stub
-  return 500.f;
+  return 250.f;
 }
 
 void ASpawner::ComputeSpawnerBounds() {

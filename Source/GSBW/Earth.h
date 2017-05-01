@@ -50,8 +50,9 @@ private:
   void LaunchRocket();
   // Returns the initial speed next rocket should have
   float GetNextRocketSpeed();
+  // Clear reference to current target
+  void ClearTarget();
 
-  AGSBWGameMode* GameMode;
   UDestructibleComponent* DestructibleComponent;
   TArray<FString> Alphabet;
   FTarget target;

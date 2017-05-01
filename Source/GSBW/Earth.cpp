@@ -22,9 +22,6 @@ AEarth::AEarth()
 
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
     Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
-    // Cache reference to game mode
-    GameMode = Cast<AGSBWGameMode>(GetWorld()->GetAuthGameMode());
 }
 
 void AEarth::OnConstruction(const FTransform& Transform) {
@@ -122,7 +119,7 @@ void AEarth::LaunchRocket() {
   targetDir.Normalize();
   transform.SetLocation(GetActorLocation() + RootComponent->Bounds.SphereRadius * 2 * targetDir);
   ARocket* rocket = GetWorld()->SpawnActor<ARocket>(BaseRocketClass, transform);
-  
+
   FRocketInitProps props;
   props.target = target.ref;
   props.letter = target.originalWord.Mid(target.rocketCount, 1);
@@ -136,8 +133,13 @@ void AEarth::LaunchRocket() {
   // then target reference can be safely set to nullptr in order to start
   // hitting another asteroid
   if (target.rocketCount == target.originalWord.Len()) {
-    target = {};
+    ClearTarget();
   }
+}
+
+void AEarth::ClearTarget() {
+  target = {};
+  target.ref = nullptr;
 }
 
 void AEarth::OnTargetHit(AAsteroid& Asteroid) {
@@ -146,5 +148,5 @@ void AEarth::OnTargetHit(AAsteroid& Asteroid) {
 
 float AEarth::GetNextRocketSpeed() {
   // TODO: This is just a stub
-  return 3000.f;
+  return 2000.f;
 }
