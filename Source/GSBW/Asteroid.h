@@ -23,9 +23,8 @@ public:
 
   virtual void OnConstruction(const FTransform& Transform) override;
 
-  // Asteroid virtual methods
+  // Asteroid public virtual methods
   virtual void Init(const FAsteroidInitProps& props);
-  virtual void Explode(const FHitResult& hit);
   
   // Asteroid special actions
   virtual void OnEarthHitAction() {}
@@ -55,7 +54,10 @@ public:
 
 protected:
   void ApplyImpulse();
-  void Disappear();
+
+  // Asteroid protected virtual methods
+  virtual void Disappear();
+  virtual void Explode(const FHitResult& hit);
   virtual void OnEarthHit(const FHitResult& hit);
   virtual void OnRocketHit(const FHitResult& hit);
 

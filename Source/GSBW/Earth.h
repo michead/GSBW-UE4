@@ -3,7 +3,9 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "GSBWGameMode.h"
 #include "Asteroid.h"
+#include "Rocket.h"
 #include "EarthStructs.h"
 #include "Earth.generated.h"
 
@@ -34,6 +36,9 @@ public:
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
   UDestructibleMesh* DestructibleMesh;
 
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rocket)
+  TSubclassOf<ARocket> BaseRocketClass;
+
 private:
   // Binding for player input
   void HandleInput(float AxisScale);
@@ -41,10 +46,13 @@ private:
   bool AcquireTarget(FString& InputLetters);
   // Returns true if rocket has been shot to target
   void ShootTarget(FString& InputLetters);
+  // Spawn rocket
   void LaunchRocket();
+  // Returns the initial speed next rocket should have
+  float GetNextRocketSpeed();
 
+  AGSBWGameMode* GameMode;
   UDestructibleComponent* DestructibleComponent;
   TArray<FString> Alphabet;
   FTarget target;
-  UClass* BaseRocketBPClass;
 };

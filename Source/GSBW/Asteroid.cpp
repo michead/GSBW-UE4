@@ -95,6 +95,9 @@ void AAsteroid::OnRocketHit(const FHitResult& hit) {
 }
 
 void AAsteroid::Explode(const FHitResult& hit) {
+  // Swap static mesh with destructible mesh
+  SetRootComponent(DestructibleComponent);
+
   GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::ASTEROID_DOWN);
   DestructibleComponent->ApplyDamage(ROCKET_HIT_DAMAGE_AMOUNT, hit.ImpactPoint, -hit.ImpactNormal, ROCKET_HIT_IMPULSE_STRENGTH);
 

@@ -20,12 +20,11 @@ AEarth::AEarth()
     // Reference to lower-case alphabet
     Alphabet = IL_ALPHABET_LC;
 
-    // Reference(s) to rocket's BP class(es)
-    static ConstructorHelpers::FObjectFinder<UBlueprint> BaseRocketBP(TEXT("Blueprint'/Game/Blueprints/BP_BaseRocket.BP_BaseRocket'"));
-    BaseRocketBPClass = (UClass*)BaseRocketBP.Object->GeneratedClass;
-
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
     Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
+    // Cache reference to game mode
+    GameMode = Cast<AGSBWGameMode>(GetWorld()->GetAuthGameMode());
 }
 
 void AEarth::OnConstruction(const FTransform& Transform) {
@@ -121,13 +120,13 @@ void AEarth::LaunchRocket() {
   FTransform transform;
   FVector targetDir = target.ref->GetActorLocation() - GetActorLocation();
   targetDir.Normalize();
-  transform.SetLocation(GetActorLocation() + 30 * targetDir);
-  ARocket* rocket = GetWorld()->SpawnActor<ARocket>(BaseRocketBPClass, transform);
+  transform.SetLocation(GetActorLocation() + RootComponent->Bounds.SphereRadius * 2 * targetDir);
+  ARocket* rocket = GetWorld()->SpawnActor<ARocket>(BaseRocketClass, transform);
   
   FRocketInitProps props;
   props.target = target.ref;
   props.letter = target.originalWord.Mid(target.rocketCount, 1);
-  props.speed = 10000.f;
+  props.speed = GetNextRocketSpeed();
   
   rocket->Init(props);
   
@@ -143,4 +142,9 @@ void AEarth::LaunchRocket() {
 
 void AEarth::OnTargetHit(AAsteroid& Asteroid) {
 
+}
+
+float AEarth::GetNextRocketSpeed() {
+  // TODO: This is just a stub
+  return 3000.f;
 }

@@ -53,8 +53,7 @@ void ARocket::ApplyImpulse() {
 void ARocket::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
                              class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
   
-  if (Cast<AAsteroid>(OtherActor) ||
-      Cast<AEarth>(OtherActor)) {
+  if (Cast<AAsteroid>(OtherActor)) {
     Explode(SweepResult);
   }
 }
