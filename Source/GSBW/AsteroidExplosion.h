@@ -19,6 +19,9 @@ public:
   // Sets default values for this actor's properties
   AAsteroidExplosion();
 
+  // Called when the game starts or when spawned
+  virtual void BeginPlay() override;
+
   // AsteroidExplosion public virtual methods
   virtual void Init(const FAsteroidExplosionInitProps& Props);
   virtual void ApplyDamage();

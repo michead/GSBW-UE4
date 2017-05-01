@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GSBW.h"
+#include "GSBWCommon.h"
 #include "GSBWUtils.h"
 #include "AsteroidExplosion.h"
 
@@ -17,17 +18,19 @@ AAsteroidExplosion::AAsteroidExplosion() {
   SetRootComponent(DestructibleComponent);
 }
 
+void AAsteroidExplosion::BeginPlay() {
+  Super::BeginPlay();
+}
+
 void AAsteroidExplosion::Init(const FAsteroidExplosionInitProps& props) {
   Hit = props.hit;
   Mesh = props.mesh;
-
   DestructibleComponent->SetDestructibleMesh(Mesh);
-
   ApplyDamage();
 }
 
 void AAsteroidExplosion::ApplyDamage() {
-  DestructibleComponent->ApplyDamage(ROCKET_HIT_DAMAGE_AMOUNT, Hit.ImpactPoint, -Hit.ImpactNormal, ROCKET_HIT_IMPULSE_STRENGTH);
+  DestructibleComponent->ApplyRadiusDamage(ROCKET_HIT_BASE_DAMAGE, Hit.Location, ROCKET_HIT_DAMAGE_RADIUS, ROCKET_HIT_IMPULSE_STRENGTH, true);
   const FTimerDelegate DisappearDelegate = FTimerDelegate::CreateUObject(this, &AAsteroidExplosion::Disappear);
   GetWorldTimerManager().SetTimer(TimerHandle, DisappearDelegate, ASTEROID_EXPLOSION_DURATION, false);
 }
