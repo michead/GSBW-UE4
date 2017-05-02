@@ -13,9 +13,8 @@ ARocket::ARocket() {
   StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RootComponent"));
   StaticMeshComponent->SetEnableGravity(false);
   StaticMeshComponent->SetSimulatePhysics(true);
+  StaticMeshComponent->SetCollisionProfileName("Rocket");
   StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &ARocket::OnOverlapBegin);
-  StaticMeshComponent->bGenerateOverlapEvents = true;
-  StaticMeshComponent->SetCollisionProfileName(FName("OverlapAll"));
   RootComponent = StaticMeshComponent;
 }
 

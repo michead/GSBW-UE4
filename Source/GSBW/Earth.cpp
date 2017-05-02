@@ -147,7 +147,8 @@ void AEarth::LaunchRocket() {
 void AEarth::ClearTarget() {
   UE_LOG(Earth, Log, TEXT("ClearTarget() called."));
 
-  Target = {};
+  Target.originalWord = nullptr;
+  Target.rocketCount = 0;
   Target.ref = nullptr;
 }
 

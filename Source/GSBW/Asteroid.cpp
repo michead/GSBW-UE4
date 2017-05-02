@@ -17,9 +17,9 @@ AAsteroid::AAsteroid() {
   StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RootComponent"));
   StaticMeshComponent->SetEnableGravity(false);
   StaticMeshComponent->SetSimulatePhysics(true);
+  StaticMeshComponent->SetCollisionProfileName("Asteroid");
   StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &AAsteroid::OnOverlapBegin);
   StaticMeshComponent->bGenerateOverlapEvents = true;
-  StaticMeshComponent->SetCollisionProfileName(FName("OverlapAll"));
   SetRootComponent(StaticMeshComponent);
 
   TextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextRenderComponent"));
