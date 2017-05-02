@@ -9,6 +9,8 @@
 #include "EarthStructs.h"
 #include "Earth.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(Earth, Log, All);
+
 UCLASS()
 class GSBW_API AEarth : public APawn
 {
@@ -55,5 +57,6 @@ private:
 
   UDestructibleComponent* DestructibleComponent;
   TArray<FString> Alphabet;
-  FTarget target;
+  FTarget Target;
+  float OldAlphaKey;
 };

@@ -46,4 +46,11 @@ namespace GSBWUtils {
     check(actors.Num() == 1);
     return Cast<AGlobalEventHandler>(actors[0]);
   }
+
+  inline FActorSpawnParameters GetNoFailSpawnParams() {
+    FActorSpawnParameters spawnParams;
+    spawnParams.bNoFail = true;
+    spawnParams.bNoCollisionFail = true;
+    return spawnParams;
+  }
 }

@@ -6,6 +6,7 @@
 #include "Rocket.h"
 #include "Earth.h"
 
+DEFINE_LOG_CATEGORY(Earth);
 
 // Sets default values
 AEarth::AEarth()
@@ -33,6 +34,8 @@ void AEarth::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
   for (FName axis : IL_ALPHABET_UC) {
     PlayerInputComponent->BindAxis(axis, this, &AEarth::HandleInput);
   }
+  // Handle TAB key
+  PlayerInputComponent->BindKey(EKeys::Tab, EInputEvent::IE_Pressed, this, &AEarth::ClearTarget);
 }
 
 // Called when the game starts or when spawned
@@ -51,19 +54,23 @@ void AEarth::Tick( float DeltaTime )
 
 void AEarth::HandleInput(float AxisScale) {
   // No button has been pressed
-  if (!AxisScale) {
+  if (!AxisScale || OldAlphaKey == AxisScale) {
     return;
   }
 
   FString letter = Alphabet[AxisScale - 1];
+  UE_LOG(Earth, Log, TEXT("HandleInput() called with input letter: %s"), *letter);
   
   // Target currently locked and not destroyed
-  if (target.ref) {
+  if (Target.ref) {
   SHOOT_TARGET:
     ShootTarget(letter);
   } else if (AcquireTarget(letter)) {
+    UE_LOG(Earth, Log, TEXT("Target acquired."));
     goto SHOOT_TARGET;
   }
+
+  OldAlphaKey = AxisScale;
 }
 
 bool AEarth::AcquireTarget(FString& InputLetters) {
@@ -87,9 +94,9 @@ bool AEarth::AcquireTarget(FString& InputLetters) {
   }
 
   if (tentativeTarget) {
-    target.ref = tentativeTarget;
-    target.originalWord = tentativeTarget->GetWord();
-    target.rocketCount = 0;
+    Target.ref = tentativeTarget;
+    Target.originalWord = tentativeTarget->GetWord();
+    Target.rocketCount = 0;
     
     return true;
   }
@@ -98,12 +105,12 @@ bool AEarth::AcquireTarget(FString& InputLetters) {
 }
 
 void AEarth::ShootTarget(FString& Letters) {
-  GSBWUtils::KeepContainedChars(target.ref->GetWord(), Letters);
+  GSBWUtils::KeepContainedChars(Target.ref->GetWord(), Letters);
   short wIndex = 0;
 
   while (!Letters.IsEmpty()) {
     FString letter = GSBWUtils::GetFirstChar(Letters);
-    FString currentWord = target.originalWord.Mid(target.rocketCount);
+    FString currentWord = Target.originalWord.Mid(Target.rocketCount);
     if (currentWord.StartsWith(letter)) {
       LaunchRocket();
     }
@@ -112,34 +119,36 @@ void AEarth::ShootTarget(FString& Letters) {
 }
 
 void AEarth::LaunchRocket() {
-  check(target.ref);
+  check(Target.ref);
 
   FTransform transform;
-  FVector targetDir = target.ref->GetActorLocation() - GetActorLocation();
+  FVector targetDir = Target.ref->GetActorLocation() - GetActorLocation();
   targetDir.Normalize();
-  transform.SetLocation(GetActorLocation() + RootComponent->Bounds.SphereRadius * 2 * targetDir);
-  ARocket* rocket = GetWorld()->SpawnActor<ARocket>(BaseRocketClass, transform);
+  transform.SetLocation(GetActorLocation() + RootComponent->Bounds.SphereRadius * 1.25f * targetDir);
+  ARocket* rocket = GetWorld()->SpawnActor<ARocket>(BaseRocketClass, transform, GSBWUtils::GetNoFailSpawnParams());
 
   FRocketInitProps props;
-  props.target = target.ref;
-  props.letter = target.originalWord.Mid(target.rocketCount, 1);
+  props.target = Target.ref;
+  props.letter = Target.originalWord.Mid(Target.rocketCount, 1);
   props.speed = GetNextRocketSpeed();
   
   rocket->Init(props);
   
-  target.rocketCount++;
+  Target.rocketCount++;
 
   // If all needed rockets to take the asteroid down are on their way,
   // then target reference can be safely set to nullptr in order to start
   // hitting another asteroid
-  if (target.rocketCount == target.originalWord.Len()) {
+  if (Target.rocketCount == Target.originalWord.Len()) {
     ClearTarget();
   }
 }
 
 void AEarth::ClearTarget() {
-  target = {};
-  target.ref = nullptr;
+  UE_LOG(Earth, Log, TEXT("ClearTarget() called."));
+
+  Target = {};
+  Target.ref = nullptr;
 }
 
 void AEarth::OnTargetHit(AAsteroid& Asteroid) {
