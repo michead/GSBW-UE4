@@ -19,7 +19,6 @@ AAsteroid::AAsteroid() {
   StaticMeshComponent->SetSimulatePhysics(true);
   StaticMeshComponent->SetCollisionProfileName("Asteroid");
   StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &AAsteroid::OnOverlapBegin);
-  StaticMeshComponent->bGenerateOverlapEvents = true;
   SetRootComponent(StaticMeshComponent);
 
   TextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextRenderComponent"));
@@ -74,7 +73,8 @@ void AAsteroid::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class 
 }
 
 void AAsteroid::OnEarthHit(class AActor* Actor, const FHitResult& Hit) {
-
+  // Let Earth broadcast the event, just explode
+  Explode(Hit);
 }
 
 void AAsteroid::OnRocketHit(class AActor* Actor, const FHitResult& Hit) {

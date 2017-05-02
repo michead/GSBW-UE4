@@ -7,42 +7,42 @@
 #define S2W_MULTIPLIER  10
 
 namespace GSBWUtils {
-  inline FVector ScreenSpaceToWorldSpace(UWorld* world, uint8 x, uint8 y, float z) {
+  inline FVector ScreenSpaceToWorldSpace(UWorld* World, uint8 X, uint8 Y, float Z) {
     // FIXE: This is the proper way to implement this, but, alas, it does not work
     FVector worldLocation, worldDirection;
-    APlayerController* controller = UGameplayStatics::GetPlayerController(world, 0);
-    check(controller->DeprojectScreenPositionToWorld(x, y, worldLocation, worldDirection));
-    FPlane plane{ FVector(0, 0, z), FVector(0, 0, 1) };
+    APlayerController* controller = UGameplayStatics::GetPlayerController(World, 0);
+    check(controller->DeprojectScreenPositionToWorld(X, Y, worldLocation, worldDirection));
+    FPlane plane{ FVector(0, 0, Z), FVector(0, 0, 1) };
     return FMath::LinePlaneIntersection(worldLocation, worldLocation + worldDirection * LINE_LEN, plane);
   }
 
-  inline FString GetCharAt(const FString& str, uint8 index) {
-    return str.Mid(index, 1);
+  inline FString GetCharAt(const FString& Str, uint8 Index) {
+    return Str.Mid(Index, 1);
   }
 
   // For convenience, since our use cases mainly involve the first char
-  inline FString GetFirstChar(const FString& str) {
-    return GetCharAt(str, 0);
+  inline FString GetFirstChar(const FString& Str) {
+    return GetCharAt(Str, 0);
   }
 
-  inline bool ContainsAnyOf(const FString& str1, const FString& str2) {
-    for (int32 i = 0; i < str2.Len(); i++) {
-      FString currChar = str2.Mid(i, 1);
-      if (str1.Contains(currChar)) return true;
+  inline bool ContainsAnyOf(const FString& Str1, const FString& Str2) {
+    for (int32 i = 0; i < Str2.Len(); i++) {
+      FString currChar = Str2.Mid(i, 1);
+      if (Str1.Contains(currChar)) return true;
     }
     return false;
   }
 
-  inline void KeepContainedChars(const FString& str1, FString& str2) {
-    for (int32 i = 0; i < str2.Len(); i++) {
-      FString currChar = str2.Mid(i, 1);
-      if (!str1.Contains(currChar)) str2.RemoveAt(i);
+  inline void KeepContainedChars(const FString& Str1, FString& Str2) {
+    for (int32 i = 0; i < Str2.Len(); i++) {
+      FString currChar = Str2.Mid(i, 1);
+      if (!Str1.Contains(currChar)) Str2.RemoveAt(i);
     }
   }
 
-  inline AGlobalEventHandler* GetEventHandler(UWorld* world) {
+  inline AGlobalEventHandler* GetEventHandler(UWorld* World) {
     TArray<AActor*> actors;
-    UGameplayStatics::GetAllActorsOfClass(world, AGlobalEventHandler::StaticClass(), actors);
+    UGameplayStatics::GetAllActorsOfClass(World, AGlobalEventHandler::StaticClass(), actors);
     check(actors.Num() == 1);
     return Cast<AGlobalEventHandler>(actors[0]);
   }
@@ -52,5 +52,16 @@ namespace GSBWUtils {
     spawnParams.bNoFail = true;
     spawnParams.bNoCollisionFail = true;
     return spawnParams;
+  }
+
+  template<class T>
+  inline void DestroyOnNextTick(
+    UWorld* World,
+    T* ActorToDestroy,
+    typename FTimerDelegate::TUObjectMethodDelegate<T>::FMethodPtr TimerMethod) {
+    // Hide actor until it gets destroyed
+    Cast<AActor>(ActorToDestroy)->GetRootComponent()->SetVisibility(false, true);
+    // Call method on next tick
+    World->GetTimerManager().SetTimerForNextTick<T>(ActorToDestroy, TimerMethod);
   }
 }

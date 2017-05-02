@@ -1,9 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GSBW.h"
+#include "GSBWUtils.h"
 #include "Rocket.h"
 #include "Earth.h"
 
+DEFINE_LOG_CATEGORY(Rocket);
 
 // Sets default values
 ARocket::ARocket() {
@@ -51,18 +53,20 @@ void ARocket::ApplyImpulse() {
 
 void ARocket::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
                              class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-  
+  UE_LOG(Rocket, Log, TEXT("OnOverlapBegin() called."));
   if (Cast<AAsteroid>(OtherActor)) {
     Explode(SweepResult);
   }
 }
 
 void ARocket::Explode(const FHitResult& hit) {
+  UE_LOG(Rocket, Log, TEXT("Explode() called."));
   if (ExplosionClass) {
     // Spawn explosion actor
     GetWorld()->SpawnActor<AExplosion>(ExplosionClass);
   }
-  Disappear();
+  // Destroy actor on next tick in order to allow overlap events to be sent to both sides
+  GSBWUtils::DestroyOnNextTick<ARocket>(GetWorld(), this, &ARocket::Disappear);
 }
 
 void ARocket::Disappear() {

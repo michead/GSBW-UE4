@@ -16,6 +16,8 @@ AEarth::AEarth()
 
     // Attach Destructible Mesh as Root Component
     DestructibleComponent = CreateDefaultSubobject<UDestructibleComponent>(TEXT("RootComponent"));
+    DestructibleComponent->SetCollisionProfileName("Earth");
+    DestructibleComponent->OnComponentBeginOverlap.AddDynamic(this, &AEarth::OnOverlapBegin);
     RootComponent = DestructibleComponent;
     
     // Reference to lower-case alphabet
@@ -53,12 +55,14 @@ void AEarth::Tick( float DeltaTime )
 }
 
 void AEarth::HandleInput(float AxisScale) {
+  FString letter;
+  
   // No button has been pressed
   if (!AxisScale || OldAlphaKey == AxisScale) {
-    return;
+    goto EXIT;
   }
 
-  FString letter = Alphabet[AxisScale - 1];
+  letter = Alphabet[AxisScale - 1];
   UE_LOG(Earth, Log, TEXT("HandleInput() called with input letter: %s"), *letter);
   
   // Target currently locked and not destroyed
@@ -70,6 +74,7 @@ void AEarth::HandleInput(float AxisScale) {
     goto SHOOT_TARGET;
   }
 
+EXIT:
   OldAlphaKey = AxisScale;
 }
 
@@ -102,6 +107,11 @@ bool AEarth::AcquireTarget(FString& InputLetters) {
   }
 
   return false;
+}
+
+void AEarth::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+  class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
+  // TODO
 }
 
 void AEarth::ShootTarget(FString& Letters) {

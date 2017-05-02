@@ -7,6 +7,8 @@
 #include "RocketStructs.h"
 #include "Rocket.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(Rocket, Log, All);
+
 UCLASS()
 class GSBW_API ARocket : public AActor
 {
