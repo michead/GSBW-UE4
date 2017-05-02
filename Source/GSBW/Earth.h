@@ -43,7 +43,8 @@ public:
 
 private:
   // Binding for player input
-  void HandleInput(float AxisScale);
+  template<TCHAR letter>
+  void HandleInput();
   // Returns true if target has been acquired
   bool AcquireTarget(FString& InputLetters);
   // Returns true if rocket has been shot to target

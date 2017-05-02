@@ -33,9 +33,32 @@ void AEarth::OnConstruction(const FTransform& Transform) {
 
 void AEarth::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
   // Handle letters typed by player
-  for (FName axis : IL_ALPHABET_UC) {
-    PlayerInputComponent->BindAxis(axis, this, &AEarth::HandleInput);
-  }
+  PlayerInputComponent->BindKey(EKeys::A, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'A'>);
+  PlayerInputComponent->BindKey(EKeys::B, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'B'>);
+  PlayerInputComponent->BindKey(EKeys::C, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'C'>);
+  PlayerInputComponent->BindKey(EKeys::D, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'D'>);
+  PlayerInputComponent->BindKey(EKeys::E, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'E'>);
+  PlayerInputComponent->BindKey(EKeys::F, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'F'>);
+  PlayerInputComponent->BindKey(EKeys::G, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'G'>);
+  PlayerInputComponent->BindKey(EKeys::H, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'H'>);
+  PlayerInputComponent->BindKey(EKeys::I, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'I'>);
+  PlayerInputComponent->BindKey(EKeys::J, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'J'>);
+  PlayerInputComponent->BindKey(EKeys::K, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'K'>);
+  PlayerInputComponent->BindKey(EKeys::L, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'L'>);
+  PlayerInputComponent->BindKey(EKeys::M, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'M'>);
+  PlayerInputComponent->BindKey(EKeys::N, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'N'>);
+  PlayerInputComponent->BindKey(EKeys::O, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'O'>);
+  PlayerInputComponent->BindKey(EKeys::P, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'P'>);
+  PlayerInputComponent->BindKey(EKeys::Q, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'Q'>);
+  PlayerInputComponent->BindKey(EKeys::R, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'R'>);
+  PlayerInputComponent->BindKey(EKeys::S, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'S'>);
+  PlayerInputComponent->BindKey(EKeys::T, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'T'>);
+  PlayerInputComponent->BindKey(EKeys::U, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'U'>);
+  PlayerInputComponent->BindKey(EKeys::V, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'V'>);
+  PlayerInputComponent->BindKey(EKeys::W, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'W'>);
+  PlayerInputComponent->BindKey(EKeys::X, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'X'>);
+  PlayerInputComponent->BindKey(EKeys::Y, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'Y'>);
+  PlayerInputComponent->BindKey(EKeys::Z, EInputEvent::IE_Pressed, this, &AEarth::HandleInput<'Z'>);
   // Handle TAB key
   PlayerInputComponent->BindKey(EKeys::Tab, EInputEvent::IE_Pressed, this, &AEarth::ClearTarget);
 }
@@ -54,16 +77,12 @@ void AEarth::Tick( float DeltaTime )
 
 }
 
-void AEarth::HandleInput(float AxisScale) {
-  FString letter;
+template<TCHAR _letter>
+void AEarth::HandleInput() {
+  UE_LOG(Earth, Log, TEXT("HandleInput() called with input letter: %s"), _letter);
   
-  // No button has been pressed
-  if (!AxisScale || OldAlphaKey == AxisScale) {
-    goto EXIT;
-  }
-
-  letter = Alphabet[AxisScale - 1];
-  UE_LOG(Earth, Log, TEXT("HandleInput() called with input letter: %s"), *letter);
+  // Wrap letter in FString
+  FString letter = _letter + "";
   
   // Target currently locked and not destroyed
   if (Target.ref) {
@@ -73,9 +92,6 @@ void AEarth::HandleInput(float AxisScale) {
     UE_LOG(Earth, Log, TEXT("Target acquired."));
     goto SHOOT_TARGET;
   }
-
-EXIT:
-  OldAlphaKey = AxisScale;
 }
 
 bool AEarth::AcquireTarget(FString& InputLetters) {
