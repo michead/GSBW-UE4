@@ -43,8 +43,35 @@ public:
 
 private:
   // Binding for player input
-  template<TCHAR letter>
-  void HandleInput();
+  void HandleInput(FString letter);
+#pragma region Input Delegates
+  void HandleA() { HandleInput("A"); }
+  void HandleB() { HandleInput("B"); }
+  void HandleC() { HandleInput("C"); }
+  void HandleD() { HandleInput("D"); }
+  void HandleE() { HandleInput("E"); }
+  void HandleF() { HandleInput("F"); }
+  void HandleG() { HandleInput("G"); }
+  void HandleH() { HandleInput("H"); }
+  void HandleI() { HandleInput("I"); }
+  void HandleJ() { HandleInput("J"); }
+  void HandleK() { HandleInput("K"); }
+  void HandleL() { HandleInput("L"); }
+  void HandleM() { HandleInput("M"); }
+  void HandleN() { HandleInput("N"); }
+  void HandleO() { HandleInput("O"); }
+  void HandleP() { HandleInput("P"); }
+  void HandleQ() { HandleInput("Q"); }
+  void HandleR() { HandleInput("R"); }
+  void HandleS() { HandleInput("S"); }
+  void HandleT() { HandleInput("T"); }
+  void HandleU() { HandleInput("U"); }
+  void HandleV() { HandleInput("V"); }
+  void HandleW() { HandleInput("W"); }
+  void HandleX() { HandleInput("X"); }
+  void HandleY() { HandleInput("Y"); }
+  void HandleZ() { HandleInput("Z"); }
+#pragma endregion
   // Returns true if target has been acquired
   bool AcquireTarget(FString& InputLetters);
   // Returns true if rocket has been shot to target
