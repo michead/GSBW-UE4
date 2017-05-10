@@ -5,7 +5,6 @@
 #include "GameFramework/Actor.h"
 #include "Asteroid.h"
 #include "AsteroidStructs.h"
-#include "GSBWUtils.h"
 #include "Spawner.generated.h"
 
 UCLASS()
@@ -30,9 +29,10 @@ private:
   void StartSpawnCoroutine();
   void Spawn();
   void Spawn(EAsteroidType AsteroidType);
-  float GetCurrentDifficultySpawnInterval();
+  float GetSpawnInterval();
   FVector GetRandomAsteroidLocation();
-  EAsteroidType GetRandomAsteroidTypeForCurrentDifficulty();
+  EAsteroidType GetRandomAsteroidType();
+  FString GetRandomWord();
   void ComputeSpawnerBounds();
   void InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type);
   FString PickAsteroidWord();
@@ -43,4 +43,5 @@ private:
   TSubclassOf<class AAsteroid> SlowAsteroidBPClass;
   TSubclassOf<class AAsteroid> FreezeAsteroidBPClass;
   TSubclassOf<class AAsteroid> BombAsteroidBPClass;
+  TMap<uint8_t, TArray<FString>> WordMap;
 };

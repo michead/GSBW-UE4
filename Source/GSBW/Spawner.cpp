@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GSBW.h"
-#include "GSBWGameMode.h"
+#include "GSBWUtils.h"
 #include "Earth.h"
 #include "Spawner.h"
 
@@ -12,22 +12,24 @@ ASpawner::ASpawner()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-    static ConstructorHelpers::FObjectFinder<UBlueprint> BaseAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_BaseAsteroid.BP_BaseAsteroid'"));
-    static ConstructorHelpers::FObjectFinder<UBlueprint> SlowAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_SlowAsteroid.BP_SlowAsteroid'"));
-    static ConstructorHelpers::FObjectFinder<UBlueprint> FreezeAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_FreezeAsteroid.BP_FreezeAsteroid'"));
-    static ConstructorHelpers::FObjectFinder<UBlueprint> BombAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_BombAsteroid.BP_BombAsteroid'"));
+  static ConstructorHelpers::FObjectFinder<UBlueprint> BaseAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_BaseAsteroid.BP_BaseAsteroid'"));
+  static ConstructorHelpers::FObjectFinder<UBlueprint> SlowAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_SlowAsteroid.BP_SlowAsteroid'"));
+  static ConstructorHelpers::FObjectFinder<UBlueprint> FreezeAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_FreezeAsteroid.BP_FreezeAsteroid'"));
+  static ConstructorHelpers::FObjectFinder<UBlueprint> BombAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_BombAsteroid.BP_BombAsteroid'"));
 
-    BaseAsteroidBPClass = (UClass*)BaseAsteroidBP.Object->GeneratedClass;
-    SlowAsteroidBPClass = (UClass*)SlowAsteroidBP.Object->GeneratedClass;
-    FreezeAsteroidBPClass = (UClass*)FreezeAsteroidBP.Object->GeneratedClass;
-    BombAsteroidBPClass = (UClass*)BombAsteroidBP.Object->GeneratedClass;
+  BaseAsteroidBPClass = (UClass*)BaseAsteroidBP.Object->GeneratedClass;
+  SlowAsteroidBPClass = (UClass*)SlowAsteroidBP.Object->GeneratedClass;
+  FreezeAsteroidBPClass = (UClass*)FreezeAsteroidBP.Object->GeneratedClass;
+  BombAsteroidBPClass = (UClass*)BombAsteroidBP.Object->GeneratedClass;
+
+  WordMap = GSBWUtils::LoadWordsFromFileIntoLenMap(FPaths::GameSourceDir() + "/Source/Data/Words.json", MIN_WORD_LEN, MAX_WORD_LEN);
 }
 
 // Called when the game starts or when spawned
 void ASpawner::BeginPlay()
 {
 	Super::BeginPlay();
-    StartSpawnCoroutine();
+  StartSpawnCoroutine();
 }
 
 // Called every frame
@@ -41,12 +43,12 @@ void ASpawner::StartSpawnCoroutine() {
     TimerHandle,
     this,
     &ASpawner::Spawn,
-    GetCurrentDifficultySpawnInterval(),
+    GetSpawnInterval(),
     true);
 }
 
 void ASpawner::Spawn() {
-  Spawn(GetRandomAsteroidTypeForCurrentDifficulty());
+  Spawn(GetRandomAsteroidType());
 }
 
 void ASpawner::Spawn(EAsteroidType AsteroidType) {
@@ -109,10 +111,17 @@ void ASpawner::ComputeSpawnerBounds() {
   Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), viewportSize.X, 0, 0));
 }
 
-float ASpawner::GetCurrentDifficultySpawnInterval() {
+float ASpawner::GetSpawnInterval() {
+  // TODO: This is just a stub
   return 2.f;
 }
 
-EAsteroidType ASpawner::GetRandomAsteroidTypeForCurrentDifficulty() {
+EAsteroidType ASpawner::GetRandomAsteroidType() {
+  // TODO: This is just a stub
   return EAsteroidType::BASE;
+}
+
+FString ASpawner::GetRandomWord() {
+  // TODO: This is just a stub
+  return WordMap[0][0];
 }

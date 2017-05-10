@@ -6,7 +6,7 @@ public class GSBW : ModuleRules
 {
 	public GSBW(TargetInfo Target)
 	{
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Json" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

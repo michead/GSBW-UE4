@@ -8,3 +8,5 @@
 #define ROCKET_HIT_IMPULSE_STRENGTH 5000.f
 #define ROCKET_EXPLOSION_DURATION   2.f
 #define ASTEROID_EXPLOSION_DURATION 5.f
+#define MIN_WORD_LEN                3
+#define MAX_WORD_LEN                12

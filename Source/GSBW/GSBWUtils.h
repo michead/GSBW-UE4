@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine.h"
+#include "Json.h"
 #include "GlobalEventHandler.h"
 
 #define LINE_LEN        100000
@@ -63,5 +64,23 @@ namespace GSBWUtils {
     Cast<AActor>(ActorToDestroy)->GetRootComponent()->SetVisibility(false, true);
     // Call method on next tick
     World->GetTimerManager().SetTimerForNextTick<T>(ActorToDestroy, TimerMethod);
+  }
+
+  inline TMap<uint8_t, TArray<FString>> LoadWordsFromFileIntoLenMap(FString Filename, uint8_t MinLen, uint8_t MaxLen) {
+    TMap<uint8_t, TArray<FString>> wordMap;
+    FString jsonStr;
+    FFileHelper::LoadFileToString(jsonStr, *Filename);
+    TSharedRef<TJsonReader<TCHAR>> jsonReader = FJsonStringReader::Create(jsonStr);
+    TSharedPtr<FJsonObject> jsonObj = MakeShareable(new FJsonObject());
+    check(FJsonSerializer::Deserialize(jsonReader, jsonObj));
+    TArray<TSharedPtr<FJsonValue>> words = jsonObj->GetArrayField(TEXT("data"));
+    for (TSharedPtr<FJsonValue> pWord : words) {
+      FString word = pWord->AsString();
+      uint8_t wordLen = word.Len();
+      if (wordLen >= MinLen && wordLen <= MaxLen) {
+        wordMap[wordLen].Add(word);
+      }
+    }
+    return wordMap;
   }
 }
