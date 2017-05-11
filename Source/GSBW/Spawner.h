@@ -7,6 +7,8 @@
 #include "AsteroidStructs.h"
 #include "Spawner.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(Spawner, Log, All);
+
 UCLASS()
 class GSBW_API ASpawner : public AActor
 {
@@ -37,6 +39,7 @@ private:
   void ComputeSpawnerBounds();
   void InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type);
 
+  FVector2D ViewportSize;
   FTimerHandle TimerHandle;
   TSubclassOf<class AAsteroid> BaseAsteroidBPClass;
   TSubclassOf<class AAsteroid> SlowAsteroidBPClass;

@@ -5,6 +5,7 @@
 #include "Earth.h"
 #include "Spawner.h"
 
+DEFINE_LOG_CATEGORY(Spawner);
 
 // Sets default values
 ASpawner::ASpawner()
@@ -52,8 +53,12 @@ void ASpawner::Spawn() {
 }
 
 void ASpawner::Spawn(EAsteroidType AsteroidType) {
-  UClass* asteroidClass;
+  // TODO: Handle the case viewport size has changed
+  if (ViewportSize.IsNearlyZero()) {
+    ComputeSpawnerBounds();
+  }
   
+  UClass* asteroidClass;
   switch (AsteroidType) {
   case EAsteroidType::SLOW:
     asteroidClass = SlowAsteroidBPClass;
@@ -113,10 +118,11 @@ EAsteroidType ASpawner::GetNextAsteroidType() {
 }
 
 void ASpawner::ComputeSpawnerBounds() {
-  const FVector2D viewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+  GEngine->GameViewport->GetViewportSize(ViewportSize);
+  UE_LOG(Spawner, Log, TEXT("Computing spawner bounds... Viewport size: %f %f"), ViewportSize.X, ViewportSize.Y);
   Bounds.Empty();
   Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), 0, 0, 0));
-  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), 0, viewportSize.Y, 0));
-  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), viewportSize.X, viewportSize.Y, 0));
-  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), viewportSize.X, 0, 0));
+  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), 0, ViewportSize.Y, 0));
+  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), ViewportSize.X, ViewportSize.Y, 0));
+  Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), ViewportSize.X, 0, 0));
 }
