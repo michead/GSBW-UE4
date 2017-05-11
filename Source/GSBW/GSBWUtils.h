@@ -74,11 +74,14 @@ namespace GSBWUtils {
     TSharedPtr<FJsonObject> jsonObj = MakeShareable(new FJsonObject());
     check(FJsonSerializer::Deserialize(jsonReader, jsonObj));
     TArray<TSharedPtr<FJsonValue>> words = jsonObj->GetArrayField(TEXT("data"));
+    for (uint8_t i = MinLen; i <= MaxLen; i++) {
+      wordMap.Add(i, TArray<FString>());
+    }
     for (TSharedPtr<FJsonValue> pWord : words) {
       FString word = pWord->AsString();
       uint8_t wordLen = word.Len();
       if (wordLen >= MinLen && wordLen <= MaxLen) {
-        wordMap[wordLen].Add(word);
+        wordMap[wordLen].Add(word.ToUpper());
       }
     }
     return wordMap;

@@ -22,7 +22,7 @@ ASpawner::ASpawner()
   FreezeAsteroidBPClass = (UClass*)FreezeAsteroidBP.Object->GeneratedClass;
   BombAsteroidBPClass = (UClass*)BombAsteroidBP.Object->GeneratedClass;
 
-  WordMap = GSBWUtils::LoadWordsFromFileIntoLenMap(FPaths::GameSourceDir() + "/Source/Data/Words.json", MIN_WORD_LEN, MAX_WORD_LEN);
+  WordMap = GSBWUtils::LoadWordsFromFileIntoLenMap(FPaths::GameContentDir() + "Data/Words.json", MIN_WORD_LEN, MAX_WORD_LEN);
 }
 
 // Called when the game starts or when spawned
@@ -48,7 +48,7 @@ void ASpawner::StartSpawnCoroutine() {
 }
 
 void ASpawner::Spawn() {
-  Spawn(GetRandomAsteroidType());
+  Spawn(GetNextAsteroidType());
 }
 
 void ASpawner::Spawn(EAsteroidType AsteroidType) {
@@ -71,7 +71,7 @@ void ASpawner::Spawn(EAsteroidType AsteroidType) {
   }
 
   FTransform transform;
-  transform.SetLocation(GetRandomAsteroidLocation());
+  transform.SetLocation(GetNextAsteroidLocation());
   AAsteroid* asteroid = GetWorld()->SpawnActor<AAsteroid>(asteroidClass, transform);
   FAsteroidInitProps props;
   InitAsteroidProps(props, AsteroidType);
@@ -80,11 +80,11 @@ void ASpawner::Spawn(EAsteroidType AsteroidType) {
 
 void ASpawner::InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type) {
   Props.type = Type;
-  Props.word = PickAsteroidWord();
-  Props.speed = PickAsteroidSpeed();
+  Props.word = GetNextAsteroidWord();
+  Props.speed = GetNextAsteroidSpeed();
 }
 
-FVector ASpawner::GetRandomAsteroidLocation() {
+FVector ASpawner::GetNextAsteroidLocation() {
   float r = FMath::FRand() * 4, r2 = FMath::FRand();
   if (r <= 1) return FMath::Lerp(Bounds[0], Bounds[1], r2);
   else if (r <= 2) return FMath::Lerp(Bounds[1], Bounds[2], r2);
@@ -92,14 +92,24 @@ FVector ASpawner::GetRandomAsteroidLocation() {
   else return FMath::Lerp(Bounds[3], Bounds[0], r2);
 }
 
-FString ASpawner::PickAsteroidWord() {
+FString ASpawner::GetNextAsteroidWord() {
   // TODO: This is just a stub
-  return "test";
+  return WordMap[MIN_WORD_LEN][0];
 }
 
-float ASpawner::PickAsteroidSpeed() {
+float ASpawner::GetNextAsteroidSpeed() {
   // TODO: This is just a stub
   return 5000.f;
+}
+
+float ASpawner::GetSpawnInterval() {
+  // TODO: This is just a stub
+  return 2.f;
+}
+
+EAsteroidType ASpawner::GetNextAsteroidType() {
+  // TODO: This is just a stub
+  return EAsteroidType::BASE;
 }
 
 void ASpawner::ComputeSpawnerBounds() {
@@ -109,19 +119,4 @@ void ASpawner::ComputeSpawnerBounds() {
   Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), 0, viewportSize.Y, 0));
   Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), viewportSize.X, viewportSize.Y, 0));
   Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), viewportSize.X, 0, 0));
-}
-
-float ASpawner::GetSpawnInterval() {
-  // TODO: This is just a stub
-  return 2.f;
-}
-
-EAsteroidType ASpawner::GetRandomAsteroidType() {
-  // TODO: This is just a stub
-  return EAsteroidType::BASE;
-}
-
-FString ASpawner::GetRandomWord() {
-  // TODO: This is just a stub
-  return WordMap[0][0];
 }

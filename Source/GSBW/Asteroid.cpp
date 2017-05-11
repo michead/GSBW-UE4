@@ -39,7 +39,7 @@ void AAsteroid::Tick(float DeltaTime) {
   Super::Tick(DeltaTime);
 
   // Update word
-  TextRenderComponent->Text = FText::FromString(WordToDisplay);
+  TextRenderComponent->SetText(WordToDisplay);
 }
 
 void AAsteroid::Init(const FAsteroidInitProps& props) {

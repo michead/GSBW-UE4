@@ -30,13 +30,12 @@ private:
   void Spawn();
   void Spawn(EAsteroidType AsteroidType);
   float GetSpawnInterval();
-  FVector GetRandomAsteroidLocation();
-  EAsteroidType GetRandomAsteroidType();
-  FString GetRandomWord();
+  FVector GetNextAsteroidLocation();
+  FString GetNextAsteroidWord();
+  EAsteroidType GetNextAsteroidType();
+  float GetNextAsteroidSpeed();
   void ComputeSpawnerBounds();
   void InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type);
-  FString PickAsteroidWord();
-  float PickAsteroidSpeed();
 
   FTimerHandle TimerHandle;
   TSubclassOf<class AAsteroid> BaseAsteroidBPClass;
