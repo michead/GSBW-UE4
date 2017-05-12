@@ -8,7 +8,7 @@
 #define S2W_MULTIPLIER  10
 
 namespace GSBWUtils {
-  inline FVector ScreenSpaceToWorldSpace(UWorld* World, uint8 X, uint8 Y, float Z) {
+  inline FVector ScreenSpaceToWorldSpace(UWorld* World, float X, float Y, float Z) {
     // FIXE: This is the proper way to implement this, but, alas, it does not work
     FVector worldLocation, worldDirection;
     APlayerController* controller = UGameplayStatics::GetPlayerController(World, 0);

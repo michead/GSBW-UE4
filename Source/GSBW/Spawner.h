@@ -38,8 +38,10 @@ private:
   float GetNextAsteroidSpeed();
   void ComputeSpawnerBounds();
   void InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type);
+  void CacheViewportSize();
 
   FVector2D ViewportSize;
+  FVector2D PrevViewportSize;
   FTimerHandle TimerHandle;
   TSubclassOf<class AAsteroid> BaseAsteroidBPClass;
   TSubclassOf<class AAsteroid> SlowAsteroidBPClass;

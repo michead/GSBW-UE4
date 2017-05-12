@@ -53,11 +53,8 @@ void ASpawner::Spawn() {
 }
 
 void ASpawner::Spawn(EAsteroidType AsteroidType) {
-  // TODO: Handle the case viewport size has changed
-  if (ViewportSize.IsNearlyZero()) {
-    ComputeSpawnerBounds();
-  }
-  
+  CacheViewportSize();
+
   UClass* asteroidClass;
   switch (AsteroidType) {
   case EAsteroidType::SLOW:
@@ -118,11 +115,25 @@ EAsteroidType ASpawner::GetNextAsteroidType() {
 }
 
 void ASpawner::ComputeSpawnerBounds() {
-  GEngine->GameViewport->GetViewportSize(ViewportSize);
-  UE_LOG(Spawner, Log, TEXT("Computing spawner bounds... Viewport size: %f %f"), ViewportSize.X, ViewportSize.Y);
   Bounds.Empty();
   Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), 0, 0, 0));
   Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), 0, ViewportSize.Y, 0));
   Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), ViewportSize.X, ViewportSize.Y, 0));
   Bounds.Add(GSBWUtils::ScreenSpaceToWorldSpace(GetWorld(), ViewportSize.X, 0, 0));
+  UE_LOG(Spawner, Log, TEXT("Bounds[0] (TL): { %.1f,  %.1f, %.1f }"), Bounds[0].X, Bounds[0].Y, Bounds[0].Z);
+  UE_LOG(Spawner, Log, TEXT("Bounds[1] (BL): { %.1f,  %.1f, %.1f }"), Bounds[1].X, Bounds[1].Y, Bounds[1].Z);
+  UE_LOG(Spawner, Log, TEXT("Bounds[2] (BR): { %.1f,  %.1f, %.1f }"), Bounds[2].X, Bounds[2].Y, Bounds[2].Z);
+  UE_LOG(Spawner, Log, TEXT("Bounds[3] (TR): { %.1f,  %.1f, %.1f }"), Bounds[3].X, Bounds[3].Y, Bounds[3].Z);
+}
+
+void ASpawner::CacheViewportSize() {
+  GEngine->GameViewport->GetViewportSize(ViewportSize);
+  UE_LOG(Spawner, Log, TEXT("Computing spawner bounds... Viewport size: %.1fx%.1f"), ViewportSize.X, ViewportSize.Y);
+  // If viewport size has not been computed yet
+  if (ViewportSize.IsNearlyZero() ||
+    // If viewport size changed
+    !(PrevViewportSize - ViewportSize).IsNearlyZero()) {
+    ComputeSpawnerBounds();
+  }
+  PrevViewportSize = ViewportSize;
 }
