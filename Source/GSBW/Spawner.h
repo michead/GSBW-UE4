@@ -5,6 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "Asteroid.h"
 #include "AsteroidStructs.h"
+#include "GSBWGameMode.h"
 #include "Spawner.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(Spawner, Log, All);
@@ -24,8 +25,8 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Gameplay)
-    TArray<FVector> Bounds;
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Gameplay)
+  TArray<FVector> Bounds;
 
 private:
   void StartSpawnCoroutine();
@@ -38,8 +39,8 @@ private:
   float GetNextAsteroidSpeed();
   void ComputeSpawnerBounds();
   void InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type);
-  void CacheViewportSize();
 
+  AGSBWGameMode* GameMode;
   FVector2D ViewportSize;
   FVector2D PrevViewportSize;
   FTimerHandle TimerHandle;
@@ -48,4 +49,5 @@ private:
   TSubclassOf<class AAsteroid> FreezeAsteroidBPClass;
   TSubclassOf<class AAsteroid> BombAsteroidBPClass;
   TMap<uint8_t, TArray<FString>> WordMap;
+  TArray<FInt32Interval> WordLens;
 };

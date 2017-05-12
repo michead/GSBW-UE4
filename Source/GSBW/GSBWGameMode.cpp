@@ -6,7 +6,6 @@
 #include "Earth.h"
 #include "GSBWGameMode.h"
 
-
 AGSBWGameMode::AGSBWGameMode() {
   DefaultPawnClass = AEarth::StaticClass();
   HUDClass = AGSBWHUD::StaticClass();

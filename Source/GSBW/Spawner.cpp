@@ -24,6 +24,15 @@ ASpawner::ASpawner()
   BombAsteroidBPClass = (UClass*)BombAsteroidBP.Object->GeneratedClass;
 
   WordMap = GSBWUtils::LoadWordsFromFileIntoLenMap(FPaths::GameContentDir() + "Data/Words.json", MIN_WORD_LEN, MAX_WORD_LEN);
+
+  WordLens.Add(FInt32Interval(MIN_WORD_LEN    , MIN_WORD_LEN + 1));
+  WordLens.Add(FInt32Interval(MIN_WORD_LEN + 2, MIN_WORD_LEN + 4));
+  WordLens.Add(FInt32Interval(MIN_WORD_LEN + 5, MIN_WORD_LEN + 5));
+  WordLens.Add(FInt32Interval(MIN_WORD_LEN + 6, MIN_WORD_LEN + 8));
+  WordLens.Add(FInt32Interval(MIN_WORD_LEN + 9, MAX_int32));
+
+  GameMode = Cast<AGSBWGameMode>(GetWorld()->GetAuthGameMode());
+  check(GameMode);
 }
 
 // Called when the game starts or when spawned
@@ -53,7 +62,15 @@ void ASpawner::Spawn() {
 }
 
 void ASpawner::Spawn(EAsteroidType AsteroidType) {
-  CacheViewportSize();
+  GEngine->GameViewport->GetViewportSize(ViewportSize);
+  UE_LOG(Spawner, Log, TEXT("Computing spawner bounds... Viewport size: %.1fx%.1f"), ViewportSize.X, ViewportSize.Y);
+  // If viewport size has not been computed yet
+  if (ViewportSize.IsNearlyZero() ||
+    // If viewport size changed
+    !(PrevViewportSize - ViewportSize).IsNearlyZero()) {
+    ComputeSpawnerBounds();
+  }
+  PrevViewportSize = ViewportSize;
 
   UClass* asteroidClass;
   switch (AsteroidType) {
@@ -95,8 +112,10 @@ FVector ASpawner::GetNextAsteroidLocation() {
 }
 
 FString ASpawner::GetNextAsteroidWord() {
-  // TODO: This is just a stub
-  return WordMap[MIN_WORD_LEN][0];
+  EDifficulty currentDifficulty = GameMode->GetCurrentDifficulty();
+  FInt32Interval bounds = WordLens[static_cast<uint8_t>(currentDifficulty)];
+  int32_t randLen = FMath::RandRange(bounds.Min, bounds.Max);
+  return WordMap[randLen][FMath::RandRange(0, WordMap[randLen].Num() - 1)];
 }
 
 float ASpawner::GetNextAsteroidSpeed() {
@@ -124,16 +143,4 @@ void ASpawner::ComputeSpawnerBounds() {
   UE_LOG(Spawner, Log, TEXT("Bounds[1] (BL): { %.1f,  %.1f, %.1f }"), Bounds[1].X, Bounds[1].Y, Bounds[1].Z);
   UE_LOG(Spawner, Log, TEXT("Bounds[2] (BR): { %.1f,  %.1f, %.1f }"), Bounds[2].X, Bounds[2].Y, Bounds[2].Z);
   UE_LOG(Spawner, Log, TEXT("Bounds[3] (TR): { %.1f,  %.1f, %.1f }"), Bounds[3].X, Bounds[3].Y, Bounds[3].Z);
-}
-
-void ASpawner::CacheViewportSize() {
-  GEngine->GameViewport->GetViewportSize(ViewportSize);
-  UE_LOG(Spawner, Log, TEXT("Computing spawner bounds... Viewport size: %.1fx%.1f"), ViewportSize.X, ViewportSize.Y);
-  // If viewport size has not been computed yet
-  if (ViewportSize.IsNearlyZero() ||
-    // If viewport size changed
-    !(PrevViewportSize - ViewportSize).IsNearlyZero()) {
-    ComputeSpawnerBounds();
-  }
-  PrevViewportSize = ViewportSize;
 }

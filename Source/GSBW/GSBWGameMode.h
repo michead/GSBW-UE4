@@ -5,7 +5,6 @@
 #include "GameFramework/GameMode.h"
 #include "GSBWGameMode.generated.h"
 
-
 /**
  *
  */
@@ -33,6 +32,10 @@ class GSBW_API AGSBWGameMode : public AGameMode
 
   UPROPERTY(EditAnywhere, Category=CPP_Gameplay)
   TArray<float> DifficultyDurations;
+
+public:
+  UFUNCTION()
+  EDifficulty GetCurrentDifficulty() const { return CurrentDifficulty; }
 
 private:
   void StartBumpDifficultyCoroutine();
