@@ -31,10 +31,13 @@ void AGSBWGameMode::StartBumpDifficultyCoroutine() {
 }
 
 void AGSBWGameMode::BumpDifficulty() {
-  CurrentDifficulty = static_cast<EDifficulty>(static_cast<uint8>(CurrentDifficulty) + 1);
+  if (static_cast<uint8>(CurrentDifficulty) <
+      static_cast<uint8>(EDifficulty::NUM_DIFFICULTIES) - 1) {
+    CurrentDifficulty = static_cast<EDifficulty>(static_cast<uint8>(CurrentDifficulty) + 1);
+  }
 }
 
 float AGSBWGameMode::GetCurrentDifficultyDuration() {
-  return 2.f;
+  return 5.f;
 }
 

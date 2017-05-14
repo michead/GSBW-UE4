@@ -2,6 +2,7 @@
 
 #include "GSBW.h"
 #include "GSBWUtils.h"
+#include "Asteroid.h"
 #include "Earth.h"
 #include "Spawner.h"
 
@@ -23,16 +24,14 @@ ASpawner::ASpawner()
   FreezeAsteroidBPClass = (UClass*)FreezeAsteroidBP.Object->GeneratedClass;
   BombAsteroidBPClass = (UClass*)BombAsteroidBP.Object->GeneratedClass;
 
+  Alphabet = FString(STR_ALPHABET_LC);
+
   WordMap = GSBWUtils::LoadWordsFromFileIntoLenMap(FPaths::GameContentDir() + "Data/Words.json", MIN_WORD_LEN, MAX_WORD_LEN);
 
-  WordLens.Add(FInt32Interval(MIN_WORD_LEN    , MIN_WORD_LEN + 1));
-  WordLens.Add(FInt32Interval(MIN_WORD_LEN + 2, MIN_WORD_LEN + 4));
-  WordLens.Add(FInt32Interval(MIN_WORD_LEN + 5, MIN_WORD_LEN + 5));
-  WordLens.Add(FInt32Interval(MIN_WORD_LEN + 6, MIN_WORD_LEN + 8));
-  WordLens.Add(FInt32Interval(MIN_WORD_LEN + 9, MAX_int32));
-
-  GameMode = Cast<AGSBWGameMode>(GetWorld()->GetAuthGameMode());
-  check(GameMode);
+  WordLens.Add(FInt32Interval(MIN_WORD_LEN +  0, MIN_WORD_LEN + 1));
+  WordLens.Add(FInt32Interval(MIN_WORD_LEN +  2, MIN_WORD_LEN + 5));
+  WordLens.Add(FInt32Interval(MIN_WORD_LEN +  6, MIN_WORD_LEN + 9));
+  WordLens.Add(FInt32Interval(MIN_WORD_LEN +  9, MIN_WORD_LEN + 10));
 }
 
 // Called when the game starts or when spawned
@@ -40,6 +39,8 @@ void ASpawner::BeginPlay()
 {
 	Super::BeginPlay();
   StartSpawnCoroutine();
+  GameMode = Cast<AGSBWGameMode>(GetWorld()->GetAuthGameMode());
+  check(GameMode);
 }
 
 // Called every frame
@@ -115,7 +116,25 @@ FString ASpawner::GetNextAsteroidWord() {
   EDifficulty currentDifficulty = GameMode->GetCurrentDifficulty();
   FInt32Interval bounds = WordLens[static_cast<uint8_t>(currentDifficulty)];
   int32_t randLen = FMath::RandRange(bounds.Min, bounds.Max);
-  return WordMap[randLen][FMath::RandRange(0, WordMap[randLen].Num() - 1)];
+  TArray<AActor*> asteroids;
+  UGameplayStatics::GetAllActorsOfClass(GetWorld(), AAsteroid::StaticClass(), asteroids);
+  FString word;
+  uint8_t index = FMath::RandRange(0, 25);
+  for (uint8_t i = 0; i < 26; i++) {
+    TArray<FString> wordArray = WordMap[randLen][Alphabet.Mid(index++ % 26, 1)];
+    if (wordArray.Num() < 1) {
+      continue;
+    }
+    word = PickWordFromMap(randLen, Alphabet.Mid(index++ % 26, 1));
+    if (SomeStartWithLetter(asteroids, word)) {
+      continue;
+    }
+    break;
+  }
+  if (word.IsEmpty()) {
+    word = PickWordFromMap(randLen, Alphabet.Mid(FMath::RandRange(0, 25), 1));
+  }
+  return word;
 }
 
 float ASpawner::GetNextAsteroidSpeed() {
@@ -125,7 +144,7 @@ float ASpawner::GetNextAsteroidSpeed() {
 
 float ASpawner::GetSpawnInterval() {
   // TODO: This is just a stub
-  return 2.f;
+  return 3.f;
 }
 
 EAsteroidType ASpawner::GetNextAsteroidType() {
@@ -144,3 +163,22 @@ void ASpawner::ComputeSpawnerBounds() {
   UE_LOG(Spawner, Log, TEXT("Bounds[2] (BR): { %.1f,  %.1f, %.1f }"), Bounds[2].X, Bounds[2].Y, Bounds[2].Z);
   UE_LOG(Spawner, Log, TEXT("Bounds[3] (TR): { %.1f,  %.1f, %.1f }"), Bounds[3].X, Bounds[3].Y, Bounds[3].Z);
 }
+
+bool ASpawner::SomeStartWithLetter(const TArray<AActor*>& Asteroids, const FString& Letter) {
+  for (const AActor* asteroid : Asteroids) {
+    AAsteroid* _asteroid = Cast<AAsteroid>((AAsteroid*)asteroid);
+    if (_asteroid && _asteroid->GetWord().StartsWith(Letter)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+FString ASpawner::PickWordFromMap(uint8_t WordLen, const FString& Prefix) {
+  if (WordMap[WordLen].Num() < 1 ||
+      WordMap[WordLen][Prefix].Num() < 1) {
+    return "";
+  }
+  return WordMap[WordLen][Prefix][FMath::RandRange(0, WordMap[WordLen][Prefix].Num() - 1)];
+}
+

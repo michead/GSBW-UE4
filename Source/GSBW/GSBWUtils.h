@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "Json.h"
 #include "GlobalEventHandler.h"
+#include "GSBWCommon.h"
 
 #define LINE_LEN        100000
 #define S2W_MULTIPLIER  10
@@ -66,8 +67,8 @@ namespace GSBWUtils {
     World->GetTimerManager().SetTimerForNextTick<T>(ActorToDestroy, TimerMethod);
   }
 
-  inline TMap<uint8_t, TArray<FString>> LoadWordsFromFileIntoLenMap(FString Filename, uint8_t MinLen, uint8_t MaxLen) {
-    TMap<uint8_t, TArray<FString>> wordMap;
+  inline GSBWWordMap LoadWordsFromFileIntoLenMap(FString Filename, uint8_t MinLen, uint8_t MaxLen) {
+    GSBWWordMap wordMap;
     FString jsonStr;
     FFileHelper::LoadFileToString(jsonStr, *Filename);
     TSharedRef<TJsonReader<TCHAR>> jsonReader = FJsonStringReader::Create(jsonStr);
@@ -75,13 +76,16 @@ namespace GSBWUtils {
     check(FJsonSerializer::Deserialize(jsonReader, jsonObj));
     TArray<TSharedPtr<FJsonValue>> words = jsonObj->GetArrayField(TEXT("data"));
     for (uint8_t i = MinLen; i <= MaxLen; i++) {
-      wordMap.Add(i, TArray<FString>());
+      wordMap.Add(i, TMap<FString, TArray<FString>>());
+      for (const FString& letter : IL_ALPHABET_LC) {
+        wordMap[i].Add(letter, TArray<FString>());
+      }
     }
     for (TSharedPtr<FJsonValue> pWord : words) {
       FString word = pWord->AsString();
       uint8_t wordLen = word.Len();
       if (wordLen >= MinLen && wordLen <= MaxLen) {
-        wordMap[wordLen].Add(word.ToUpper());
+        wordMap[wordLen][word.Mid(0, 1)].Add(word.ToUpper());
       }
     }
     return wordMap;

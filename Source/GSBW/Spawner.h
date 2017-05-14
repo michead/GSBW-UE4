@@ -6,6 +6,7 @@
 #include "Asteroid.h"
 #include "AsteroidStructs.h"
 #include "GSBWGameMode.h"
+#include "GSBWCommon.h"
 #include "Spawner.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(Spawner, Log, All);
@@ -39,6 +40,10 @@ private:
   float GetNextAsteroidSpeed();
   void ComputeSpawnerBounds();
   void InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type);
+  FString PickWordFromMap(uint8_t WordLen, const FString& Prefix);
+
+  // Static methods
+  static bool SomeStartWithLetter(const TArray<AActor*>& Asteroids, const FString& Letter);
 
   AGSBWGameMode* GameMode;
   FVector2D ViewportSize;
@@ -48,6 +53,7 @@ private:
   TSubclassOf<class AAsteroid> SlowAsteroidBPClass;
   TSubclassOf<class AAsteroid> FreezeAsteroidBPClass;
   TSubclassOf<class AAsteroid> BombAsteroidBPClass;
-  TMap<uint8_t, TArray<FString>> WordMap;
+  FString Alphabet;
+  GSBWWordMap WordMap;
   TArray<FInt32Interval> WordLens;
 };
