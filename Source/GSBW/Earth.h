@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Blueprint/UserWidget.h"
 #include "GameFramework/Actor.h"
 #include "GSBWGameMode.h"
 #include "Asteroid.h"
@@ -40,6 +41,9 @@ public:
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rocket)
   TSubclassOf<ARocket> BaseRocketClass;
+
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_HUD)
+  TSubclassOf<class UUserWidget> EarthHUDClass;
 
 private:
   // Binding for player input
@@ -92,6 +96,7 @@ private:
     bool bFromSweep,
     const FHitResult& SweepResult);
 
+  UUserWidget* HUD;
   UDestructibleComponent* DestructibleComponent;
   TArray<FString> Alphabet;
   FTarget Target;

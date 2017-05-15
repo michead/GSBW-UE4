@@ -69,7 +69,9 @@ void AEarth::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 void AEarth::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+    HUD = CreateWidget<UUserWidget>(Cast<APlayerController>(GetController()), EarthHUDClass);
+    HUD->AddToViewport();
 }
 
 // Called every frame
