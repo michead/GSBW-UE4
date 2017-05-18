@@ -25,6 +25,8 @@ AEarth::AEarth()
 
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
     Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
+    Health = MaxHealth;
 }
 
 void AEarth::OnConstruction(const FTransform& Transform) {
@@ -69,16 +71,12 @@ void AEarth::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 void AEarth::BeginPlay()
 {
 	Super::BeginPlay();
-
-    HUD = CreateWidget<UUserWidget>(Cast<APlayerController>(GetController()), EarthHUDClass);
-    HUD->AddToViewport();
 }
 
 // Called every frame
 void AEarth::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
-
 }
 
 void AEarth::HandleInput(FString letter) { 
