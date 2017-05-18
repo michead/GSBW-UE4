@@ -32,6 +32,7 @@ public:
   TSubclassOf<class UUserWidget> PauseMenuClass;
 
 private:
+  APlayerController* PlayerController;
   UUserWidget* HUD;
   UUserWidget* MainMenu;
   UUserWidget* PauseMenu;

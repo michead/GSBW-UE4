@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GSBW.h"
+#include "Earth.h"
 #include "GSBWHUD.h"
 
 // Sets default values
@@ -12,12 +13,16 @@ AGSBWHUD::AGSBWHUD() {
 void AGSBWHUD::BeginPlay() {
   Super::BeginPlay();
 
-  HUD = CreateWidget<UUserWidget>(GetWorld()->GetFirstPlayerController(), EarthHUDClass);
+  TArray<AActor*> actors;
+  UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEarth::StaticClass(), actors);
+  PlayerController = Cast<APlayerController>(Cast<AEarth>(actors[0])->GetController());
+
+  HUD = CreateWidget<UUserWidget>(PlayerController, EarthHUDClass);
   HUD->AddToViewport();
 
-  MainMenu = CreateWidget<UUserWidget>(GetWorld()->GetFirstPlayerController(), MainMenuClass);
+  MainMenu = CreateWidget<UUserWidget>(PlayerController, MainMenuClass);
   MainMenu->AddToViewport();
 
-  PauseMenu = CreateWidget<UUserWidget>(GetWorld()->GetFirstPlayerController(), PauseMenuClass);
+  PauseMenu = CreateWidget<UUserWidget>(PlayerController, PauseMenuClass);
   PauseMenu->AddToViewport();
 }
