@@ -12,4 +12,15 @@
 #define MIN_WORD_LEN                3
 #define MAX_WORD_LEN                15
 
+// Data source
 typedef TMap<uint8_t, TMap<FString, TArray<FString>>> GSBWWordMap;
+
+// Events
+enum EGSBWEvent {
+  ASTEROID_HIT,
+  ASTEROID_DOWN
+};
+struct GSBWEventPayload {
+
+};
+typedef void (AActor::*GSBWEventCallback)(void);

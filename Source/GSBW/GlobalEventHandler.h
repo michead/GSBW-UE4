@@ -3,19 +3,9 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "GSBWCommon.h"
 #include "GlobalEventHandlerComponent.h"
 #include "GlobalEventHandler.generated.h"
-
-enum EGSBWEvent {
-  ASTEROID_HIT,
-  ASTEROID_DOWN
-};
-
-struct GSBWEventPayload {
-
-};
-
-typedef void (AActor::*GSBWEventCallback)(void);
 
 UCLASS()
 class GSBW_API AGlobalEventHandler : public AActor
@@ -35,6 +25,6 @@ public:
     // Wraps delegates of GSBW events
     UGlobalEventHandlerComponent* EventHandler;
 
-    void BroadcastEvent(EGSBWEvent ev, GSBWEventPayload* payload = nullptr);
-    void SubscribeToEvent(EGSBWEvent ev, AActor* subscriber, GSBWEventCallback callback);
+    void BroadcastEvent(EGSBWEvent Ev, GSBWEventPayload* Payload = nullptr);
+    void SubscribeToEvent(EGSBWEvent Ev, AActor* Subscriber, GSBWEventCallback DelegateFunc);
 };

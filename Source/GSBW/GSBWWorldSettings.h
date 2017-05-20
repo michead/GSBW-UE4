@@ -14,9 +14,14 @@ class GSBW_API AGSBWWorldSettings : public AWorldSettings
   GENERATED_BODY()
 
 public:
-  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = CPP_Gameplay)
+  // Health
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
   int32 AsteroidDamage;
-
-  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = CPP_Gameplay)
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
   int32 RocketDamage;
+  // Score
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
+  int32 AsteroidHitScore;
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
+  int32 AsteroidDownScore;
 };

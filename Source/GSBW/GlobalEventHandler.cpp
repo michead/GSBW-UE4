@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GSBW.h"
+#include "GSBWCommon.h"
 #include "GlobalEventHandler.h"
 
 
@@ -27,8 +28,8 @@ void AGlobalEventHandler::Tick( float DeltaTime )
 
 }
 
-void AGlobalEventHandler::BroadcastEvent(EGSBWEvent ev, GSBWEventPayload* payload) {
-  switch (ev) {
+void AGlobalEventHandler::BroadcastEvent(EGSBWEvent Ev, GSBWEventPayload* Payload) {
+  switch (Ev) {
   case EGSBWEvent::ASTEROID_HIT:
     EventHandler->OnAsteroidHit.Broadcast(); break;
   case EGSBWEvent::ASTEROID_DOWN:
@@ -38,12 +39,12 @@ void AGlobalEventHandler::BroadcastEvent(EGSBWEvent ev, GSBWEventPayload* payloa
   }
 }
 
-void AGlobalEventHandler::SubscribeToEvent(EGSBWEvent ev, AActor* subscriber, GSBWEventCallback callback) {
-  switch (ev) {
+void AGlobalEventHandler::SubscribeToEvent(EGSBWEvent Ev, AActor* Subscriber, GSBWEventCallback DelegateFunc) {
+  switch (Ev) {
   case EGSBWEvent::ASTEROID_HIT:
-    EventHandler->OnAsteroidHit.AddDynamic(subscriber, callback); break;
+    EventHandler->OnAsteroidHit.AddDynamic(Subscriber, DelegateFunc); break;
   case EGSBWEvent::ASTEROID_DOWN:
-    EventHandler->OnAsteroidDown.AddDynamic(subscriber, callback); break;
+    EventHandler->OnAsteroidDown.AddDynamic(Subscriber, DelegateFunc); break;
   default:
     break;
   }
