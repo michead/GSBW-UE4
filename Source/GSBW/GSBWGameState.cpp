@@ -3,16 +3,17 @@
 #include "GSBW.h"
 #include "GSBWCommon.h"
 #include "GSBWUtils.h"
+#include "GlobalEventHandler.h"
 #include "GSBWGameState.h"
 
 void AGSBWGameState::HandleMatchHasStarted() {
   Super::HandleMatchHasStarted();
 
   // Register event listeners
-  // GSBWEventCallback cbHit = &AGSBWGameState::OnAsteroidHit;
-  // GSBWEventCallback cbDown = &AGSBWGameState::OnAsteroidDown;
-  // GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_HIT, this, cbHit);
-  // GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_DOWN, this, cbDown);
+  AsteroidHitDelegate.BindUFunction(this,"OnAsteroidHit");
+  AsteroidDownDelegate.BindUFunction(this, "OnAsteroidDown");
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_HIT, AsteroidHitDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_DOWN, AsteroidDownDelegate);
 
   // Cache world settings
   WorldSettings = Cast<AGSBWWorldSettings>(GetWorldSettings());

@@ -26,4 +26,6 @@ public:
 
 private:
   AGSBWWorldSettings* WorldSettings;
+  TScriptDelegate<FWeakObjectPtr> AsteroidHitDelegate;
+  TScriptDelegate<FWeakObjectPtr> AsteroidDownDelegate;
 };

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine.h"
+
 #define PURE_VIRTUAL                { check(0 && "Pure Virtual Function -- Override It") }
 #define STR_ALPHABET_LC             "abcdefghijklmnopqrstuvwxyz" 
 #define IL_ALPHABET_LC              { "a", "b", "c", "d", "e",  "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" }
@@ -23,4 +25,3 @@ enum EGSBWEvent {
 struct GSBWEventPayload {
 
 };
-typedef void (AActor::*GSBWEventCallback)(void);

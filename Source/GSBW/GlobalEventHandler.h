@@ -7,6 +7,8 @@
 #include "GlobalEventHandlerComponent.h"
 #include "GlobalEventHandler.generated.h"
 
+DECLARE_DELEGATE(EventDelegate);
+
 UCLASS()
 class GSBW_API AGlobalEventHandler : public AActor
 {
@@ -22,9 +24,9 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
-    // Wraps delegates of GSBW events
-    UGlobalEventHandlerComponent* EventHandler;
+  // Wraps delegates of GSBW events
+  UGlobalEventHandlerComponent* EventHandler;
 
-    void BroadcastEvent(EGSBWEvent Ev, GSBWEventPayload* Payload = nullptr);
-    void SubscribeToEvent(EGSBWEvent Ev, AActor* Subscriber, GSBWEventCallback DelegateFunc);
+  void BroadcastEvent(EGSBWEvent Ev, GSBWEventPayload* Payload = nullptr);
+  void SubscribeToEvent(EGSBWEvent Ev, TScriptDelegate<FWeakObjectPtr>& DelegateFunc);
 };
