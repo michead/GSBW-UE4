@@ -20,7 +20,9 @@ typedef TMap<uint8_t, TMap<FString, TArray<FString>>> GSBWWordMap;
 // Events
 enum EGSBWEvent {
   ASTEROID_HIT,
-  ASTEROID_DOWN
+  ASTEROID_DOWN,
+  EARTH_HIT,
+  EARTH_DOWN
 };
 struct GSBWEventPayload {
 

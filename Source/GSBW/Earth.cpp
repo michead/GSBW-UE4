@@ -125,7 +125,11 @@ bool AEarth::AcquireTarget(FString& InputLetters) {
 void AEarth::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
   class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
   if (Cast<AAsteroid>(OtherActor)) {
+    GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::EARTH_HIT);
     Health -= FMath::Max(WorldSettings->AsteroidDamage, 0);
+    if (Health == 0) {
+      GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::EARTH_DOWN);
+    }
   }
 }
 
