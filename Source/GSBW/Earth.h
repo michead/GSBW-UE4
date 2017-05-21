@@ -4,6 +4,7 @@
 
 #include "GameFramework/Actor.h"
 #include "GSBWGameMode.h"
+#include "GSBWWorldSettings.h"
 #include "Asteroid.h"
 #include "Rocket.h"
 #include "EarthStructs.h"
@@ -41,11 +42,11 @@ public:
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rocket)
   TSubclassOf<ARocket> BaseRocketClass;
 
-  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Gameplay)
-  int32 MaxHealth;
-
   UPROPERTY(BlueprintReadOnly, Category=Gameplay)
   int32 Health;
+
+  UPROPERTY(BlueprintReadOnly, Category = Gameplay)
+  int32 MaxHealth;
 
 private:
   // Binding for player input
@@ -100,6 +101,7 @@ private:
 
   UDestructibleComponent* DestructibleComponent;
   TArray<FString> Alphabet;
+  AGSBWWorldSettings* WorldSettings;
   FTarget Target;
   float OldAlphaKey;
 };

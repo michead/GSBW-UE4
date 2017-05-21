@@ -20,10 +20,10 @@ void AGSBWGameState::HandleMatchHasStarted() {
 }
 
 void AGSBWGameState::OnAsteroidHit() {
-
+  Score += WorldSettings->AsteroidHitScore;
 }
 
 void AGSBWGameState::OnAsteroidDown() {
-
+  Score += WorldSettings->AsteroidDownScore;
 }
 

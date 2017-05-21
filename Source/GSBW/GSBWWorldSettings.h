@@ -16,9 +16,9 @@ class GSBW_API AGSBWWorldSettings : public AWorldSettings
 public:
   // Health
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
-  int32 AsteroidDamage;
+  int32 EarthMaxHealth;
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
-  int32 RocketDamage;
+  int32 AsteroidDamage;
   // Score
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
   int32 AsteroidHitScore;

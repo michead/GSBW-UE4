@@ -25,8 +25,6 @@ AEarth::AEarth()
 
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
     Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
-    Health = MaxHealth;
 }
 
 void AEarth::OnConstruction(const FTransform& Transform) {
@@ -71,6 +69,9 @@ void AEarth::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 void AEarth::BeginPlay()
 {
 	Super::BeginPlay();
+  WorldSettings = Cast<AGSBWWorldSettings>(GetWorldSettings());
+  MaxHealth = WorldSettings->EarthMaxHealth;
+  Health = MaxHealth;
 }
 
 // Called every frame
@@ -123,7 +124,9 @@ bool AEarth::AcquireTarget(FString& InputLetters) {
 
 void AEarth::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
   class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-  // TODO
+  if (Cast<AAsteroid>(OtherActor)) {
+    Health -= FMath::Max(WorldSettings->AsteroidDamage, 0);
+  }
 }
 
 void AEarth::ShootTarget(FString& Letters) {
