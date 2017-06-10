@@ -20,14 +20,18 @@ public:
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Gameplay_CPP)
   AEarth* Earth;
 
-private:
+  UFUNCTION()
   void OnAsteroidHit();
+  UFUNCTION()
   void OnAsteroidDown();
+  UFUNCTION()
   void OnEarthHit();
+  UFUNCTION()
   void OnEarthDown();
 
-  TScriptDelegate<FWeakObjectPtr> OnAsteroidHitDelegate;
-  TScriptDelegate<FWeakObjectPtr> OnAsteroidDownDelegate;
-  TScriptDelegate<FWeakObjectPtr> OnEarthHitDelegate;
-  TScriptDelegate<FWeakObjectPtr> OnEarthDownDelegate;
+private:
+  FScriptDelegate OnAsteroidHitDelegate;
+  FScriptDelegate OnAsteroidDownDelegate;
+  FScriptDelegate OnEarthHitDelegate;
+  FScriptDelegate OnEarthDownDelegate;
 };

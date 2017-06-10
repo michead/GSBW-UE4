@@ -16,8 +16,9 @@ class GSBW_API AGSBWGameState : public AGameState
   virtual void HandleMatchHasStarted() override;
 
 public:
-  // Event delegates
+  UFUNCTION()
   void OnAsteroidHit();
+  UFUNCTION()
   void OnAsteroidDown();
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Score)
@@ -25,6 +26,6 @@ public:
 
 private:
   AGSBWWorldSettings* WorldSettings;
-  TScriptDelegate<FWeakObjectPtr> AsteroidHitDelegate;
-  TScriptDelegate<FWeakObjectPtr> AsteroidDownDelegate;
+  FScriptDelegate AsteroidHitDelegate;
+  FScriptDelegate AsteroidDownDelegate;
 };

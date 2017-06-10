@@ -39,7 +39,7 @@ void AGlobalEventHandler::BroadcastEvent(EGSBWEvent Ev, GSBWEventPayload* Payloa
   }
 }
 
-void AGlobalEventHandler::SubscribeToEvent(EGSBWEvent Ev, TScriptDelegate<FWeakObjectPtr>& DelegateFunc) {
+void AGlobalEventHandler::SubscribeToEvent(EGSBWEvent Ev, const FScriptDelegate& DelegateFunc) {
   switch (Ev) {
   case EGSBWEvent::ASTEROID_HIT:
     EventHandler->OnAsteroidHit.Add(DelegateFunc); break;

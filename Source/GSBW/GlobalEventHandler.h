@@ -28,5 +28,5 @@ public:
   UGlobalEventHandlerComponent* EventHandler;
 
   void BroadcastEvent(EGSBWEvent Ev, GSBWEventPayload* Payload = nullptr);
-  void SubscribeToEvent(EGSBWEvent Ev, TScriptDelegate<FWeakObjectPtr>& DelegateFunc);
+  void SubscribeToEvent(EGSBWEvent Ev, const FScriptDelegate& DelegateFunc);
 };
