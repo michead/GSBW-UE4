@@ -16,7 +16,9 @@ ASpawner::ASpawner()
 
   Alphabet = FString(STR_ALPHABET_LC);
 
-  WordMap = GSBWUtils::LoadWordsFromFileIntoLenMap(FPaths::GameContentDir() + "Data/Words.json", MIN_WORD_LEN, MAX_WORD_LEN);
+  FString wordsPath = FPaths::Combine(*FPaths::GameContentDir(), *FString("Data/Words.json"));
+  UE_LOG(Spawner, Log, TEXT("Loading words from %s"), *wordsPath);
+  WordMap = GSBWUtils::LoadWordsFromFileIntoLenMap(wordsPath, MIN_WORD_LEN, MAX_WORD_LEN);
 
   WordLens.Add(FInt32Interval(MIN_WORD_LEN +  0, MIN_WORD_LEN + 1));
   WordLens.Add(FInt32Interval(MIN_WORD_LEN +  2, MIN_WORD_LEN + 5));
