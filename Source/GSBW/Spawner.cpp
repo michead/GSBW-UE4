@@ -14,16 +14,6 @@ ASpawner::ASpawner()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-  static ConstructorHelpers::FObjectFinder<UBlueprint> BaseAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_BaseAsteroid.BP_BaseAsteroid'"));
-  static ConstructorHelpers::FObjectFinder<UBlueprint> SlowAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_SlowAsteroid.BP_SlowAsteroid'"));
-  static ConstructorHelpers::FObjectFinder<UBlueprint> FreezeAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_FreezeAsteroid.BP_FreezeAsteroid'"));
-  static ConstructorHelpers::FObjectFinder<UBlueprint> BombAsteroidBP(TEXT("Blueprint'/Game/Blueprints/BP_BombAsteroid.BP_BombAsteroid'"));
-
-  BaseAsteroidBPClass = (UClass*)BaseAsteroidBP.Object->GeneratedClass;
-  SlowAsteroidBPClass = (UClass*)SlowAsteroidBP.Object->GeneratedClass;
-  FreezeAsteroidBPClass = (UClass*)FreezeAsteroidBP.Object->GeneratedClass;
-  BombAsteroidBPClass = (UClass*)BombAsteroidBP.Object->GeneratedClass;
-
   Alphabet = FString(STR_ALPHABET_LC);
 
   WordMap = GSBWUtils::LoadWordsFromFileIntoLenMap(FPaths::GameContentDir() + "Data/Words.json", MIN_WORD_LEN, MAX_WORD_LEN);
@@ -35,8 +25,7 @@ ASpawner::ASpawner()
 }
 
 // Called when the game starts or when spawned
-void ASpawner::BeginPlay()
-{
+void ASpawner::BeginPlay() {
 	Super::BeginPlay();
   StartSpawnCoroutine();
   GameMode = Cast<AGSBWGameMode>(GetWorld()->GetAuthGameMode());
@@ -44,9 +33,8 @@ void ASpawner::BeginPlay()
 }
 
 // Called every frame
-void ASpawner::Tick( float DeltaTime )
-{
-	Super::Tick( DeltaTime );
+void ASpawner::Tick(float DeltaTime) {
+	Super::Tick(DeltaTime);
 }
 
 void ASpawner::StartSpawnCoroutine() {

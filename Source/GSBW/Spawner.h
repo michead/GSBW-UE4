@@ -29,6 +29,18 @@ public:
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Gameplay)
   TArray<FVector> Bounds;
 
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Gameplay)
+  TSubclassOf<class AAsteroid> BaseAsteroidBPClass;
+
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Gameplay)
+  TSubclassOf<class AAsteroid> SlowAsteroidBPClass;
+
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Gameplay)
+  TSubclassOf<class AAsteroid> FreezeAsteroidBPClass;
+
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Gameplay)
+  TSubclassOf<class AAsteroid> BombAsteroidBPClass;
+
 private:
   void StartSpawnCoroutine();
   void Spawn();
@@ -49,10 +61,6 @@ private:
   FVector2D ViewportSize;
   FVector2D PrevViewportSize;
   FTimerHandle TimerHandle;
-  TSubclassOf<class AAsteroid> BaseAsteroidBPClass;
-  TSubclassOf<class AAsteroid> SlowAsteroidBPClass;
-  TSubclassOf<class AAsteroid> FreezeAsteroidBPClass;
-  TSubclassOf<class AAsteroid> BombAsteroidBPClass;
   FString Alphabet;
   GSBWWordMap WordMap;
   TArray<FInt32Interval> WordLens;

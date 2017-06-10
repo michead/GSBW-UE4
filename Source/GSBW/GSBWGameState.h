@@ -21,7 +21,7 @@ public:
   void OnAsteroidHit();
   void OnAsteroidDown();
 
-  UPROPERTY(VisibleAnywhere, Category=CPP_Score)
+  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Score)
   int32 Score;
 
 private:

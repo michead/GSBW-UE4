@@ -5,11 +5,11 @@
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/HUD.h"
+#include "EarthHUD.h"
 #include "GSBWHUD.generated.h"
 
-/**
- * 
- */
+DECLARE_LOG_CATEGORY_EXTERN(GSBWHUD, Log, All);
+
 UCLASS()
 class GSBW_API AGSBWHUD : public AHUD
 {
@@ -33,7 +33,7 @@ public:
 
 private:
   APlayerController* PlayerController;
-  UUserWidget* HUD;
+  UEarthHUD* HUD;
   UUserWidget* MainMenu;
   UUserWidget* PauseMenu;
 };
