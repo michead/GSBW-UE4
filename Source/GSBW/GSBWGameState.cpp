@@ -6,6 +6,8 @@
 #include "GlobalEventHandler.h"
 #include "GSBWGameState.h"
 
+DEFINE_LOG_CATEGORY(GSBWGameState);
+
 void AGSBWGameState::HandleMatchHasStarted() {
   Super::HandleMatchHasStarted();
 
@@ -20,10 +22,12 @@ void AGSBWGameState::HandleMatchHasStarted() {
 }
 
 void AGSBWGameState::OnAsteroidHit() {
+  UE_LOG(GSBWGameState, Log, TEXT("OnAsteroidHit()"));
   Score += WorldSettings->AsteroidHitScore;
 }
 
 void AGSBWGameState::OnAsteroidDown() {
+  UE_LOG(GSBWGameState, Log, TEXT("OnAsteroidDown()"));
   Score += WorldSettings->AsteroidDownScore;
 }
 

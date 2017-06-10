@@ -6,9 +6,8 @@
 #include "GSBWWorldSettings.h"
 #include "GSBWGameState.generated.h"
 
-/**
- * 
- */
+DECLARE_LOG_CATEGORY_EXTERN(GSBWGameState, Log, All);
+
 UCLASS()
 class GSBW_API AGSBWGameState : public AGameState
 {

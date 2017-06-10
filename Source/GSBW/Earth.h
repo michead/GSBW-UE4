@@ -42,10 +42,10 @@ public:
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rocket)
   TSubclassOf<ARocket> BaseRocketClass;
 
-  UPROPERTY(BlueprintReadOnly, Category=Gameplay)
+  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Gameplay)
   int32 Health;
 
-  UPROPERTY(BlueprintReadOnly, Category = Gameplay)
+  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
   int32 MaxHealth;
 
 private:

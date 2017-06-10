@@ -5,6 +5,10 @@
 #include "Components/ActorComponent.h"
 #include "GlobalEventHandlerComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnAsteroidHit);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnAsteroidDown);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnEarthHit);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnEarthDown);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GSBW_API UGlobalEventHandlerComponent : public UActorComponent
@@ -20,14 +24,9 @@ public:
 	
 	// Called every frame
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
-
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnAsteroidHit);
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnAsteroidDown);
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnEarthHit);
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnEarthDown);
     
-    FLevelEventDelegate_OnAsteroidHit OnAsteroidHit;
-    FLevelEventDelegate_OnAsteroidDown OnAsteroidDown;
-    FLevelEventDelegate_OnEarthHit OnEarthHit;
-    FLevelEventDelegate_OnEarthDown OnEarthDown;
+  FLevelEventDelegate_OnAsteroidHit OnAsteroidHit;
+  FLevelEventDelegate_OnAsteroidDown OnAsteroidDown;
+  FLevelEventDelegate_OnEarthHit OnEarthHit;
+  FLevelEventDelegate_OnEarthDown OnEarthDown;
 };
