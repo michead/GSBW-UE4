@@ -129,6 +129,7 @@ void AEarth::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AAc
     Health -= FMath::Max(WorldSettings->AsteroidDamage, 0);
     if (Health == 0) {
       GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::EARTH_DOWN);
+      Explode();
     }
   }
 }
@@ -188,4 +189,17 @@ void AEarth::OnTargetHit(AAsteroid& Asteroid) {
 float AEarth::GetNextRocketSpeed() {
   // TODO: This is just a stub
   return 2000.f;
+}
+
+void AEarth::Explode() {
+  DestructibleComponent->ApplyRadiusDamage(
+    ASTEROID_HIT_BASE_DAMAGE, GetActorLocation(),
+    ASTEROID_HIT_DAMAGE_RADIUS,
+    ASTEROID_HIT_IMPULSE_STRENGTH, true);
+  const FTimerDelegate DisappearDelegate = FTimerDelegate::CreateUObject(this, &AEarth::Disappear);
+  GetWorldTimerManager().SetTimer(TimerHandle, DisappearDelegate,EARTH_EXPLOSION_DURATION, false);
+}
+
+void AEarth::Disappear() {
+  Destroy();
 }

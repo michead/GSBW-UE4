@@ -68,8 +68,10 @@ DerivedDataCache/*
 *.swo
 .ctrlp_cache/
 
-# UE4 Starter Content
+# UE4 Starter Content / Migrated Assets
 Content/StarterContent/*
+Content/Assets/*
+Content/Effects/*
 
 # Workspace Configuration
 .vs

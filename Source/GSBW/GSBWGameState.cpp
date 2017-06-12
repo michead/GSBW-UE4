@@ -17,6 +17,7 @@ void AGSBWGameState::HandleMatchHasStarted() {
   AsteroidDownDelegate.BindUFunction(this, "OnAsteroidDown");
   GamePausedDelegate.BindUFunction(this, "OnGamePaused");
   GameUnpausedDelegate.BindUFunction(this, "OnGameUnpaused");
+  EarthDownDelegate.BindUFunction(this, "OnEarthDown");
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_HIT, AsteroidHitDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_DOWN, AsteroidDownDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_PAUSED, GamePausedDelegate);
@@ -59,3 +60,6 @@ bool AGSBWGameState::IsPaused() {
   return Paused;
 }
 
+void AGSBWGameState::OnEarthDown() {
+  UE_LOG(GSBWGameState, Log, TEXT("OnEarthDown()"));
+}

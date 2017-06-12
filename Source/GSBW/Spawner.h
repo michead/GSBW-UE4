@@ -41,6 +41,9 @@ public:
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Gameplay)
   TSubclassOf<class AAsteroid> BombAsteroidBPClass;
 
+  UFUNCTION()
+  void OnEarthDown();
+
 private:
   void StartSpawnCoroutine();
   void Spawn();
@@ -60,6 +63,7 @@ private:
   AGSBWGameMode* GameMode;
   FVector2D ViewportSize;
   FVector2D PrevViewportSize;
+  FScriptDelegate EarthDownDelegate;
   FTimerHandle TimerHandle;
   FString Alphabet;
   GSBWWordMap WordMap;

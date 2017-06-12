@@ -89,6 +89,10 @@ private:
   float GetNextRocketSpeed();
   // Clear reference to current target
   void ClearTarget();
+  // Explode once health reaches 0
+  void Explode();
+  // Destroy actor
+  void Disappear();
 
   UFUNCTION()
   void OnOverlapBegin(
@@ -100,6 +104,7 @@ private:
     const FHitResult& SweepResult);
 
   UDestructibleComponent* DestructibleComponent;
+  FTimerHandle TimerHandle;
   TArray<FString> Alphabet;
   AGSBWWorldSettings* WorldSettings;
   FTarget Target;

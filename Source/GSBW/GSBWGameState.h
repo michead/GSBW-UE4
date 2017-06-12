@@ -26,6 +26,8 @@ public:
   void OnGameUnpaused();
   UFUNCTION(BlueprintCallable, Category=CPP_Gameplay)
   bool IsPaused();
+  UFUNCTION()
+  void OnEarthDown();
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Score)
   int32 Score;
@@ -36,5 +38,6 @@ private:
   FScriptDelegate AsteroidDownDelegate;
   FScriptDelegate GamePausedDelegate;
   FScriptDelegate GameUnpausedDelegate;
+  FScriptDelegate EarthDownDelegate;
   bool Paused;
 };

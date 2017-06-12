@@ -11,8 +11,8 @@ DEFINE_LOG_CATEGORY(Spawner);
 // Sets default values
 ASpawner::ASpawner()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+  // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+  PrimaryActorTick.bCanEverTick = true;
 
   Alphabet = FString(STR_ALPHABET_LC);
 
@@ -24,6 +24,8 @@ ASpawner::ASpawner()
   WordLens.Add(FInt32Interval(MIN_WORD_LEN +  2, MIN_WORD_LEN + 5));
   WordLens.Add(FInt32Interval(MIN_WORD_LEN +  6, MIN_WORD_LEN + 9));
   WordLens.Add(FInt32Interval(MIN_WORD_LEN +  9, MIN_WORD_LEN + 10));
+
+  EarthDownDelegate.BindUFunction(this, "OnEarthDown");
 }
 
 // Called when the game starts or when spawned
@@ -31,7 +33,7 @@ void ASpawner::BeginPlay() {
 	Super::BeginPlay();
   StartSpawnCoroutine();
   GameMode = Cast<AGSBWGameMode>(GetWorld()->GetAuthGameMode());
-  check(GameMode);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::EARTH_DOWN, EarthDownDelegate);
 }
 
 // Called every frame
@@ -170,5 +172,10 @@ FString ASpawner::PickWordFromMap(uint8_t WordLen, const FString& Prefix) {
     return "";
   }
   return WordMap[WordLen][Prefix][FMath::RandRange(0, WordMap[WordLen][Prefix].Num() - 1)];
+}
+
+void ASpawner::OnEarthDown() {
+  // Stop Spawn() routine
+  TimerHandle.Invalidate();
 }
 
