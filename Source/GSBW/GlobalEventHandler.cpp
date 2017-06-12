@@ -28,12 +28,16 @@ void AGlobalEventHandler::Tick( float DeltaTime )
 
 }
 
-void AGlobalEventHandler::BroadcastEvent(EGSBWEvent Ev, GSBWEventPayload* Payload) {
+void AGlobalEventHandler::BroadcastEvent(EGSBWEvent Ev) {
   switch (Ev) {
   case EGSBWEvent::ASTEROID_HIT:
     EventHandler->OnAsteroidHit.Broadcast(); break;
   case EGSBWEvent::ASTEROID_DOWN:
     EventHandler->OnAsteroidDown.Broadcast(); break;
+  case EGSBWEvent::GAME_PAUSED:
+    EventHandler->OnGamePaused.Broadcast(); break;
+  case EGSBWEvent::GAME_UNPAUSED:
+    EventHandler->OnGameUnpaused.Broadcast(); break;
   default:
     break;
   }

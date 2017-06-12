@@ -30,3 +30,7 @@ void AGSBWHUD::BeginPlay() {
   PauseMenu = CreateWidget<UUserWidget>(PlayerController, PauseMenuClass);
   PauseMenu->AddToViewport();
 }
+
+void AGSBWHUD::SetPauseMenuVisibility(bool NewVisiblity) {
+  PauseMenu->SetVisibility(NewVisiblity ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
+}

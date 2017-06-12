@@ -3,6 +3,7 @@
 #include "GSBW.h"
 #include "GSBWCommon.h"
 #include "GSBWUtils.h"
+#include "GSBWHUD.h"
 #include "GlobalEventHandler.h"
 #include "GSBWGameState.h"
 
@@ -14,11 +15,18 @@ void AGSBWGameState::HandleMatchHasStarted() {
   // Register event listeners
   AsteroidHitDelegate.BindUFunction(this,"OnAsteroidHit");
   AsteroidDownDelegate.BindUFunction(this, "OnAsteroidDown");
+  GamePausedDelegate.BindUFunction(this, "OnGamePaused");
+  GameUnpausedDelegate.BindUFunction(this, "OnGameUnpaused");
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_HIT, AsteroidHitDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_DOWN, AsteroidDownDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_PAUSED, GamePausedDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_UNPAUSED, GameUnpausedDelegate);
 
   // Cache world settings
   WorldSettings = Cast<AGSBWWorldSettings>(GetWorldSettings());
+
+  // Game is not paused when started
+  Paused = false;
 }
 
 void AGSBWGameState::OnAsteroidHit() {
@@ -29,5 +37,25 @@ void AGSBWGameState::OnAsteroidHit() {
 void AGSBWGameState::OnAsteroidDown() {
   UE_LOG(GSBWGameState, Log, TEXT("OnAsteroidDown()"));
   Score += WorldSettings->AsteroidDownScore;
+}
+
+void AGSBWGameState::OnGamePaused() {
+  UE_LOG(GSBWGameState, Log, TEXT("OnGamePaused()"));
+  UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0);
+  AGSBWHUD* hud = Cast<AGSBWHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+  hud->SetPauseMenuVisibility(true);
+  Paused = true;
+}
+
+void AGSBWGameState::OnGameUnpaused() {
+  UE_LOG(GSBWGameState, Log, TEXT("OnGameUnpaused()"));
+  UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
+  AGSBWHUD* hud = Cast<AGSBWHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+  hud->SetPauseMenuVisibility(false);
+  Paused = false;
+}
+
+bool AGSBWGameState::IsPaused() {
+  return Paused;
 }
 

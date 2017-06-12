@@ -12,21 +12,23 @@ DECLARE_DELEGATE(EventDelegate);
 UCLASS()
 class GSBW_API AGlobalEventHandler : public AActor
 {
-	GENERATED_BODY()
+  GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
-	AGlobalEventHandler();
+  // Sets default values for this actor's properties
+  AGlobalEventHandler();
 
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+  // Called when the game starts or when spawned
+  virtual void BeginPlay() override;
 	
-	// Called every frame
-	virtual void Tick( float DeltaSeconds ) override;
+  // Called every frame
+  virtual void Tick( float DeltaSeconds ) override;
 
   // Wraps delegates of GSBW events
   UGlobalEventHandlerComponent* EventHandler;
 
-  void BroadcastEvent(EGSBWEvent Ev, GSBWEventPayload* Payload = nullptr);
+  UFUNCTION(BlueprintCallable, Category=CPP_Events)
+  void BroadcastEvent(EGSBWEvent Ev);
+
   void SubscribeToEvent(EGSBWEvent Ev, const FScriptDelegate& DelegateFunc);
 };

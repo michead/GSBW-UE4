@@ -31,6 +31,9 @@ public:
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_UI)
   TSubclassOf<class UUserWidget> PauseMenuClass;
 
+  UFUNCTION(BlueprintCallable, Category=CPP_UI)
+  void SetPauseMenuVisibility(bool NewVisibilty);
+
 private:
   APlayerController* PlayerController;
   UEarthHUD* HUD;

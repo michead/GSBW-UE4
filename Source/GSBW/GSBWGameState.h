@@ -20,6 +20,12 @@ public:
   void OnAsteroidHit();
   UFUNCTION()
   void OnAsteroidDown();
+  UFUNCTION()
+  void OnGamePaused();
+  UFUNCTION()
+  void OnGameUnpaused();
+  UFUNCTION(BlueprintCallable, Category=CPP_Gameplay)
+  bool IsPaused();
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Score)
   int32 Score;
@@ -28,4 +34,7 @@ private:
   AGSBWWorldSettings* WorldSettings;
   FScriptDelegate AsteroidHitDelegate;
   FScriptDelegate AsteroidDownDelegate;
+  FScriptDelegate GamePausedDelegate;
+  FScriptDelegate GameUnpausedDelegate;
+  bool Paused;
 };
