@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/WorldSettings.h"
+#include "GSBWCommon.h"
 #include "GSBWWorldSettings.generated.h"
 
 /**
@@ -24,4 +25,11 @@ public:
   int32 AsteroidHitScore;
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
   int32 AsteroidDownScore;
+  // Gameplay
+  UPROPERTY(EditDefaultsOnly, Category=CPP_Gameplay)
+  int32 DufficultyDurations[EDifficulty::NUM_DIFFICULTIES];
+  UPROPERTY(EditDefaultsOnly, Category=CPP_Gameplay)
+  int32 AsteroidSpeeds[EDifficulty::NUM_DIFFICULTIES];
+  UPROPERTY(EditDefaultsOnly, Category=CPP_Gameplay)
+  FInt32Interval AsteroidWordLens[EDifficulty::NUM_DIFFICULTIES];
 };

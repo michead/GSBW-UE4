@@ -3,23 +3,10 @@
 #pragma once
 
 #include "GameFramework/GameMode.h"
+#include "GSBWCommon.h"
 #include "GSBWGameMode.generated.h"
 
-/**
- *
- */
-UENUM()
-enum class EDifficulty : uint8 {
-  EASY,
-  NORMAL,
-  HARD,
-  BARUCH,
-  NUM_DIFFICULTIES
-};
 
-/**
- * 
- */
 UCLASS()
 class GSBW_API AGSBWGameMode : public AGameMode
 {

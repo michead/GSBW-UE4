@@ -83,7 +83,7 @@ void ASpawner::Spawn(EAsteroidType AsteroidType) {
   }
 
   FTransform transform;
-  transform.SetLocation(GetNextAsteroidLocation());
+  transform.SetLocation(GetNextAsteroidLocation(AsteroidType));
   AAsteroid* asteroid = GetWorld()->SpawnActor<AAsteroid>(asteroidClass, transform);
   FAsteroidInitProps props;
   InitAsteroidProps(props, AsteroidType);
@@ -96,37 +96,50 @@ void ASpawner::InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type) 
   Props.speed = GetNextAsteroidSpeed();
 }
 
-FVector ASpawner::GetNextAsteroidLocation() {
+FVector ASpawner::GetNextAsteroidLocation(EAsteroidType AsteroidType) {
   float r = FMath::FRand() * 4, r2 = FMath::FRand();
-  if (r <= 1) return FMath::Lerp(Bounds[0], Bounds[1], r2);
-  else if (r <= 2) return FMath::Lerp(Bounds[1], Bounds[2], r2);
-  else if (r <= 3) return FMath::Lerp(Bounds[2], Bounds[3], r2);
-  else return FMath::Lerp(Bounds[3], Bounds[0], r2);
+  float asteroidRadius = 100;
+  if (r <= 1) {
+    return FMath::Lerp(Bounds[0], Bounds[1], r2) + FVector(-asteroidRadius, 0, 0);
+  } else if (r <= 2) {
+    return FMath::Lerp(Bounds[1], Bounds[2], r2) + FVector(0, -asteroidRadius, 0);
+  } else if (r <= 3) {
+    return FMath::Lerp(Bounds[2], Bounds[3], r2) + FVector(asteroidRadius, 0, 0);
+  } else {
+    return FMath::Lerp(Bounds[3], Bounds[0], r2) + FVector(0, asteroidRadius, 0);
+  }
 }
 
-FString ASpawner::GetNextAsteroidWord() {
-  EDifficulty currentDifficulty = GameMode->GetCurrentDifficulty();
-  FInt32Interval bounds = WordLens[static_cast<uint8_t>(currentDifficulty)];
-  int32_t randLen = FMath::RandRange(bounds.Min, bounds.Max);
-  TArray<AActor*> asteroids;
-  UGameplayStatics::GetAllActorsOfClass(GetWorld(), AAsteroid::StaticClass(), asteroids);
+int32_t ASpawner::GetNextWordLen() {
+  FInt32Interval bounds = WordLens[(uint8_t) GameMode->GetCurrentDifficulty()];
+  return FMath::RandRange(bounds.Min, bounds.Max);
+}
+
+FString ASpawner::GetNextFirstLetter(TArray<AActor*> Asteroids) {
   FString word;
   uint8_t index = FMath::RandRange(0, 25);
+  int32_t wordLen = GetNextWordLen();
   for (uint8_t i = 0; i < 26; i++) {
-    TArray<FString> wordArray = WordMap[randLen][Alphabet.Mid(index++ % 26, 1)];
+    TArray<FString> wordArray = WordMap[wordLen][Alphabet.Mid(index++ % 26, 1)];
     if (wordArray.Num() < 1) {
       continue;
     }
-    word = PickWordFromMap(randLen, Alphabet.Mid(index++ % 26, 1));
-    if (SomeStartWithLetter(asteroids, word)) {
+    word = PickWordFromMap(wordLen, Alphabet.Mid(index++ % 26, 1));
+    if (SomeStartWithLetter(Asteroids, word)) {
       continue;
     }
     break;
   }
   if (word.IsEmpty()) {
-    word = PickWordFromMap(randLen, Alphabet.Mid(FMath::RandRange(0, 25), 1));
+    word = PickWordFromMap(wordLen, Alphabet.Mid(FMath::RandRange(0, 25), 1));
   }
   return word;
+}
+
+FString ASpawner::GetNextAsteroidWord() {
+  TArray<AActor*> asteroids;
+  UGameplayStatics::GetAllActorsOfClass(GetWorld(), AAsteroid::StaticClass(), asteroids);
+  return GetNextFirstLetter(asteroids);
 }
 
 float ASpawner::GetNextAsteroidSpeed() {

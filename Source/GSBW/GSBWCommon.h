@@ -18,10 +18,8 @@
 #define MIN_WORD_LEN                  3
 #define MAX_WORD_LEN                  15
 
-// Data source
 typedef TMap<uint8_t, TMap<FString, TArray<FString>>> GSBWWordMap;
 
-// Events
 UENUM()
 enum EGSBWEvent {
   ASTEROID_HIT,
@@ -30,4 +28,13 @@ enum EGSBWEvent {
   EARTH_DOWN,
   GAME_PAUSED,
   GAME_UNPAUSED
+};
+
+UENUM()
+enum class EDifficulty : uint8 {
+  EASY,
+  NORMAL,
+  HARD,
+  BARUCH,
+  NUM_DIFFICULTIES
 };

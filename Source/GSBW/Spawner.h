@@ -49,13 +49,15 @@ private:
   void Spawn();
   void Spawn(EAsteroidType AsteroidType);
   float GetSpawnInterval();
-  FVector GetNextAsteroidLocation();
+  FVector GetNextAsteroidLocation(EAsteroidType AsteroidType);
   FString GetNextAsteroidWord();
   EAsteroidType GetNextAsteroidType();
   float GetNextAsteroidSpeed();
   void ComputeSpawnerBounds();
   void InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type);
   FString PickWordFromMap(uint8_t WordLen, const FString& Prefix);
+  FString GetNextFirstLetter(TArray<AActor*> Asteroids);
+  int32_t GetNextWordLen();
 
   // Static methods
   static bool SomeStartWithLetter(const TArray<AActor*>& Asteroids, const FString& Letter);
