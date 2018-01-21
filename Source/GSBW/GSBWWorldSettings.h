@@ -27,9 +27,9 @@ public:
   int32 AsteroidDownScore;
   // Gameplay
   UPROPERTY(EditDefaultsOnly, Category=CPP_Gameplay)
-  int32 DufficultyDurations[EDifficulty::NUM_DIFFICULTIES];
+  int32 DufficultyDurations[(size_t)EDifficulty::NUM_DIFFICULTIES];
   UPROPERTY(EditDefaultsOnly, Category=CPP_Gameplay)
-  int32 AsteroidSpeeds[EDifficulty::NUM_DIFFICULTIES];
+  int32 AsteroidSpeeds[(size_t)EDifficulty::NUM_DIFFICULTIES];
   UPROPERTY(EditDefaultsOnly, Category=CPP_Gameplay)
-  FInt32Interval AsteroidWordLens[EDifficulty::NUM_DIFFICULTIES];
+  FInt32Interval AsteroidWordLens[(size_t)EDifficulty::NUM_DIFFICULTIES];
 };
