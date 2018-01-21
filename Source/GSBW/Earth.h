@@ -33,8 +33,11 @@ public:
   // Called when rocket hits target
   void OnTargetHit(AAsteroid& Asteroid);
 
-  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Camera)
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Camera)
   UCameraComponent* Camera;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Camera)
+  float DistanceFromCamera;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
   UDestructibleMesh* DestructibleMesh;
@@ -45,7 +48,7 @@ public:
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Gameplay)
   int32 Health;
 
-  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
+  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Gameplay)
   int32 MaxHealth;
 
 private:

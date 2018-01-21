@@ -14,21 +14,22 @@ AEarth::AEarth()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-    // Attach Destructible Mesh as Root Component
-    DestructibleComponent = CreateDefaultSubobject<UDestructibleComponent>(TEXT("RootComponent"));
-    DestructibleComponent->SetCollisionProfileName("Earth");
-    DestructibleComponent->OnComponentBeginOverlap.AddDynamic(this, &AEarth::OnOverlapBegin);
-    RootComponent = DestructibleComponent;
+  // Attach Destructible Mesh as Root Component
+  DestructibleComponent = CreateDefaultSubobject<UDestructibleComponent>(TEXT("RootComponent"));
+  DestructibleComponent->SetCollisionProfileName("Earth");
+  DestructibleComponent->OnComponentBeginOverlap.AddDynamic(this, &AEarth::OnOverlapBegin);
+  RootComponent = DestructibleComponent;
     
-    // Reference to lower-case alphabet
-    Alphabet = IL_ALPHABET_LC;
+  // Reference to lower-case alphabet
+  Alphabet = IL_ALPHABET_LC;
 
-    Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-    Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+  Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+  Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 void AEarth::OnConstruction(const FTransform& Transform) {
   DestructibleComponent->SetDestructibleMesh(DestructibleMesh);
+  Camera->SetRelativeLocation(FVector(0, 0, -DistanceFromCamera));
 }
 
 void AEarth::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
