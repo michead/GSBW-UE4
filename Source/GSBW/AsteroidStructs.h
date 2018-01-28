@@ -38,3 +38,13 @@ struct FAsteroidExplosionInitProps {
   UPROPERTY()
   FHitResult hit;
 };
+
+USTRUCT(BlueprintType)
+struct FAsteroidTextComponentInitProps {
+  GENERATED_BODY()
+
+  UPROPERTY()
+  USceneComponent* rootComponent;
+  UPROPERTY()
+  FString word;
+};

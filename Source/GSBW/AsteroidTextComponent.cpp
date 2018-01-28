@@ -1,45 +1,27 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GSBW.h"
-#include "AsteroidText.h"
+#include "AsteroidTextComponent.h"
 
 
 // Sets default values for this component's properties
-AAsteroidText::AAsteroidText() {
-  // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-  PrimaryActorTick.bCanEverTick = true;
+UAsteroidTextComponent::UAsteroidTextComponent() {
+  PrimaryComponentTick.bCanEverTick = false;
 }
 
-// Called when the game starts
-void AAsteroidText::BeginPlay() {
-  Super::BeginPlay();
-}
-
-// Called every frame
-void AAsteroidText::Tick(float DeltaSeconds) {
-  Super::Tick(DeltaSeconds);
-
-  // ...
-}
-
-void AAsteroidText::Init(FString Word) {
-  this->Word = Word;
-  
-  AttachTextComponents();
-}
-
-void AAsteroidText::OnConstruction(const FTransform & Transform) {
-  Super::OnConstruction(Transform);
+void UAsteroidTextComponent::Init(const FAsteroidTextComponentInitProps& Props) {
+  Word = Props.word;
+  RootComponent = Props.rootComponent;
 
   AttachTextComponents();
 }
 
-void AAsteroidText::DestroyLastChar() {
+void UAsteroidTextComponent::DestroyLastChar() {
   Word.RemoveAt(Word.Len() - 1);
   TextRenderComponents[Word.Len() - 1]->DestroyComponent();
 }
 
-void AAsteroidText::AttachTextComponents() {
+void UAsteroidTextComponent::AttachTextComponents() {
   bool bWordChanged = InitialWord != Word;
 
   InitialWord = Word;

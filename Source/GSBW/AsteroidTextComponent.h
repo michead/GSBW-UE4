@@ -2,31 +2,27 @@
 
 #pragma once
 
-#include "GameFramework/Actor.h"
-#include "AsteroidText.generated.h"
+#include "Components/ActorComponent.h"
+#include "AsteroidStructs.h"
+#include "AsteroidTextComponent.generated.h"
 
 
-UCLASS()
-class GSBW_API AAsteroidText : public AActor {
+UCLASS(Blueprintable)
+class GSBW_API UAsteroidTextComponent : public USceneComponent {
   GENERATED_BODY()
 
 public:
   // Sets default values for this component's properties
-  AAsteroidText();
-
-  // Called when the game starts
-  virtual void BeginPlay() override;
-
-  // Called every frame
-  virtual void Tick(float DeltaSeconds) override;
-
-  virtual void OnConstruction(const FTransform & Transform) override;
+  UAsteroidTextComponent();
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   FRotator BaseRotation;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   TArray<UTextRenderComponent*> TextRenderComponents;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  USceneComponent* RootComponent;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   FString Word;
@@ -38,7 +34,7 @@ public:
   float Radius;
 
   // Initialize component with passed word
-  void Init(FString Word);
+  void Init(const FAsteroidTextComponentInitProps& Word);
 
   // Make the last char explode
   void DestroyLastChar();

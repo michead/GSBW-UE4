@@ -5,7 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "GSBWCommon.h"
 #include "AsteroidStructs.h"
-#include "AsteroidText.h"
+#include "AsteroidTextComponent.h"
 #include "Asteroid.generated.h"
 
 UCLASS()
@@ -42,10 +42,10 @@ public:
   UDestructibleMesh* DestructibleMesh;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Gameplay)
-  TSubclassOf<AAsteroidText> AsteroidTextClass;
+  TSubclassOf<UAsteroidTextComponent> AsteroidTextComponentClass;
 
   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=CPP_Gameplay)
-  AAsteroidText* AsteroidText;
+  UAsteroidTextComponent* AsteroidTextComponent;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Gameplay)
   FString Word;

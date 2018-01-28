@@ -14,8 +14,8 @@ AAsteroid::AAsteroid() {
   // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
   PrimaryActorTick.bCanEverTick = true;
 
-  // Default value for AsteroidText class
-  AsteroidTextClass = AAsteroidText::StaticClass();
+  // Default value for AsteroidTextComponent class
+  AsteroidTextComponentClass = UAsteroidTextComponent::StaticClass();
 
   StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RootComponent"));
   StaticMeshComponent->SetEnableGravity(false);
@@ -29,7 +29,7 @@ void AAsteroid::OnConstruction(const FTransform& Transform) {
   Super::OnConstruction(Transform);
 
   StaticMeshComponent->SetStaticMesh(StaticMesh);
-  AsteroidText = NewObject<AAsteroidText>(this, AsteroidTextClass);
+  AsteroidTextComponent = NewObject<UAsteroidTextComponent>(this, AsteroidTextComponentClass);
 
   AttachFloatingText();
 }
@@ -44,8 +44,8 @@ void AAsteroid::Tick(float DeltaTime) {
   Super::Tick(DeltaTime);
 
   // Update word
-  if (AsteroidText->Word.Len() - WordToDisplay.Len()) {
-    AsteroidText->DestroyLastChar();
+  if (AsteroidTextComponent->Word.Len() - WordToDisplay.Len()) {
+    AsteroidTextComponent->DestroyLastChar();
   }
 }
 
@@ -61,8 +61,8 @@ void AAsteroid::Init(const FAsteroidInitProps& props) {
 }
 
 void AAsteroid::AttachFloatingText() {
-  AsteroidText->Init(WordToDisplay);
-  AsteroidText->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+  AsteroidTextComponent->Init({ RootComponent, WordToDisplay });
+  AsteroidTextComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 void AAsteroid::ApplyImpulse() {
