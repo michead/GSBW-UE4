@@ -14,19 +14,24 @@ AAsteroid::AAsteroid() {
   // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
   PrimaryActorTick.bCanEverTick = true;
 
+  // Default value for AsteroidText class
+  AsteroidTextClass = AAsteroidText::StaticClass();
+
   StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RootComponent"));
   StaticMeshComponent->SetEnableGravity(false);
   StaticMeshComponent->SetSimulatePhysics(true);
   StaticMeshComponent->SetCollisionProfileName("Asteroid");
   StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &AAsteroid::OnOverlapBegin);
   SetRootComponent(StaticMeshComponent);
-
-  TextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextRenderComponent"));
 }
 
 void AAsteroid::OnConstruction(const FTransform& Transform) {
+  Super::OnConstruction(Transform);
+
   StaticMeshComponent->SetStaticMesh(StaticMesh);
-  TextRenderComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+  AsteroidText = NewObject<AAsteroidText>(this, AsteroidTextClass);
+
+  AttachFloatingText();
 }
 
 // Called when the game starts or when spawned
@@ -39,7 +44,9 @@ void AAsteroid::Tick(float DeltaTime) {
   Super::Tick(DeltaTime);
 
   // Update word
-  TextRenderComponent->SetText(WordToDisplay);
+  if (AsteroidText->Word.Len() - WordToDisplay.Len()) {
+    AsteroidText->DestroyLastChar();
+  }
 }
 
 void AAsteroid::Init(const FAsteroidInitProps& props) {
@@ -49,7 +56,13 @@ void AAsteroid::Init(const FAsteroidInitProps& props) {
 
   WordToDisplay = Word;
 
+  AttachFloatingText();
   ApplyImpulse();
+}
+
+void AAsteroid::AttachFloatingText() {
+  AsteroidText->Init(WordToDisplay);
+  AsteroidText->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 void AAsteroid::ApplyImpulse() {

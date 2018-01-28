@@ -5,6 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "GSBWCommon.h"
 #include "AsteroidStructs.h"
+#include "AsteroidText.h"
 #include "Asteroid.generated.h"
 
 UCLASS()
@@ -41,21 +42,25 @@ public:
   UDestructibleMesh* DestructibleMesh;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Gameplay)
-  UTextRenderComponent* TextRenderComponent;
+  TSubclassOf<AAsteroidText> AsteroidTextClass;
 
-  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
+  UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=CPP_Gameplay)
+  AAsteroidText* AsteroidText;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Gameplay)
   FString Word;
 
-  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Gameplay)
   EAsteroidType Type;
 
-  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Gameplay)
   float Speed;
 
   // Returns current asteroid word (which might be truncated wrt the original one)
   FString GetWord() const;
 
 protected:
+  void AttachFloatingText();
   void ApplyImpulse();
 
   // Asteroid protected virtual methods
