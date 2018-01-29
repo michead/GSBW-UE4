@@ -31,6 +31,9 @@ void AAsteroid::OnConstruction(const FTransform& Transform) {
   StaticMeshComponent->SetStaticMesh(StaticMesh);
   AsteroidTextComponent = NewObject<UAsteroidTextComponent>(this, AsteroidTextComponentClass);
 
+  // Set default value mostly for debugging purposes
+  WordToDisplay = Word;
+
   AttachFloatingText();
 }
 
@@ -61,8 +64,11 @@ void AAsteroid::Init(const FAsteroidInitProps& props) {
 }
 
 void AAsteroid::AttachFloatingText() {
-  AsteroidTextComponent->Init({ RootComponent, WordToDisplay });
-  AsteroidTextComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+  FAsteroidTextComponentInitProps props = {};
+  props.rootComponent = RootComponent;
+  props.word = WordToDisplay;
+  AsteroidTextComponent->Init(props);
+  check(AsteroidTextComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform));
 }
 
 void AAsteroid::ApplyImpulse() {

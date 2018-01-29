@@ -7,6 +7,9 @@
 // Sets default values for this component's properties
 UAsteroidTextComponent::UAsteroidTextComponent() {
   PrimaryComponentTick.bCanEverTick = false;
+
+  Radius = 10;
+  CharSpacing = 10;
 }
 
 void UAsteroidTextComponent::Init(const FAsteroidTextComponentInitProps& Props) {
@@ -29,6 +32,7 @@ void UAsteroidTextComponent::AttachTextComponents() {
   if (bWordChanged) {
     for (auto component : TextRenderComponents) {
       if (component) {
+        component->UnregisterComponent();
         component->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
         component->DestroyComponent();
       }
@@ -42,15 +46,21 @@ void UAsteroidTextComponent::AttachTextComponents() {
   }
 
   uint8_t i = 0;
-  float x = -((TextRenderComponents.Num() - (TextRenderComponents.Num() % 2 == 0 ? 1 : 0)) / 2) * CharSpacing;
+  float x = -((TextRenderComponents.Num() - (TextRenderComponents.Num() % 2 == 0 ? 1 : 0)) / 2) * (CharSpacing * FontScalingFactor);
+
   for (auto component : TextRenderComponents) {
     component->SetWorldRotation(BaseRotation);
     component->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
     component->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
     component->SetRelativeLocation(FVector(x, 0, -Radius));
+    component->SetWorldScale3D(FVector(FontScalingFactor));
     component->SetText(FString("").AppendChar(Word[i]));
-    component->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-    x += CharSpacing;
+    component->SetTextRenderColor(TextColor);
+    component->RegisterComponent();
+
+    check(component->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform));
+    
+    x += CharSpacing * FontScalingFactor;
     i += 1;
   }
 };

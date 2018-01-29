@@ -24,7 +24,7 @@ AEarth::AEarth()
   Alphabet = IL_ALPHABET_LC;
 
   Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-  Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+  check(Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform));
 }
 
 void AEarth::OnConstruction(const FTransform& Transform) {

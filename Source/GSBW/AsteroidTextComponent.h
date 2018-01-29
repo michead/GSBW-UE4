@@ -25,6 +25,12 @@ public:
   USceneComponent* RootComponent;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  float FontScalingFactor;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  FColor TextColor;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   FString Word;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
