@@ -21,7 +21,7 @@ void UAsteroidTextComponent::Init(const FAsteroidTextComponentInitProps& Props) 
 
 void UAsteroidTextComponent::DestroyLastChar() {
   Word.RemoveAt(Word.Len() - 1);
-  TextRenderComponents[Word.Len() - 1]->DestroyComponent();
+  TextRenderComponents[Word.Len()]->DestroyComponent();
 }
 
 void UAsteroidTextComponent::AttachTextComponents() {
