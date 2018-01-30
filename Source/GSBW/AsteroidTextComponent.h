@@ -42,8 +42,8 @@ public:
   // Initialize component with passed word
   void Init(const FAsteroidTextComponentInitProps& Word);
 
-  // Make the last char explode
-  void DestroyLastChar();
+  // Make the first char explode
+  void DestroyFirstChar();
 
 private:
   void AttachTextComponents();

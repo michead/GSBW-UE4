@@ -52,7 +52,6 @@ namespace GSBWUtils {
   inline FActorSpawnParameters GetNoFailSpawnParams() {
     FActorSpawnParameters spawnParams;
     spawnParams.bNoFail = true;
-    spawnParams.bNoCollisionFail = true;
     return spawnParams;
   }
 

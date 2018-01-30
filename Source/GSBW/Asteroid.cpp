@@ -48,7 +48,7 @@ void AAsteroid::Tick(float DeltaTime) {
 
   // Update word
   if (AsteroidTextComponent->Word.Len() - WordToDisplay.Len()) {
-    AsteroidTextComponent->DestroyLastChar();
+    AsteroidTextComponent->DestroyFirstChar();
   }
 }
 
