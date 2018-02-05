@@ -92,6 +92,8 @@ private:
   float GetNextRocketSpeed();
   // Clear reference to current target
   void ClearTarget();
+  // Toggle pause menu
+  void TogglePause();
   // Explode once health reaches 0
   void Explode();
   // Destroy actor

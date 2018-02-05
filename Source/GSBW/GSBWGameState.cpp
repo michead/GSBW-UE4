@@ -3,7 +3,6 @@
 #include "GSBW.h"
 #include "GSBWCommon.h"
 #include "GSBWUtils.h"
-#include "GSBWHUD.h"
 #include "GlobalEventHandler.h"
 #include "GSBWGameState.h"
 
@@ -42,17 +41,11 @@ void AGSBWGameState::OnAsteroidDown() {
 
 void AGSBWGameState::OnGamePaused() {
   UE_LOG(GSBWGameState, Log, TEXT("OnGamePaused()"));
-  UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0);
-  AGSBWHUD* hud = Cast<AGSBWHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-  hud->SetPauseMenuVisibility(true);
   Paused = true;
 }
 
 void AGSBWGameState::OnGameUnpaused() {
   UE_LOG(GSBWGameState, Log, TEXT("OnGameUnpaused()"));
-  UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
-  AGSBWHUD* hud = Cast<AGSBWHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-  hud->SetPauseMenuVisibility(false);
   Paused = false;
 }
 

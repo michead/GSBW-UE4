@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GSBW.h"
+#include "GSBWUtils.h"
 #include "GSBWGameState.h"
 #include "GSBWHUD.h"
 #include "Earth.h"
@@ -39,5 +40,24 @@ void AGSBWGameMode::BumpDifficulty() {
 
 float AGSBWGameMode::GetCurrentDifficultyDuration() {
   return 5.f;
+}
+
+void AGSBWGameMode::TogglePause() {
+  if (IsGamePaused) {
+    UnpauseGame();
+  } else {
+    PauseGame();
+  }
+  IsGamePaused = !IsGamePaused;
+}
+
+void AGSBWGameMode::PauseGame() {
+  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::GAME_PAUSED);
+  UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0);
+}
+
+void AGSBWGameMode::UnpauseGame() {
+  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::GAME_UNPAUSED);
+  UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
 }
 

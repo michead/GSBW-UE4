@@ -23,12 +23,17 @@ class GSBW_API AGSBWGameMode : public AGameMode
 public:
   UFUNCTION()
   EDifficulty GetCurrentDifficulty() const { return CurrentDifficulty; }
+  UFUNCTION()
+  void TogglePause();
 
 private:
+  void PauseGame();
+  void UnpauseGame();
   void StartBumpDifficultyCoroutine();
   void BumpDifficulty();
   float GetCurrentDifficultyDuration();
 
   FTimerHandle TimerHandle;
   EDifficulty CurrentDifficulty;
+  bool IsGamePaused;
 };

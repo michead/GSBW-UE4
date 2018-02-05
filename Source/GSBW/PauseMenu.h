@@ -11,9 +11,5 @@
 UCLASS()
 class GSBW_API UPauseMenu : public UUserWidget
 {
-	GENERATED_BODY()
-	
-	
-	
-	
+  GENERATED_BODY()
 };

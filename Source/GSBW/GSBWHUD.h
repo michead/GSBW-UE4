@@ -5,7 +5,6 @@
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/HUD.h"
-#include "EarthHUD.h"
 #include "GSBWHUD.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(GSBWHUD, Log, All);
@@ -23,20 +22,23 @@ public:
   virtual void BeginPlay() override;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_UI)
-  TSubclassOf<class UUserWidget> EarthHUDClass;
+  TSubclassOf<class UEarthHUD> EarthHUDClass;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_UI)
-  TSubclassOf<class UUserWidget> MainMenuClass;
+  TSubclassOf<class UPauseMenu> PauseMenuClass;
 
-  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_UI)
-  TSubclassOf<class UUserWidget> PauseMenuClass;
-
-  UFUNCTION(BlueprintCallable, Category=CPP_UI)
-  void SetPauseMenuVisibility(bool NewVisibilty);
+  UFUNCTION()
+  void OnGamePaused();
+  
+  UFUNCTION()
+  void OnGameUnpaused();
 
 private:
+  void SetPauseMenuVisibility(bool NewVisibilty);
+
   APlayerController* PlayerController;
   UEarthHUD* HUD;
-  UUserWidget* MainMenu;
-  UUserWidget* PauseMenu;
+  UPauseMenu* PauseMenu;
+  FScriptDelegate OnGamePausedDelegate;
+  FScriptDelegate OnGameUnpausedDelegate;
 };

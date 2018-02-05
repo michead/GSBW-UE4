@@ -3,6 +3,7 @@
 #include "GSBW.h"
 #include "GSBWCommon.h"
 #include "GSBWUtils.h"
+#include "GSBWGameMode.h"
 #include "Rocket.h"
 #include "Earth.h"
 
@@ -64,6 +65,8 @@ void AEarth::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 #pragma endregion
   // Handle TAB key
   PlayerInputComponent->BindKey(EKeys::Tab, EInputEvent::IE_Pressed, this, &AEarth::ClearTarget);
+  // Handle pause menu toggling
+  PlayerInputComponent->BindKey(EKeys::BackSpace, EInputEvent::IE_Pressed, this, &AEarth::TogglePause);
 }
 
 // Called when the game starts or when spawned
@@ -181,6 +184,10 @@ void AEarth::ClearTarget() {
   Target.originalWord = nullptr;
   Target.rocketCount = 0;
   Target.ref = nullptr;
+}
+
+void AEarth::TogglePause() {
+  Cast<AGSBWGameMode>(GetWorld()->GetAuthGameMode())->TogglePause();
 }
 
 void AEarth::OnTargetHit(AAsteroid& Asteroid) {

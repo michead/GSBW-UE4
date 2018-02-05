@@ -49,6 +49,10 @@ void AGlobalEventHandler::SubscribeToEvent(EGSBWEvent Ev, const FScriptDelegate&
     EventHandler->OnAsteroidHit.Add(DelegateFunc); break;
   case EGSBWEvent::ASTEROID_DOWN:
     EventHandler->OnAsteroidDown.Add(DelegateFunc); break;
+  case EGSBWEvent::GAME_PAUSED:
+    EventHandler->OnGamePaused.Add(DelegateFunc); break;
+  case EGSBWEvent::GAME_UNPAUSED:
+    EventHandler->OnGameUnpaused.Add(DelegateFunc); break;
   default:
     break;
   }
