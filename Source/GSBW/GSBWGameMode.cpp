@@ -18,6 +18,7 @@ void AGSBWGameMode::InitGame(const FString& MapName, const FString& Options, FSt
 
 void AGSBWGameMode::HandleMatchHasStarted() {
   Super::HandleMatchHasStarted();
+
   StartBumpDifficultyCoroutine();
 
   OnGamePausedDelegate.BindUFunction(this, "OnGamePaused");
@@ -25,6 +26,9 @@ void AGSBWGameMode::HandleMatchHasStarted() {
 
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_PAUSED, OnGamePausedDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_UNPAUSED, OnGameUnpausedDelegate);
+
+  PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+  PlayerController->bShowMouseCursor = false;
 }
 
 void AGSBWGameMode::StartBumpDifficultyCoroutine() {
@@ -50,11 +54,13 @@ float AGSBWGameMode::GetCurrentDifficultyDuration() {
 
 void AGSBWGameMode::OnGamePaused() {
   UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0);
+  PlayerController->bShowMouseCursor = true;
   IsGamePaused = true;
 }
 
 void AGSBWGameMode::OnGameUnpaused() {
   UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
+  PlayerController->bShowMouseCursor = false;
   IsGamePaused = false;
 }
 

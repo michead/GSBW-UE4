@@ -7,3 +7,11 @@
 AGSBWMenuMode::AGSBWMenuMode() {
   HUDClass = AGSBWMenu::StaticClass();
 }
+
+void AGSBWMenuMode::HandleMatchHasStarted() {
+  Super::HandleMatchHasStarted();
+
+  PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+  PlayerController->bShowMouseCursor = true;
+}
+

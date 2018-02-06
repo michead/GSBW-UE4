@@ -2,7 +2,6 @@
 
 #include "GSBW.h"
 #include "GSBWUtils.h"
-#include "Earth.h"
 #include "EarthHUD.h"
 #include "PauseMenu.h"
 #include "GSBWHUD.h"
@@ -18,9 +17,7 @@ AGSBWHUD::AGSBWHUD() {
 void AGSBWHUD::BeginPlay() {
   Super::BeginPlay();
 
-  TArray<AActor*> actors;
-  UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEarth::StaticClass(), actors);
-  PlayerController = Cast<APlayerController>(Cast<AEarth>(actors[0])->GetController());
+  PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
   HUD = CreateWidget<UEarthHUD>(PlayerController, EarthHUDClass);
   HUD->AddToViewport();

@@ -35,6 +35,7 @@ private:
   void BumpDifficulty();
   float GetCurrentDifficultyDuration();
 
+  APlayerController* PlayerController;
   FTimerHandle TimerHandle;
   FScriptDelegate OnGamePausedDelegate;
   FScriptDelegate OnGameUnpausedDelegate;
