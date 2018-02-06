@@ -26,7 +26,7 @@ void AGSBWGameState::HandleMatchHasStarted() {
   WorldSettings = Cast<AGSBWWorldSettings>(GetWorldSettings());
 
   // Game is not paused when started
-  Paused = false;
+  IsPaused = false;
 }
 
 void AGSBWGameState::OnAsteroidHit() {
@@ -41,18 +41,22 @@ void AGSBWGameState::OnAsteroidDown() {
 
 void AGSBWGameState::OnGamePaused() {
   UE_LOG(GSBWGameState, Log, TEXT("OnGamePaused()"));
-  Paused = true;
+  IsPaused = true;
 }
 
 void AGSBWGameState::OnGameUnpaused() {
   UE_LOG(GSBWGameState, Log, TEXT("OnGameUnpaused()"));
-  Paused = false;
+  IsPaused = false;
 }
 
-bool AGSBWGameState::IsPaused() {
-  return Paused;
+bool AGSBWGameState::IsGamePaused() {
+  return IsPaused;
 }
 
 void AGSBWGameState::OnEarthDown() {
   UE_LOG(GSBWGameState, Log, TEXT("OnEarthDown()"));
+}
+
+void AGSBWGameState::RequestPauseToggle() {
+  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(IsPaused ? EGSBWEvent::GAME_UNPAUSED : EGSBWEvent::GAME_PAUSED);
 }

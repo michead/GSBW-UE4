@@ -25,12 +25,14 @@ public:
   UFUNCTION()
   void OnGameUnpaused();
   UFUNCTION(BlueprintCallable, Category=CPP_Gameplay)
-  bool IsPaused();
+  bool IsGamePaused();
   UFUNCTION()
   void OnEarthDown();
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Score)
   int32 Score;
+
+  void RequestPauseToggle();
 
 private:
   AGSBWWorldSettings* WorldSettings;
@@ -39,5 +41,5 @@ private:
   FScriptDelegate GamePausedDelegate;
   FScriptDelegate GameUnpausedDelegate;
   FScriptDelegate EarthDownDelegate;
-  bool Paused;
+  bool IsPaused;
 };

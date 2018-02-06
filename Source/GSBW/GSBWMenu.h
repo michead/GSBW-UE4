@@ -21,9 +21,9 @@ public:
   virtual void BeginPlay() override;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_UI)
-  TSubclassOf<class UUserWidget> MainMenuClass;
+  TSubclassOf<class UMainMenu> MainMenuClass;
 
 private:
   APlayerController * PlayerController;
-  UUserWidget* MainMenu;
+  UMainMenu* MainMenu;
 };

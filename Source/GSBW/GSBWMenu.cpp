@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GSBW.h"
+#include "MainMenu.h"
 #include "GSBWMenu.h"
 
 DEFINE_LOG_CATEGORY(GSBWMenu);
@@ -16,6 +17,6 @@ void AGSBWMenu::BeginPlay() {
 
   PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
-  MainMenu = CreateWidget<UUserWidget>(PlayerController, MainMenuClass);
+  MainMenu = CreateWidget<UMainMenu>(PlayerController, MainMenuClass);
   MainMenu->AddToViewport();
 }

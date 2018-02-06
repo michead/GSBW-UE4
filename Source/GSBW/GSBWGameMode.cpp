@@ -19,6 +19,12 @@ void AGSBWGameMode::InitGame(const FString& MapName, const FString& Options, FSt
 void AGSBWGameMode::HandleMatchHasStarted() {
   Super::HandleMatchHasStarted();
   StartBumpDifficultyCoroutine();
+
+  OnGamePausedDelegate.BindUFunction(this, "OnGamePaused");
+  OnGameUnpausedDelegate.BindUFunction(this, "OnGameUnpaused");
+
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_PAUSED, OnGamePausedDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_UNPAUSED, OnGameUnpausedDelegate);
 }
 
 void AGSBWGameMode::StartBumpDifficultyCoroutine() {
@@ -42,22 +48,13 @@ float AGSBWGameMode::GetCurrentDifficultyDuration() {
   return 5.f;
 }
 
-void AGSBWGameMode::TogglePause() {
-  if (IsGamePaused) {
-    UnpauseGame();
-  } else {
-    PauseGame();
-  }
-  IsGamePaused = !IsGamePaused;
-}
-
-void AGSBWGameMode::PauseGame() {
-  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::GAME_PAUSED);
+void AGSBWGameMode::OnGamePaused() {
   UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0);
+  IsGamePaused = true;
 }
 
-void AGSBWGameMode::UnpauseGame() {
-  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::GAME_UNPAUSED);
+void AGSBWGameMode::OnGameUnpaused() {
   UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
+  IsGamePaused = false;
 }
 
