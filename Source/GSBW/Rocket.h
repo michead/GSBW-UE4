@@ -29,8 +29,11 @@ public:
   // Asteroid virtual methods
   virtual void Init(const FRocketInitProps& props);
 	
-  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   UStaticMesh* StaticMesh;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  UStaticMeshComponent* StaticMeshComponent;
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
   FString Letter;
@@ -48,7 +51,8 @@ public:
   TSubclassOf<AExplosion> ExplosionClass;
 
 protected:
-  void ApplyImpulse();
+  void ApplyImpulse(const FVector& Direction);
+  void AlignWithVector(const FVector& Vector);
   void Explode(const FHitResult& hit);
   void Disappear();
 
@@ -60,6 +64,4 @@ protected:
     int32 OtherBodyIndex,
     bool bFromSweep,
     const FHitResult& SweepResult);
-
-  UStaticMeshComponent* StaticMeshComponent;
 };

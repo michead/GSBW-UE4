@@ -124,14 +124,14 @@ FString ASpawner::GetNextFirstLetter(TArray<AActor*> Asteroids) {
     if (wordArray.Num() < 1) {
       continue;
     }
-    word = PickWordFromMap(wordLen, Alphabet.Mid(index++ % 26, 1));
+    word = PickWordFromMap(wordLen, index++ % 26);
     if (SomeStartWithLetter(Asteroids, word)) {
       continue;
     }
     break;
   }
   if (word.IsEmpty()) {
-    word = PickWordFromMap(wordLen, Alphabet.Mid(FMath::RandRange(0, 25), 1));
+    word = PickWordFromMap(wordLen, FMath::RandRange(0, 25));
   }
   return word;
 }
@@ -179,12 +179,20 @@ bool ASpawner::SomeStartWithLetter(const TArray<AActor*>& Asteroids, const FStri
   return false;
 }
 
-FString ASpawner::PickWordFromMap(uint8_t WordLen, const FString& Prefix) {
-  if (WordMap[WordLen].Num() < 1 ||
-      WordMap[WordLen][Prefix].Num() < 1) {
-    return "";
+FString ASpawner::PickWordFromMap(uint8_t WordLen, uint8_t PrefixCharIndex) {
+  FString ret = "";
+  uint8_t i = 0;
+  while (i < 26) {
+    FString prefix = Alphabet.Mid((PrefixCharIndex + i) % 26, 1);
+    if (WordMap[WordLen].Num() > 0 &&
+      WordMap[WordLen][prefix].Num() > 0) {
+      ret = WordMap[WordLen][prefix][FMath::RandRange(0, WordMap[WordLen][prefix].Num() - 1)];
+      break;
+    }
+    i++;
   }
-  return WordMap[WordLen][Prefix][FMath::RandRange(0, WordMap[WordLen][Prefix].Num() - 1)];
+  check(ret.Len());
+  return ret;
 }
 
 void ASpawner::OnEarthDown() {

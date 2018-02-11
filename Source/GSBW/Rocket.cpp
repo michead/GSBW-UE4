@@ -4,6 +4,7 @@
 #include "GSBWUtils.h"
 #include "Rocket.h"
 #include "Earth.h"
+#include "Kismet/KismetMathLibrary.h"
 
 DEFINE_LOG_CATEGORY(Rocket);
 
@@ -14,13 +15,15 @@ ARocket::ARocket() {
 
   StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RootComponent"));
   StaticMeshComponent->SetEnableGravity(false);
-  StaticMeshComponent->SetSimulatePhysics(true);
   StaticMeshComponent->SetCollisionProfileName("Rocket");
   StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &ARocket::OnOverlapBegin);
+  StaticMeshComponent->SetMobility(EComponentMobility::Movable);
   RootComponent = StaticMeshComponent;
 }
 
 void ARocket::OnConstruction(const FTransform& Transform) {
+  Super::OnConstruction(Transform);
+
   StaticMeshComponent->SetStaticMesh(StaticMesh);
 }
 
@@ -40,15 +43,33 @@ void ARocket::Init(const FRocketInitProps& props) {
   Speed = props.speed;
   Target = props.target;
 
-  ApplyImpulse();
-}
-
-void ARocket::ApplyImpulse() {
   FVector direction = (Target->GetActorLocation() - GetActorLocation());
   direction.Normalize();
 
+  AlignWithVector(direction);
+  ApplyImpulse(direction);
+}
+
+void ARocket::ApplyImpulse(const FVector& Direction) {
+  // Enable physics simulation
+  StaticMeshComponent->SetSimulatePhysics(true);
   // Self-apply impulse
-  StaticMeshComponent->AddImpulse(direction * Speed);
+  StaticMeshComponent->AddImpulse(Direction * Speed);
+}
+
+void ARocket::AlignWithVector(const FVector& Vector) {
+  // Disable physics simulation
+  StaticMeshComponent->SetSimulatePhysics(false);
+  FVector origin = GetActorLocation();
+  FVector axisX = ((origin + GetActorForwardVector()) - origin);
+  FVector axisY = (Target->GetActorLocation()) - origin;
+  FVector axisZ = FVector::CrossProduct(axisX, axisY);
+  axisX.Normalize();
+  axisY.Normalize();
+  axisZ.Normalize();
+  float angle = FMath::Acos(FVector::DotProduct(axisX, axisY));
+  FRotator rotator = UKismetMathLibrary::RotatorFromAxisAndAngle(axisZ, angle);
+  SetActorRotation(rotator);
 }
 
 void ARocket::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,

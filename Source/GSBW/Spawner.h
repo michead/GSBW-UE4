@@ -55,7 +55,7 @@ private:
   float GetNextAsteroidSpeed();
   void ComputeSpawnerBounds();
   void InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type);
-  FString PickWordFromMap(uint8_t WordLen, const FString& Prefix);
+  FString PickWordFromMap(uint8_t WordLen, uint8_t PrefixCharIndex);
   FString GetNextFirstLetter(TArray<AActor*> Asteroids);
   int32_t GetNextWordLen();
 

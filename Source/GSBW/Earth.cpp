@@ -112,6 +112,7 @@ bool AEarth::AcquireTarget(FString& InputLetters) {
     if (GSBWUtils::ContainsAnyOf(asteroid->GetWord(), InputLetters) && tmpSqrdDist < sqrdDistance) {
       tentativeTarget = asteroid;
       sqrdDistance = tmpSqrdDist;
+      break;
     }
   }
 
