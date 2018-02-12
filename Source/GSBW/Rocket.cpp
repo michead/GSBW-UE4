@@ -15,6 +15,7 @@ ARocket::ARocket() {
 
   StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RootComponent"));
   StaticMeshComponent->SetEnableGravity(false);
+  StaticMeshComponent->SetSimulatePhysics(false);
   StaticMeshComponent->SetCollisionProfileName("Rocket");
   StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &ARocket::OnOverlapBegin);
   StaticMeshComponent->SetMobility(EComponentMobility::Movable);
@@ -30,11 +31,17 @@ void ARocket::OnConstruction(const FTransform& Transform) {
 // Called when the game starts or when spawned
 void ARocket::BeginPlay() {
   Super::BeginPlay();
+
+  RootComponent->SetWorldScale3D(FVector(.5f));
 }
 
 // Called every frame
-void ARocket::Tick( float DeltaTime ) {
-  Super::Tick( DeltaTime );
+void ARocket::Tick(float DeltaTime) {
+  Super::Tick(DeltaTime);
+
+  if (Target) {
+    Move(DeltaTime);
+  }
 }
 
 void ARocket::Init(const FRocketInitProps& props) {
@@ -42,34 +49,15 @@ void ARocket::Init(const FRocketInitProps& props) {
   Type = props.type;
   Speed = props.speed;
   Target = props.target;
+}
 
+void ARocket::Move(float DeltaTime) {
   FVector direction = (Target->GetActorLocation() - GetActorLocation());
   direction.Normalize();
-
-  AlignWithVector(direction);
-  ApplyImpulse(direction);
-}
-
-void ARocket::ApplyImpulse(const FVector& Direction) {
-  // Enable physics simulation
-  StaticMeshComponent->SetSimulatePhysics(true);
-  // Self-apply impulse
-  StaticMeshComponent->AddImpulse(Direction * Speed);
-}
-
-void ARocket::AlignWithVector(const FVector& Vector) {
-  // Disable physics simulation
-  StaticMeshComponent->SetSimulatePhysics(false);
-  FVector origin = GetActorLocation();
-  FVector axisX = ((origin + GetActorForwardVector()) - origin);
-  FVector axisY = (Target->GetActorLocation()) - origin;
-  FVector axisZ = FVector::CrossProduct(axisX, axisY);
-  axisX.Normalize();
-  axisY.Normalize();
-  axisZ.Normalize();
-  float angle = FMath::Acos(FVector::DotProduct(axisX, axisY));
-  FRotator rotator = UKismetMathLibrary::RotatorFromAxisAndAngle(axisZ, angle);
-  SetActorRotation(rotator);
+  FRotator rotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetActorLocation());
+  // Align Z with forward direction
+  rotator = rotator.Add(0, -90, 90);
+  RootComponent->MoveComponent(direction * Speed * 0.001f, rotator, true);
 }
 
 void ARocket::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,

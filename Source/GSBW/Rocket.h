@@ -22,7 +22,7 @@ public:
   virtual void BeginPlay() override;
 	
   // Called every frame
-  virtual void Tick( float DeltaSeconds ) override;
+  virtual void Tick(float DeltaSeconds) override;
 
   virtual void OnConstruction(const FTransform& Transform) override;
 
@@ -51,8 +51,7 @@ public:
   TSubclassOf<AExplosion> ExplosionClass;
 
 protected:
-  void ApplyImpulse(const FVector& Direction);
-  void AlignWithVector(const FVector& Vector);
+  void Move(float DeltaSeconds);
   void Explode(const FHitResult& hit);
   void Disappear();
 
