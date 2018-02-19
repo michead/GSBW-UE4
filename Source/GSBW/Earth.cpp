@@ -15,22 +15,28 @@ AEarth::AEarth()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+  // Reference to lower-case alphabet
+  Alphabet = IL_ALPHABET_LC;
+
   // Attach Destructible Mesh as Root Component
   DestructibleComponent = CreateDefaultSubobject<UDestructibleComponent>(TEXT("RootComponent"));
   DestructibleComponent->SetCollisionProfileName("Earth");
   DestructibleComponent->OnComponentBeginOverlap.AddDynamic(this, &AEarth::OnOverlapBegin);
+  
   RootComponent = DestructibleComponent;
-    
-  // Reference to lower-case alphabet
-  Alphabet = IL_ALPHABET_LC;
+
+  // Destructible mesh has pivot on surface, hence reposition to origin
+  SetPivotOffset(FVector(0, 0, RootComponent->Bounds.SphereRadius));
 
   Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-  check(Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform));
 }
 
 void AEarth::OnConstruction(const FTransform& Transform) {
+  Super::OnConstruction(Transform);
+
   DestructibleComponent->SetDestructibleMesh(DestructibleMesh);
-  Camera->SetRelativeLocation(FVector(0, 0, -DistanceFromCamera));
+  Camera->SetWorldTransform(CameraTransform);
+  Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
 }
 
 void AEarth::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
@@ -70,18 +76,27 @@ void AEarth::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 }
 
 // Called when the game starts or when spawned
-void AEarth::BeginPlay()
-{
+void AEarth::BeginPlay() {
 	Super::BeginPlay();
+
   WorldSettings = Cast<AGSBWWorldSettings>(GetWorldSettings());
   MaxHealth = WorldSettings->EarthMaxHealth;
   Health = MaxHealth;
+
+  ComputeRocketSpawnPoints();
 }
 
 // Called every frame
-void AEarth::Tick( float DeltaTime )
+void AEarth::Tick(float DeltaTime)
 {
-	Super::Tick( DeltaTime );
+	Super::Tick(DeltaTime);
+
+  Rotate(DeltaTime);
+}
+
+void AEarth::Rotate(float DeltaTime) {
+  AddActorLocalRotation(DeltaRotation * DeltaTime);
+  Camera->SetWorldTransform(CameraTransform);
 }
 
 void AEarth::HandleInput(FString letter) { 
@@ -193,7 +208,7 @@ void AEarth::OnTargetHit(AAsteroid& Asteroid) {
 
 float AEarth::GetNextRocketSpeed() {
   // TODO: This is just a stub
-  return 2000.f;
+  return 100.f;
 }
 
 void AEarth::Explode() {
@@ -211,4 +226,17 @@ void AEarth::Disappear() {
 
 void AEarth::TogglePause() {
   Cast<AGSBWGameState>(GetWorld()->GetGameState())->RequestPauseToggle();
+}
+
+void AEarth::ComputeRocketSpawnPoints() {
+  FVector origin = GetActorLocation();
+  float radius = RootComponent->Bounds.SphereRadius;
+
+  RocketSpawnPoints.Empty();
+  RocketSpawnPoints.Push(origin + GetActorForwardVector() * radius);
+  RocketSpawnPoints.Push(origin + -GetActorForwardVector() * radius);
+  RocketSpawnPoints.Push(origin + GetActorUpVector() * radius);
+  RocketSpawnPoints.Push(origin + -GetActorUpVector() * radius);
+  RocketSpawnPoints.Push(origin + GetActorRightVector() * radius);
+  RocketSpawnPoints.Push(origin + -GetActorRightVector() * radius);
 }

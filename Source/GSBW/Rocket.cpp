@@ -19,20 +19,40 @@ ARocket::ARocket() {
   StaticMeshComponent->SetCollisionProfileName("Rocket");
   StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &ARocket::OnOverlapBegin);
   StaticMeshComponent->SetMobility(EComponentMobility::Movable);
+
+  ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
+
   RootComponent = StaticMeshComponent;
 }
 
 void ARocket::OnConstruction(const FTransform& Transform) {
   Super::OnConstruction(Transform);
 
-  StaticMeshComponent->SetStaticMesh(StaticMesh);
+  if (StaticMeshComponent) {
+    StaticMeshComponent->SetWorldScale3D(FVector(.5f));
+    StaticMeshComponent->SetStaticMesh(StaticMesh);
+  }
+
+  if (ProjectileMovementComponent) {
+    ProjectileMovementComponent->bIsHomingProjectile = true;
+    ProjectileMovementComponent->HomingAccelerationMagnitude = HomingAccelerationMagnitude;
+  }
+
+  if (SmokeEmitter) {
+    SmokeEmitter->SetActorRelativeRotation(FRotator(0, 0, 0));
+    SmokeEmitter->SetActorRelativeLocation(-RootComponent->Bounds.SphereRadius * GetActorUpVector());
+    SmokeEmitter->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+  }
 }
 
 // Called when the game starts or when spawned
 void ARocket::BeginPlay() {
   Super::BeginPlay();
 
-  RootComponent->SetWorldScale3D(FVector(.5f));
+  SmokeEmitter = GetWorld()->SpawnActor<AEmitter>(SmokeEmitterClass);
+  SmokeEmitter->SetActorRelativeRotation(FRotator(0, 0, 0));
+  SmokeEmitter->SetActorRelativeLocation(-RootComponent->Bounds.SphereRadius * GetActorUpVector());
+  SmokeEmitter->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 // Called every frame
@@ -40,7 +60,7 @@ void ARocket::Tick(float DeltaTime) {
   Super::Tick(DeltaTime);
 
   if (Target) {
-    Move(DeltaTime);
+    Align(DeltaTime);
   }
 }
 
@@ -49,15 +69,18 @@ void ARocket::Init(const FRocketInitProps& props) {
   Type = props.type;
   Speed = props.speed;
   Target = props.target;
+
+  ProjectileMovementComponent->HomingTargetComponent = Target->GetRootComponent();
+  ProjectileMovementComponent->InitialSpeed = Speed;
 }
 
-void ARocket::Move(float DeltaTime) {
+void ARocket::Align(float DeltaTime) {
   FVector direction = (Target->GetActorLocation() - GetActorLocation());
   direction.Normalize();
   FRotator rotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetActorLocation());
   // Align Z with forward direction
   rotator = rotator.Add(0, -90, 90);
-  RootComponent->MoveComponent(direction * Speed * 0.001f, rotator, true);
+  RootComponent->SetWorldRotation(rotator);
 }
 
 void ARocket::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,

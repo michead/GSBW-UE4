@@ -37,7 +37,13 @@ public:
   UCameraComponent* Camera;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Camera)
-  float DistanceFromCamera;
+  FTransform CameraTransform;
+
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
+  FRotator DeltaRotation;
+
+  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
+  TArray<FVector> RocketSpawnPoints;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
   UDestructibleMesh* DestructibleMesh;
@@ -82,21 +88,17 @@ private:
   void HandleY() { HandleInput("Y"); }
   void HandleZ() { HandleInput("Z"); }
 #pragma endregion
+  void Rotate(float DeltaTime);
+  // Compute all rocket spawn points on Earth's surface
+  void ComputeRocketSpawnPoints();
   // Returns true if target has been acquired
   bool AcquireTarget(FString& InputLetters);
-  // Returns true if rocket has been shot to target
   void ShootTarget(FString& InputLetters);
-  // Spawn rocket
   void LaunchRocket();
-  // Returns the initial speed next rocket should have
   float GetNextRocketSpeed();
-  // Clear reference to current target
   void ClearTarget();
-  // Toggle pause menu
   void TogglePause();
-  // Explode once health reaches 0
   void Explode();
-  // Destroy actor
   void Disappear();
 
   UFUNCTION()
