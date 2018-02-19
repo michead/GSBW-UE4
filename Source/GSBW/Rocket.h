@@ -41,6 +41,18 @@ public:
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
   ERocketType Type;
 
+  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
+  UProjectileMovementComponent* ProjectileMovementComponent;
+
+  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=CPP_Rendering)
+  TSubclassOf<AEmitter> SmokeEmitterClass;
+
+  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
+  float HomingAccelerationMagnitude;
+
+  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
+  float MaxSpeed;
+
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
   float Speed;
 
@@ -51,7 +63,7 @@ public:
   TSubclassOf<AExplosion> ExplosionClass;
 
 protected:
-  void Move(float DeltaSeconds);
+  void Align(float DeltaSeconds);
   void Explode(const FHitResult& hit);
   void Disappear();
 
@@ -63,4 +75,6 @@ protected:
     int32 OtherBodyIndex,
     bool bFromSweep,
     const FHitResult& SweepResult);
+
+  AEmitter* SmokeEmitter;
 };

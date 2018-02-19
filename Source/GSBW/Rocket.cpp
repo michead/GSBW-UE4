@@ -72,6 +72,7 @@ void ARocket::Init(const FRocketInitProps& props) {
 
   ProjectileMovementComponent->HomingTargetComponent = Target->GetRootComponent();
   ProjectileMovementComponent->InitialSpeed = Speed;
+  ProjectileMovementComponent->MaxSpeed = FMath::Max(Speed, MaxSpeed);
 }
 
 void ARocket::Align(float DeltaTime) {
