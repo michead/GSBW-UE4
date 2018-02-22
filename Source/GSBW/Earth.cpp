@@ -236,6 +236,7 @@ void AEarth::TogglePause() {
 void AEarth::ComputeRocketSpawnPoints() {
   FVector origin = GetActorLocation();
   float radius = RootComponent->Bounds.SphereRadius;
+  float distanceFromOrigin = radius * 1.1f;
 
   RocketSpawnPoints.Empty();
   RocketSpawnPoints.Push(origin + GetActorForwardVector() * distanceFromOrigin);
