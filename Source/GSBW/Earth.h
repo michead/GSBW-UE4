@@ -95,7 +95,8 @@ private:
   bool AcquireTarget(FString& InputLetters);
   void ShootTarget(FString& InputLetters);
   void LaunchRocket();
-  float GetNextRocketSpeed();
+  FVector GetRocketSpawnLocation();
+  float GetRocketSpeed();
   void ClearTarget();
   void TogglePause();
   void Explode();

@@ -22,6 +22,9 @@ ARocket::ARocket() {
 
   ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 
+  // Previous location is using for aligning the rocket with the movement direction
+  PrevLocation = { 0, 0, 0 };
+
   RootComponent = StaticMeshComponent;
 }
 
@@ -76,12 +79,14 @@ void ARocket::Init(const FRocketInitProps& props) {
 }
 
 void ARocket::Align(float DeltaTime) {
-  FVector direction = (Target->GetActorLocation() - GetActorLocation());
+  FVector currLocation = GetActorLocation();
+  FVector direction = currLocation - PrevLocation;
   direction.Normalize();
   FRotator rotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetActorLocation());
   // Align Z with forward direction
   rotator = rotator.Add(0, -90, 90);
   RootComponent->SetWorldRotation(rotator);
+  PrevLocation = currLocation;
 }
 
 void ARocket::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,

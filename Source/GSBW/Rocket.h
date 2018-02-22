@@ -77,4 +77,5 @@ protected:
     const FHitResult& SweepResult);
 
   AEmitter* SmokeEmitter;
+  FVector PrevLocation;
 };

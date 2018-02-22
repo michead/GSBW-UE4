@@ -174,13 +174,13 @@ void AEarth::LaunchRocket() {
   FTransform transform;
   FVector targetDir = Target.ref->GetActorLocation() - GetActorLocation();
   targetDir.Normalize();
-  transform.SetLocation(GetActorLocation() + RootComponent->Bounds.SphereRadius * 1.25f * targetDir);
+  transform.SetLocation(GetRocketSpawnLocation());
   ARocket* rocket = GetWorld()->SpawnActor<ARocket>(BaseRocketClass, transform, GSBWUtils::GetNoFailSpawnParams());
 
   FRocketInitProps props;
   props.target = Target.ref;
   props.letter = Target.originalWord.Mid(Target.rocketCount, 1);
-  props.speed = GetNextRocketSpeed();
+  props.speed = GetRocketSpeed();
   
   rocket->Init(props);
   
@@ -206,7 +206,12 @@ void AEarth::OnTargetHit(AAsteroid& Asteroid) {
 
 }
 
-float AEarth::GetNextRocketSpeed() {
+FVector AEarth::GetRocketSpawnLocation() {
+  uint8_t i = FMath::RandRange(0, RocketSpawnPoints.Num() - 1);
+  return RocketSpawnPoints[i];
+}
+
+float AEarth::GetRocketSpeed() {
   // TODO: This is just a stub
   return 100.f;
 }
@@ -233,10 +238,10 @@ void AEarth::ComputeRocketSpawnPoints() {
   float radius = RootComponent->Bounds.SphereRadius;
 
   RocketSpawnPoints.Empty();
-  RocketSpawnPoints.Push(origin + GetActorForwardVector() * radius);
-  RocketSpawnPoints.Push(origin + -GetActorForwardVector() * radius);
-  RocketSpawnPoints.Push(origin + GetActorUpVector() * radius);
-  RocketSpawnPoints.Push(origin + -GetActorUpVector() * radius);
-  RocketSpawnPoints.Push(origin + GetActorRightVector() * radius);
-  RocketSpawnPoints.Push(origin + -GetActorRightVector() * radius);
+  RocketSpawnPoints.Push(origin + GetActorForwardVector() * distanceFromOrigin);
+  RocketSpawnPoints.Push(origin + -GetActorForwardVector() * distanceFromOrigin);
+  RocketSpawnPoints.Push(origin + GetActorUpVector() * distanceFromOrigin);
+  RocketSpawnPoints.Push(origin + -GetActorUpVector() * distanceFromOrigin);
+  RocketSpawnPoints.Push(origin + GetActorRightVector() * distanceFromOrigin);
+  RocketSpawnPoints.Push(origin + -GetActorRightVector() * distanceFromOrigin);
 }
