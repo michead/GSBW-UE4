@@ -14,8 +14,6 @@ ARocket::ARocket() {
   PrimaryActorTick.bCanEverTick = true;
 
   StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RootComponent"));
-  StaticMeshComponent->SetEnableGravity(false);
-  StaticMeshComponent->SetSimulatePhysics(false);
   StaticMeshComponent->SetCollisionProfileName("Rocket");
   StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &ARocket::OnOverlapBegin);
   StaticMeshComponent->SetMobility(EComponentMobility::Movable);
@@ -31,15 +29,10 @@ ARocket::ARocket() {
 void ARocket::OnConstruction(const FTransform& Transform) {
   Super::OnConstruction(Transform);
 
-  if (StaticMeshComponent) {
-    StaticMeshComponent->SetWorldScale3D(FVector(.5f));
-    StaticMeshComponent->SetStaticMesh(StaticMesh);
-  }
-
-  if (ProjectileMovementComponent) {
-    ProjectileMovementComponent->bIsHomingProjectile = true;
-    ProjectileMovementComponent->HomingAccelerationMagnitude = HomingAccelerationMagnitude;
-  }
+  StaticMeshComponent->SetEnableGravity(false);
+  StaticMeshComponent->SetSimulatePhysics(true);
+  StaticMeshComponent->SetWorldScale3D(FVector(.5f));
+  StaticMeshComponent->SetStaticMesh(StaticMesh);
 
   if (SmokeEmitter) {
     SmokeEmitter->SetActorRelativeRotation(FRotator(0, 0, 0));
@@ -56,6 +49,8 @@ void ARocket::BeginPlay() {
   SmokeEmitter->SetActorRelativeRotation(FRotator(0, 0, 0));
   SmokeEmitter->SetActorRelativeLocation(-RootComponent->Bounds.SphereRadius * GetActorUpVector());
   SmokeEmitter->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
+  AimTarget();
 }
 
 // Called every frame
@@ -78,14 +73,21 @@ void ARocket::Init(const FRocketInitProps& props) {
   ProjectileMovementComponent->MaxSpeed = FMath::Max(Speed, MaxSpeed);
 }
 
+void ARocket::AimTarget() {
+  StaticMeshComponent->SetSimulatePhysics(false);
+
+  ProjectileMovementComponent->bIsHomingProjectile = true;
+  ProjectileMovementComponent->HomingAccelerationMagnitude = HomingAccelerationMagnitude;
+}
+
 void ARocket::Align(float DeltaTime) {
   FVector currLocation = GetActorLocation();
   FVector direction = currLocation - PrevLocation;
   direction.Normalize();
-  FRotator rotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetActorLocation());
+  FRotator rotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), GetActorLocation() + direction);
   // Align Z with forward direction
   rotator = rotator.Add(0, -90, 90);
-  RootComponent->SetWorldRotation(rotator);
+  SetActorRotation(rotator);
   PrevLocation = currLocation;
 }
 
