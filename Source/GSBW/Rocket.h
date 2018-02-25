@@ -48,9 +48,6 @@ public:
   TSubclassOf<AEmitter> SmokeEmitterClass;
 
   UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
-  float AimTargetDelay;
-
-  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
   float HomingAccelerationMagnitude;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
