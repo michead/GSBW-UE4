@@ -48,12 +48,15 @@ public:
   TSubclassOf<AEmitter> SmokeEmitterClass;
 
   UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
+  float AimTargetDelay;
+
+  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
   float HomingAccelerationMagnitude;
 
-  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
   float MaxSpeed;
 
-  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
   float Speed;
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
@@ -64,6 +67,7 @@ public:
 
 protected:
   void Align(float DeltaSeconds);
+  void AimTarget();
   void Explode(const FHitResult& hit);
   void Disappear();
 

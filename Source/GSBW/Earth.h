@@ -45,6 +45,15 @@ public:
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
   TArray<FVector> RocketSpawnPoints;
 
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  UStaticMeshComponent* StaticMeshComponent;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  UStaticMesh* Mesh;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  UDestructibleComponent* DestructibleComponent;
+
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
   UDestructibleMesh* DestructibleMesh;
 
@@ -111,7 +120,6 @@ private:
     bool bFromSweep,
     const FHitResult& SweepResult);
 
-  UDestructibleComponent* DestructibleComponent;
   FTimerHandle TimerHandle;
   TArray<FString> Alphabet;
   AGSBWWorldSettings* WorldSettings;

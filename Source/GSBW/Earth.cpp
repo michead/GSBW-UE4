@@ -18,23 +18,24 @@ AEarth::AEarth()
   // Reference to lower-case alphabet
   Alphabet = IL_ALPHABET_LC;
 
-  // Attach Destructible Mesh as Root Component
-  DestructibleComponent = CreateDefaultSubobject<UDestructibleComponent>(TEXT("RootComponent"));
-  DestructibleComponent->SetCollisionProfileName("Earth");
-  DestructibleComponent->OnComponentBeginOverlap.AddDynamic(this, &AEarth::OnOverlapBegin);
-  
-  RootComponent = DestructibleComponent;
+  StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+  StaticMeshComponent->SetStaticMesh(Mesh);
+  StaticMeshComponent->SetCollisionProfileName("Earth");
+  StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &AEarth::OnOverlapBegin);
 
-  // Destructible mesh has pivot on surface, hence reposition to origin
-  SetPivotOffset(FVector(0, 0, RootComponent->Bounds.SphereRadius));
+  // Destructible Mesh will be spawned when Earth is to be destroyed
+  DestructibleComponent = CreateDefaultSubobject<UDestructibleComponent>(TEXT("DestructibleMesh"));
+  DestructibleComponent->SetDestructibleMesh(DestructibleMesh);
+  DestructibleComponent->SetVisibility(false);
 
   Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+
+  RootComponent = StaticMeshComponent;
 }
 
 void AEarth::OnConstruction(const FTransform& Transform) {
   Super::OnConstruction(Transform);
 
-  DestructibleComponent->SetDestructibleMesh(DestructibleMesh);
   Camera->SetWorldTransform(CameraTransform);
   Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
 }
@@ -217,10 +218,19 @@ float AEarth::GetRocketSpeed() {
 }
 
 void AEarth::Explode() {
+  DestructibleComponent->SetVisibility(true);
+  DestructibleComponent->SetWorldLocation(
+    GetActorLocation() - FVector(0, 0, RootComponent->Bounds.SphereRadius));
   DestructibleComponent->ApplyRadiusDamage(
     ASTEROID_HIT_BASE_DAMAGE, GetActorLocation(),
     ASTEROID_HIT_DAMAGE_RADIUS,
     ASTEROID_HIT_IMPULSE_STRENGTH, true);
+
+  RootComponent = DestructibleComponent;
+
+  StaticMeshComponent->UnregisterComponent();
+  StaticMeshComponent->DestroyComponent();
+
   const FTimerDelegate DisappearDelegate = FTimerDelegate::CreateUObject(this, &AEarth::Disappear);
   GetWorldTimerManager().SetTimer(TimerHandle, DisappearDelegate,EARTH_EXPLOSION_DURATION, false);
 }
