@@ -47,24 +47,20 @@ public:
   UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=CPP_Rendering)
   TSubclassOf<AEmitter> SmokeEmitterClass;
 
-  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
-  float HomingAccelerationMagnitude;
-
-  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
-  float MaxSpeed;
-
-  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
-  float Speed;
-
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
   AAsteroid* Target;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
   TSubclassOf<AExplosion> ExplosionClass;
 
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
+  float DeltaHomingAcceleration;
+
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
+  float MaxHomingAcceleration;
+
 protected:
-  void Align(float DeltaSeconds);
-  void AimTarget();
+  void IncreaseHomingAcceleration(float DeltaTime);
   void Explode(const FHitResult& hit);
   void Disappear();
 
@@ -79,4 +75,5 @@ protected:
 
   AEmitter* SmokeEmitter;
   FVector PrevLocation;
+  float Speed;
 };
