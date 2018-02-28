@@ -14,6 +14,9 @@ ASpawner::ASpawner()
   // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
   PrimaryActorTick.bCanEverTick = true;
 
+  // Start the game with spawner enabled
+  ShouldSpawn = true;
+
   Alphabet = FString(STR_ALPHABET_LC);
 
   FString wordsPath = FPaths::Combine(*FPaths::GameContentDir(), *FString("Data/Words.json"));
@@ -51,7 +54,9 @@ void ASpawner::StartSpawnCoroutine() {
 }
 
 void ASpawner::Spawn() {
-  Spawn(GetNextAsteroidType());
+  if (ShouldSpawn) {
+    Spawn(GetNextAsteroidType());
+  }
 }
 
 void ASpawner::Spawn(EAsteroidType AsteroidType) {
@@ -197,6 +202,7 @@ FString ASpawner::PickWordFromMap(uint8_t WordLen, uint8_t PrefixCharIndex) {
 
 void ASpawner::OnEarthDown() {
   // Stop Spawn() routine
+  ShouldSpawn = false;
   TimerHandle.Invalidate();
 }
 

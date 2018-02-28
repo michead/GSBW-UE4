@@ -30,6 +30,9 @@ public:
   UFUNCTION()
   void OnGameUnpaused();
 
+  UFUNCTION()
+  void OnEarthDown();
+
 private:
   void StartBumpDifficultyCoroutine();
   void BumpDifficulty();
@@ -39,6 +42,7 @@ private:
   FTimerHandle TimerHandle;
   FScriptDelegate OnGamePausedDelegate;
   FScriptDelegate OnGameUnpausedDelegate;
+  FScriptDelegate OnEarthDownDelegate;
   EDifficulty CurrentDifficulty;
   bool IsGamePaused;
 };

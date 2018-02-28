@@ -67,6 +67,7 @@ private:
   FVector2D PrevViewportSize;
   FScriptDelegate EarthDownDelegate;
   FTimerHandle TimerHandle;
+  bool ShouldSpawn;
   FString Alphabet;
   GSBWWordMap WordMap;
   TArray<FInt32Interval> WordLens;
