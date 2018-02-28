@@ -35,6 +35,16 @@ namespace GSBWUtils {
     return false;
   }
 
+  inline bool StartsWithAnyOf(const FString& Str1, const FString& Str2) {
+    FString firstLetter = Str1.Mid(0, 1);
+    for (int32 i = 0; i < Str2.Len(); i++) {
+      if (firstLetter == Str2.Mid(i, 1)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   inline void KeepContainedChars(const FString& Str1, FString& Str2) {
     for (int32 i = 0; i < Str2.Len(); i++) {
       FString currChar = Str2.Mid(i, 1);

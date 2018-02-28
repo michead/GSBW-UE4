@@ -125,7 +125,7 @@ bool AEarth::AcquireTarget(FString& InputLetters) {
     FVector distVec = GetActorLocation() - asteroid->GetActorLocation();
     float tmpSqrdDist = FVector::DotProduct(distVec, distVec);
 
-    if (GSBWUtils::ContainsAnyOf(asteroid->GetWord(), InputLetters) && tmpSqrdDist < sqrdDistance) {
+    if (GSBWUtils::StartsWithAnyOf(asteroid->GetWord(), InputLetters) && tmpSqrdDist < sqrdDistance) {
       tentativeTarget = asteroid;
       sqrdDistance = tmpSqrdDist;
       break;
@@ -233,6 +233,9 @@ void AEarth::Explode() {
 
   const FTimerDelegate DisappearDelegate = FTimerDelegate::CreateUObject(this, &AEarth::Disappear);
   GetWorldTimerManager().SetTimer(TimerHandle, DisappearDelegate,EARTH_EXPLOSION_DURATION, false);
+
+  // Notify all actors that game is over
+  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::EARTH_DOWN);
 }
 
 void AEarth::Disappear() {

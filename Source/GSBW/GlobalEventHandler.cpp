@@ -34,6 +34,10 @@ void AGlobalEventHandler::BroadcastEvent(EGSBWEvent Ev) {
     EventHandler->OnAsteroidHit.Broadcast(); break;
   case EGSBWEvent::ASTEROID_DOWN:
     EventHandler->OnAsteroidDown.Broadcast(); break;
+  case EGSBWEvent::EARTH_HIT:
+    EventHandler->OnEarthHit.Broadcast(); break;
+  case EGSBWEvent::EARTH_DOWN:
+    EventHandler->OnEarthDown.Broadcast(); break;
   case EGSBWEvent::GAME_PAUSED:
     EventHandler->OnGamePaused.Broadcast(); break;
   case EGSBWEvent::GAME_UNPAUSED:
@@ -49,6 +53,10 @@ void AGlobalEventHandler::SubscribeToEvent(EGSBWEvent Ev, const FScriptDelegate&
     EventHandler->OnAsteroidHit.Add(DelegateFunc); break;
   case EGSBWEvent::ASTEROID_DOWN:
     EventHandler->OnAsteroidDown.Add(DelegateFunc); break;
+  case EGSBWEvent::EARTH_HIT:
+    EventHandler->OnEarthHit.Add(DelegateFunc); break;
+  case EGSBWEvent::EARTH_DOWN:
+    EventHandler->OnEarthDown.Add(DelegateFunc); break;
   case EGSBWEvent::GAME_PAUSED:
     EventHandler->OnGamePaused.Add(DelegateFunc); break;
   case EGSBWEvent::GAME_UNPAUSED:
