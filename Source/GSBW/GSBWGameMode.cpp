@@ -53,7 +53,7 @@ float AGSBWGameMode::GetCurrentDifficultyDuration() {
   return 5.f;
 }
 
-void AGSBWGamemode::OnEarthDown() {
+void AGSBWGameMode::OnEarthDown() {
 
 }
 
