@@ -214,7 +214,7 @@ FVector AEarth::GetRocketSpawnLocation() {
 
 float AEarth::GetRocketSpeed() {
   // TODO: This is just a stub
-  return 100.f;
+  return 500.f;
 }
 
 void AEarth::Explode() {
@@ -249,7 +249,7 @@ void AEarth::TogglePause() {
 void AEarth::ComputeRocketSpawnPoints() {
   FVector origin = GetActorLocation();
   float radius = RootComponent->Bounds.SphereRadius;
-  float distanceFromOrigin = radius * 1.1f;
+  float distanceFromOrigin = radius * 1.15f;
 
   RocketSpawnPoints.Empty();
   RocketSpawnPoints.Push(origin + GetActorForwardVector() * distanceFromOrigin);

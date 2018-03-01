@@ -39,9 +39,6 @@ void ARocket::BeginPlay() {
   SmokeEmitter->SetActorRelativeRotation(FRotator(0, 0, 0));
   SmokeEmitter->SetActorRelativeLocation(-RootComponent->Bounds.SphereRadius * GetActorUpVector());
   SmokeEmitter->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
-  // Aim target
-  ProjectileMovementComponent->bIsHomingProjectile = true;
 }
 
 // Called every frame
@@ -62,7 +59,6 @@ void ARocket::Init(const FRocketInitProps& props) {
   Letter = props.letter;
   Type = props.type;
   Target = props.target;
-  // Currently ignored
   Speed = props.speed;
 
   ProjectileMovementComponent->UpdatedComponent = RootComponent;
@@ -70,6 +66,15 @@ void ARocket::Init(const FRocketInitProps& props) {
   ProjectileMovementComponent->HomingTargetComponent = Target->GetRootComponent();
   ProjectileMovementComponent->HomingAccelerationMagnitude = 0;
   ProjectileMovementComponent->bRotationFollowsVelocity = true;
+
+  // Initial velocity is perpendicular to Earth surface
+  FVector initialVelocity = GetActorLocation();
+  initialVelocity.Normalize();
+  initialVelocity *= Speed;
+
+  // Aim target
+  ProjectileMovementComponent->bIsHomingProjectile = true;
+  ProjectileMovementComponent->Velocity = initialVelocity;
 }
 
 void ARocket::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
