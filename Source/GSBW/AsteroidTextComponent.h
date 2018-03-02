@@ -40,10 +40,12 @@ public:
   float Radius;
 
   // Initialize component with passed word
-  void Init(const FAsteroidTextComponentInitProps& Word);
+  UFUNCTION()
+  void Init(const FAsteroidTextComponentInitProps& Props);
 
   // Make the first char explode
-  void DestroyFirstChar();
+  UFUNCTION()
+  void DestroyLetterAt(uint32 LetterIndex);
 
 private:
   void AttachTextComponents();

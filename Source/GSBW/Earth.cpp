@@ -180,7 +180,7 @@ void AEarth::LaunchRocket() {
 
   FRocketInitProps props;
   props.target = Target.ref;
-  props.letter = Target.originalWord.Mid(Target.rocketCount, 1);
+  props.letterIndex = Target.rocketCount;
   props.speed = GetRocketSpeed();
   
   rocket->Init(props);

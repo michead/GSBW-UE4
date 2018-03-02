@@ -56,7 +56,7 @@ void ARocket::IncreaseHomingAcceleration(float DeltaTime) {
 }
 
 void ARocket::Init(const FRocketInitProps& props) {
-  Letter = props.letter;
+  LetterIndex = props.letterIndex;
   Type = props.type;
   Target = props.target;
   Speed = props.speed;
@@ -80,9 +80,14 @@ void ARocket::Init(const FRocketInitProps& props) {
 void ARocket::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
                              class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
   UE_LOG(Rocket, Log, TEXT("OnOverlapBegin() called."));
-  if (Cast<AAsteroid>(OtherActor)) {
+  if (Cast<AAsteroid>(OtherActor) && OtherActor->GetUniqueID() == GetTargetID()) {
     Explode(SweepResult);
   }
+}
+
+uint32 ARocket::GetTargetID() {
+  check(Target);
+  return Target->GetUniqueID();
 }
 
 void ARocket::Explode(const FHitResult& hit) {

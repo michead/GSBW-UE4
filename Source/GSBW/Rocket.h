@@ -36,7 +36,7 @@ public:
   UStaticMeshComponent* StaticMeshComponent;
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
-  FString Letter;
+  int32 LetterIndex;
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
   ERocketType Type;
@@ -58,6 +58,9 @@ public:
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
   float MaxHomingAcceleration;
+
+  UFUNCTION()
+  uint32 GetTargetID();
 
 protected:
   void IncreaseHomingAcceleration(float DeltaTime);

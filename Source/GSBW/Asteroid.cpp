@@ -23,6 +23,8 @@ AAsteroid::AAsteroid() {
   StaticMeshComponent->SetCollisionProfileName("Asteroid");
   StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &AAsteroid::OnOverlapBegin);
   SetRootComponent(StaticMeshComponent);
+
+  RocketCount = 0;
 }
 
 void AAsteroid::OnConstruction(const FTransform& Transform) {
@@ -45,11 +47,6 @@ void AAsteroid::BeginPlay() {
 // Called every frame
 void AAsteroid::Tick(float DeltaTime) {
   Super::Tick(DeltaTime);
-
-  // Update word
-  if (AsteroidTextComponent->Word.Len() - WordToDisplay.Len()) {
-    AsteroidTextComponent->DestroyFirstChar();
-  }
 }
 
 void AAsteroid::Init(const FAsteroidInitProps& props) {
@@ -86,7 +83,8 @@ void AAsteroid::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class 
                                class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
 	if (Cast<AEarth>(OtherActor)) {
 		OnEarthHit(OtherActor, SweepResult);
-	} else if (Cast<ARocket>(OtherActor)) {
+	} else if (Cast<ARocket>(OtherActor)
+          && Cast<ARocket>(OtherActor)->GetTargetID() == GetUniqueID()) {
 		OnRocketHit(OtherActor, SweepResult);
 	}
 }
@@ -97,16 +95,13 @@ void AAsteroid::OnEarthHit(class AActor* Actor, const FHitResult& Hit) {
 }
 
 void AAsteroid::OnRocketHit(class AActor* Actor, const FHitResult& Hit) {
-  FString rocketLetter = Cast<ARocket>(Actor)->Letter;
-  if (!rocketLetter.Equals(GSBWUtils::GetFirstChar(WordToDisplay))) {
-    // Letter field in rocket object does not match asteroid's first letter, do nothing
-    return;
-  }
-
+  uint32 rocketLetterIndex = Cast<ARocket>(Actor)->LetterIndex;
   GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::ASTEROID_HIT);
-  WordToDisplay.RemoveAt(0);
   
-  if (WordToDisplay.IsEmpty()) {
+  RocketCount++;
+
+  AsteroidTextComponent->DestroyLetterAt(rocketLetterIndex);
+  if (WordToDisplay.Len() == RocketCount) {
     Explode(Hit);
   }
 }

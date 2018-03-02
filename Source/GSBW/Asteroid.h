@@ -56,7 +56,11 @@ public:
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Gameplay)
   float Speed;
 
+  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
+  int32 RocketCount;
+
   // Returns current asteroid word (which might be truncated wrt the original one)
+  UFUNCTION()
   FString GetWord() const;
 
 protected:

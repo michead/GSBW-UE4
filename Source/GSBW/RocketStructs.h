@@ -22,7 +22,7 @@ struct FRocketInitProps {
   UPROPERTY()
   ERocketType type;
   UPROPERTY()
-  FString letter;
+  uint32 letterIndex;
   UPROPERTY()
   float speed;
   UPROPERTY()
