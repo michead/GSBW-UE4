@@ -96,10 +96,9 @@ private:
   void HandleX() { HandleInput("X"); }
   void HandleY() { HandleInput("Y"); }
   void HandleZ() { HandleInput("Z"); }
+  void HandleHyphen() { HandleInput("-"); }
 #pragma endregion
   void Rotate(float DeltaTime);
-  // Compute all rocket spawn points on Earth's surface
-  void ComputeRocketSpawnPoints();
   // Returns true if target has been acquired
   bool AcquireTarget(FString& InputLetters);
   void ShootTarget(FString& InputLetters);
