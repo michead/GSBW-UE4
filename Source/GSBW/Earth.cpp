@@ -69,6 +69,7 @@ void AEarth::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
   PlayerInputComponent->BindKey(EKeys::X, EInputEvent::IE_Pressed, this, &AEarth::HandleX);
   PlayerInputComponent->BindKey(EKeys::Y, EInputEvent::IE_Pressed, this, &AEarth::HandleY);
   PlayerInputComponent->BindKey(EKeys::Z, EInputEvent::IE_Pressed, this, &AEarth::HandleZ);
+  PlayerInputComponent->BindKey(EKeys::Hyphen, EInputEvent::IE_Pressed, this, &AEarth::HandleHyphen);
 #pragma endregion
   // Handle TAB key
   PlayerInputComponent->BindKey(EKeys::Tab, EInputEvent::IE_Pressed, this, &AEarth::ClearTarget);
@@ -83,8 +84,6 @@ void AEarth::BeginPlay() {
   WorldSettings = Cast<AGSBWWorldSettings>(GetWorldSettings());
   MaxHealth = WorldSettings->EarthMaxHealth;
   Health = MaxHealth;
-
-  ComputeRocketSpawnPoints();
 }
 
 // Called every frame
@@ -208,8 +207,15 @@ void AEarth::OnTargetHit(AAsteroid& Asteroid) {
 }
 
 FVector AEarth::GetRocketSpawnLocation() {
-  uint8_t i = FMath::RandRange(0, RocketSpawnPoints.Num() - 1);
-  return RocketSpawnPoints[i];
+  FVector dir = Target.ref->GetActorLocation() - GetActorLocation();
+  float radius = RootComponent->Bounds.SphereRadius;
+  float distanceFromOrigin = radius * 1.15f;
+  FVector2D sphericalLoc = dir.UnitCartesianToSpherical();
+  float pi4 = FMath::DegreesToRadians<float>(45.f);
+  float phi = FMath::FRandRange(-pi4, pi4);
+  float theta = FMath::FRandRange(-pi4, pi4);
+  FVector2D delta = FVector2D(phi, theta);
+  return (sphericalLoc + delta).SphericalToUnitCartesian() * distanceFromOrigin;
 }
 
 float AEarth::GetRocketSpeed() {
@@ -244,18 +250,4 @@ void AEarth::Disappear() {
 
 void AEarth::TogglePause() {
   Cast<AGSBWGameState>(GetWorld()->GetGameState())->RequestPauseToggle();
-}
-
-void AEarth::ComputeRocketSpawnPoints() {
-  FVector origin = GetActorLocation();
-  float radius = RootComponent->Bounds.SphereRadius;
-  float distanceFromOrigin = radius * 1.15f;
-
-  RocketSpawnPoints.Empty();
-  RocketSpawnPoints.Push(origin + GetActorForwardVector() * distanceFromOrigin);
-  RocketSpawnPoints.Push(origin + -GetActorForwardVector() * distanceFromOrigin);
-  RocketSpawnPoints.Push(origin + GetActorUpVector() * distanceFromOrigin);
-  RocketSpawnPoints.Push(origin + -GetActorUpVector() * distanceFromOrigin);
-  RocketSpawnPoints.Push(origin + GetActorRightVector() * distanceFromOrigin);
-  RocketSpawnPoints.Push(origin + -GetActorRightVector() * distanceFromOrigin);
 }
