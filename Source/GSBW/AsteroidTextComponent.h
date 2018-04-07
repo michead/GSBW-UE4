@@ -4,6 +4,7 @@
 
 #include "Components/ActorComponent.h"
 #include "AsteroidStructs.h"
+#include "AsteroidLetterComponent.h"
 #include "AsteroidTextComponent.generated.h"
 
 
@@ -19,7 +20,7 @@ public:
   FRotator BaseRotation;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
-  TArray<UTextRenderComponent*> TextRenderComponents;
+  TArray<UAsteroidLetterComponent*> TextRenderComponents;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   USceneComponent* RootComponent;
