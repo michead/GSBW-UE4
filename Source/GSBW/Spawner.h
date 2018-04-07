@@ -5,7 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "Asteroid.h"
 #include "AsteroidStructs.h"
-#include "GSBWGameMode.h"
+#include "GSBWGameState.h"
 #include "GSBWCommon.h"
 #include "Spawner.generated.h"
 
@@ -40,6 +40,15 @@ public:
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Gameplay)
   TSubclassOf<class AAsteroid> BombAsteroidBPClass;
+  
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
+  TArray<float> AsteroidSpawnIntervalRanges;
+  
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
+  TArray<float> AsteroidSpeedRanges;
+  
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
+  TArray<float> AsteroidTypeProbabilities;
 
   UFUNCTION()
   void OnEarthDown();
@@ -62,7 +71,7 @@ private:
   // Static methods
   static bool SomeStartWithLetter(const TArray<AActor*>& Asteroids, const FString& Letter);
 
-  AGSBWGameMode* GameMode;
+  AGSBWGameState* GameState;
   FVector2D ViewportSize;
   FVector2D PrevViewportSize;
   FScriptDelegate EarthDownDelegate;

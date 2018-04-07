@@ -106,14 +106,21 @@ void AAsteroid::OnRocketHit(class AActor* Actor, const FHitResult& Hit) {
   }
 }
 
+void AAsteroid::OnDestruction() {
+  // Base asteroid class has no logic to execute on destruction
+}
+
 void AAsteroid::Explode(const FHitResult& Hit) {
   // Notify other actors about event
   GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::ASTEROID_DOWN);
 
+  // Trigger asteroid-specific logic on destruction
+  OnDestruction();
+  
   // Spawn explosion
   AAsteroidExplosion* explosion = GetWorld()->SpawnActor<AAsteroidExplosion>(GetActorLocation(), GetActorRotation());
   explosion->Init({ DestructibleMesh, Hit });
-
+    
   // Destroy static mesh
   Disappear();
 }

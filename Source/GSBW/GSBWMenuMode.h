@@ -9,9 +9,8 @@
  * 
  */
 UCLASS()
-class GSBW_API AGSBWMenuMode : public AGameMode
-{
-	GENERATED_BODY()
+class GSBW_API AGSBWMenuMode : public AGameMode {
+  GENERATED_BODY()
 
   AGSBWMenuMode();
 	

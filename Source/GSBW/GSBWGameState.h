@@ -18,17 +18,28 @@ class GSBW_API AGSBWGameState : public AGameState
 public:
   UFUNCTION()
   void OnAsteroidHit();
+  
   UFUNCTION()
   void OnAsteroidDown();
+  
   UFUNCTION()
   void OnGamePaused();
+  
   UFUNCTION()
   void OnGameUnpaused();
+  
   UFUNCTION(BlueprintCallable, Category=CPP_Gameplay)
   bool IsGamePaused();
+  
   UFUNCTION()
   void OnEarthDown();
-
+  
+  UFUNCTION()
+  void OnDifficultyBump();
+  
+  UFUNCTION()
+  EDifficulty GetCurrentDifficulty() const;
+  
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Score)
   int32 Score;
 
@@ -36,10 +47,15 @@ public:
 
 private:
   AGSBWWorldSettings* WorldSettings;
+  
+  EDifficulty CurrentDifficulty;
+  
   FScriptDelegate AsteroidHitDelegate;
   FScriptDelegate AsteroidDownDelegate;
   FScriptDelegate GamePausedDelegate;
   FScriptDelegate GameUnpausedDelegate;
   FScriptDelegate EarthDownDelegate;
+  FScriptDelegate DifficultyBumpDelegate;
+  
   bool IsPaused;
 };

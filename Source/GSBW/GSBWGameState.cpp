@@ -17,16 +17,22 @@ void AGSBWGameState::HandleMatchHasStarted() {
   GamePausedDelegate.BindUFunction(this, "OnGamePaused");
   GameUnpausedDelegate.BindUFunction(this, "OnGameUnpaused");
   EarthDownDelegate.BindUFunction(this, "OnEarthDown");
+  DifficultyBumpDelegate.BindUFunction(this, "OnDifficultyBump");
+  
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_HIT, AsteroidHitDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_DOWN, AsteroidDownDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_PAUSED, GamePausedDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_UNPAUSED, GameUnpausedDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::DIFFICULTY_BUMP, DifficultyBumpDelegate);
 
   // Cache world settings
   WorldSettings = Cast<AGSBWWorldSettings>(GetWorldSettings());
 
   // Game is not paused when started
   IsPaused = false;
+  
+  // Start off easy
+  CurrentDifficulty = EDifficulty::EASY;
 }
 
 void AGSBWGameState::OnAsteroidHit() {
@@ -47,6 +53,18 @@ void AGSBWGameState::OnGamePaused() {
 void AGSBWGameState::OnGameUnpaused() {
   UE_LOG(GSBWGameState, Log, TEXT("OnGameUnpaused()"));
   IsPaused = false;
+}
+
+void AGSBWGameState::OnDifficultyBump() {
+  UE_LOG(GSBWGameState, Log, TEXT("OnDifficultyBump()"));
+  if (static_cast<uint8>(CurrentDifficulty) <
+      static_cast<uint8>(EDifficulty::NUM_DIFFICULTIES) - 1) {
+    CurrentDifficulty = static_cast<EDifficulty>(static_cast<uint8>(CurrentDifficulty) + 1);
+  }
+}
+
+EDifficulty AGSBWGameState::GetCurrentDifficulty() const {
+  return CurrentDifficulty;
 }
 
 bool AGSBWGameState::IsGamePaused() {

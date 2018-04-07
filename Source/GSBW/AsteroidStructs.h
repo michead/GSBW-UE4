@@ -11,8 +11,8 @@
 UENUM()
 enum class EAsteroidType : uint8 {
   BASE,
-  FREEZE,
   SLOW,
+  FREEZE,
   BOMB,
   NUM_TYPES
 };

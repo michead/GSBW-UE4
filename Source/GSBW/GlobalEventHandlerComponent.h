@@ -11,6 +11,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnEarthHit);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnEarthDown);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnGamePaused);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnGameUnpaused);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnDifficultyBump);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GSBW_API UGlobalEventHandlerComponent : public UActorComponent
@@ -33,4 +34,5 @@ public:
   FLevelEventDelegate_OnEarthDown OnEarthDown;
   FLevelEventDelegate_OnGamePaused OnGamePaused;
   FLevelEventDelegate_OnGameUnpaused OnGameUnpaused;
+  FLevelEventDelegate_OnDifficultyBump OnDifficultyBump;
 };

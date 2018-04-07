@@ -9,11 +9,9 @@
  * 
  */
 UCLASS()
-class GSBW_API AFreezeAsteroid : public AAsteroid
-{
-	GENERATED_BODY()
+class GSBW_API AFreezeAsteroid : public AAsteroid {
+  GENERATED_BODY()
 	
-	
-	
-	
+protected:
+  virtual void OnDestruction() override;
 };

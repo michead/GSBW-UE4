@@ -33,10 +33,17 @@ ASpawner::ASpawner()
 
 // Called when the game starts or when spawned
 void ASpawner::BeginPlay() {
-	Super::BeginPlay();
-  StartSpawnCoroutine();
-  GameMode = Cast<AGSBWGameMode>(GetWorld()->GetAuthGameMode());
+  Super::BeginPlay();
+  
+  check(AsteroidSpawnIntervalRanges.Num() == static_cast<int>(EDifficulty::NUM_DIFFICULTIES) * 2);
+  check(AsteroidSpeedRanges.Num() == static_cast<int>(EDifficulty::NUM_DIFFICULTIES) * 2);
+  check(AsteroidTypeProbabilities.Num() == static_cast<int>(EDifficulty::NUM_DIFFICULTIES) * static_cast<int>(EAsteroidType::NUM_TYPES));
+  
+  GameState = GetWorld()->GetGameState<AGSBWGameState>();
+  
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::EARTH_DOWN, EarthDownDelegate);
+  
+  StartSpawnCoroutine();
 }
 
 // Called every frame
@@ -116,7 +123,7 @@ FVector ASpawner::GetNextAsteroidLocation(EAsteroidType AsteroidType) {
 }
 
 int32_t ASpawner::GetNextWordLen() {
-  FInt32Interval bounds = WordLens[(uint8_t) GameMode->GetCurrentDifficulty()];
+  FInt32Interval bounds = WordLens[static_cast<int>(GameState->GetCurrentDifficulty())];
   return FMath::RandRange(bounds.Min, bounds.Max);
 }
 
@@ -148,18 +155,41 @@ FString ASpawner::GetNextAsteroidWord() {
 }
 
 float ASpawner::GetNextAsteroidSpeed() {
-  // TODO: This is just a stub
-  return 5000.f;
+  int difficultyIndex = static_cast<int>(GameState->GetCurrentDifficulty());
+  float a = AsteroidSpeedRanges[2 * difficultyIndex];
+  float b = AsteroidSpeedRanges[2 * difficultyIndex + 1];
+  return FMath::FRandRange(a, b);
 }
 
 float ASpawner::GetSpawnInterval() {
-  // TODO: This is just a stub
-  return 3.f;
+  int difficultyIndex = static_cast<int>(GameState->GetCurrentDifficulty());
+  float a = AsteroidSpawnIntervalRanges[2 * difficultyIndex];
+  float b = AsteroidSpawnIntervalRanges[2 * difficultyIndex + 1];
+  return FMath::FRandRange(a, b);
 }
 
 EAsteroidType ASpawner::GetNextAsteroidType() {
-  // TODO: This is just a stub
-  return EAsteroidType::BASE;
+  int difficultyIndex = static_cast<int>(GameState->GetCurrentDifficulty());
+  int numAsteroidTypes = static_cast<int>(EAsteroidType::NUM_TYPES);
+  
+  float probA = AsteroidTypeProbabilities[difficultyIndex * numAsteroidTypes];
+  float probB = AsteroidTypeProbabilities[difficultyIndex * numAsteroidTypes + 1] + probA;
+  float probC = AsteroidTypeProbabilities[difficultyIndex * numAsteroidTypes + 2] + probB;
+  
+  float randNum = FMath::FRand();
+  EAsteroidType type;
+  
+  if (randNum <= probA) {
+    type = EAsteroidType::BASE;
+  } else if (randNum <= probB) {
+    type = EAsteroidType::SLOW;
+  } else if (randNum <= probC) {
+    type = EAsteroidType::FREEZE;
+  } else {
+    type = EAsteroidType::BOMB;
+  }
+  
+  return type;
 }
 
 void ASpawner::ComputeSpawnerBounds() {

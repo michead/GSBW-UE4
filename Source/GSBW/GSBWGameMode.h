@@ -22,9 +22,6 @@ class GSBW_API AGSBWGameMode : public AGameMode
 
 public:
   UFUNCTION()
-  EDifficulty GetCurrentDifficulty() const { return CurrentDifficulty; }
-  
-  UFUNCTION()
   void OnGamePaused();
 
   UFUNCTION()
@@ -36,13 +33,12 @@ public:
 private:
   void StartBumpDifficultyCoroutine();
   void BumpDifficulty();
-  float GetCurrentDifficultyDuration();
+  float GetCurrentDifficultyDuration() const;
 
   APlayerController* PlayerController;
   FTimerHandle TimerHandle;
   FScriptDelegate OnGamePausedDelegate;
   FScriptDelegate OnGameUnpausedDelegate;
   FScriptDelegate OnEarthDownDelegate;
-  EDifficulty CurrentDifficulty;
   bool IsGamePaused;
 };

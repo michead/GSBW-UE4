@@ -23,6 +23,7 @@ void AGSBWGameMode::HandleMatchHasStarted() {
 
   OnGamePausedDelegate.BindUFunction(this, "OnGamePaused");
   OnGameUnpausedDelegate.BindUFunction(this, "OnGameUnpaused");
+  OnEarthDownDelegate.BindUFunction(this, "OnEarthDown");
 
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_PAUSED, OnGamePausedDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_UNPAUSED, OnGameUnpausedDelegate);
@@ -30,10 +31,11 @@ void AGSBWGameMode::HandleMatchHasStarted() {
 
   PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
   PlayerController->bShowMouseCursor = false;
+  
+  check(DifficultyDurations.Num() == static_cast<int>(EDifficulty::NUM_DIFFICULTIES) - 1);
 }
 
 void AGSBWGameMode::StartBumpDifficultyCoroutine() {
-  CurrentDifficulty = EDifficulty::EASY;
   GetWorld()->GetTimerManager().SetTimer(
     TimerHandle,
     this,
@@ -42,19 +44,20 @@ void AGSBWGameMode::StartBumpDifficultyCoroutine() {
     true);
 }
 
-void AGSBWGameMode::BumpDifficulty() {
-  if (static_cast<uint8>(CurrentDifficulty) <
-      static_cast<uint8>(EDifficulty::NUM_DIFFICULTIES) - 1) {
-    CurrentDifficulty = static_cast<EDifficulty>(static_cast<uint8>(CurrentDifficulty) + 1);
+float AGSBWGameMode::GetCurrentDifficultyDuration() const {
+  EDifficulty currentDifficulty = GetWorld()->GetGameState<AGSBWGameState>()->GetCurrentDifficulty();
+  if (currentDifficulty == EDifficulty::BARUCH) {
+    return MAX_FLT;
   }
+  return DifficultyDurations[static_cast<int>(currentDifficulty)];
 }
 
-float AGSBWGameMode::GetCurrentDifficultyDuration() {
-  return 5.f;
+void AGSBWGameMode::BumpDifficulty() {
+  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::DIFFICULTY_BUMP);
 }
 
 void AGSBWGameMode::OnEarthDown() {
-
+  // Probably nothing to do on behalf of GameMode
 }
 
 void AGSBWGameMode::OnGamePaused() {

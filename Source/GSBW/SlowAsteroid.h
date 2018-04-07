@@ -9,11 +9,12 @@
  * 
  */
 UCLASS()
-class GSBW_API ASlowAsteroid : public AAsteroid
-{
-	GENERATED_BODY()
-	
-	
-	
-	
+class GSBW_API ASlowAsteroid : public AAsteroid {
+  GENERATED_BODY()
+  
+  UPROPERTY(EditAnywhere, Category=CPP_Gameplay)
+  float TimeScale;
+  
+protected:
+  virtual void OnDestruction() override;
 };

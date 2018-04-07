@@ -3,6 +3,8 @@
 #include "GSBW.h"
 #include "SlowAsteroid.h"
 
-
-
-
+void ASlowAsteroid::OnDestruction() {
+  AAsteroid::OnDestruction();
+  
+  UGameplayStatics::SetGlobalTimeDilation(GetWorld(), TimeScale);
+}

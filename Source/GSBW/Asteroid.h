@@ -62,6 +62,9 @@ public:
   // Returns current asteroid word (which might be truncated wrt the original one)
   UFUNCTION()
   FString GetWord() const;
+  
+  UFUNCTION()
+  virtual void Explode(const FHitResult& hit);
 
 protected:
   void AttachFloatingText();
@@ -69,9 +72,9 @@ protected:
 
   // Asteroid protected virtual methods
   virtual void Disappear();
-  virtual void Explode(const FHitResult& hit);
   virtual void OnEarthHit(class AActor* Actor, const FHitResult& hit);
   virtual void OnRocketHit(class AActor* Actor, const FHitResult& hit);
+  virtual void OnDestruction();
 
   UFUNCTION()
   void OnOverlapBegin(

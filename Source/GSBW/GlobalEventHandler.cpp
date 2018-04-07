@@ -6,26 +6,21 @@
 
 
 // Sets default values
-AGlobalEventHandler::AGlobalEventHandler()
-{
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+AGlobalEventHandler::AGlobalEventHandler() {
+  // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+  PrimaryActorTick.bCanEverTick = true;
 
   EventHandler = ConstructObject<UGlobalEventHandlerComponent>(UGlobalEventHandlerComponent::StaticClass(), this);
 }
 
 // Called when the game starts or when spawned
-void AGlobalEventHandler::BeginPlay()
-{
-	Super::BeginPlay();
-	
+void AGlobalEventHandler::BeginPlay() {
+  Super::BeginPlay();
 }
 
 // Called every frame
-void AGlobalEventHandler::Tick( float DeltaTime )
-{
-	Super::Tick( DeltaTime );
-
+void AGlobalEventHandler::Tick( float DeltaTime ) {
+  Super::Tick(DeltaTime);
 }
 
 void AGlobalEventHandler::BroadcastEvent(EGSBWEvent Ev) {
@@ -42,6 +37,8 @@ void AGlobalEventHandler::BroadcastEvent(EGSBWEvent Ev) {
     EventHandler->OnGamePaused.Broadcast(); break;
   case EGSBWEvent::GAME_UNPAUSED:
     EventHandler->OnGameUnpaused.Broadcast(); break;
+  case EGSBWEvent::DIFFICULTY_BUMP:
+    EventHandler->OnDifficultyBump.Broadcast(); break;
   default:
     break;
   }
@@ -61,6 +58,8 @@ void AGlobalEventHandler::SubscribeToEvent(EGSBWEvent Ev, const FScriptDelegate&
     EventHandler->OnGamePaused.Add(DelegateFunc); break;
   case EGSBWEvent::GAME_UNPAUSED:
     EventHandler->OnGameUnpaused.Add(DelegateFunc); break;
+  case EGSBWEvent::DIFFICULTY_BUMP:
+    EventHandler->OnDifficultyBump.Add(DelegateFunc); break;
   default:
     break;
   }
