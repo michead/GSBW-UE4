@@ -10,7 +10,7 @@ AGlobalEventHandler::AGlobalEventHandler() {
   // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
   PrimaryActorTick.bCanEverTick = true;
 
-  EventHandler = NewObject<UGlobalEventHandlerComponent>(this, UGlobalEventHandlerComponent::StaticClass());
+  EventHandler = CreateDefaultSubobject<UGlobalEventHandlerComponent>(TEXT("GlobalEventHandlerComponent"));
 }
 
 // Called when the game starts or when spawned

@@ -7,7 +7,7 @@
 
 
 // Sets default values
-AAsteroidExplosion::AAsteroidExplosion() {
+AAsteroidExplosion::AAsteroidExplosion() : AExplosion() {
   // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
   PrimaryActorTick.bCanEverTick = true;
 
@@ -26,6 +26,13 @@ void AAsteroidExplosion::Init(const FAsteroidExplosionInitProps& props) {
   Hit = props.hit;
   Mesh = props.mesh;
   DestructibleComponent->SetDestructibleMesh(Mesh);
+  
+  Explode();
+}
+
+void AAsteroidExplosion::Explode() {
+  Super::Explode();
+  
   ApplyDamage();
 }
 

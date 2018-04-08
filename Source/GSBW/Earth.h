@@ -41,9 +41,12 @@ public:
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
   FRotator DeltaRotation;
-
-  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
-  TArray<FVector> RocketSpawnPoints;
+  
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Audio)
+  UAudioComponent* AudioComponent;
+  
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Audio)
+  USoundBase* RocketLaunchSound;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   UStaticMeshComponent* StaticMeshComponent;

@@ -4,5 +4,15 @@
 #include "Explosion.h"
 
 
+AExplosion::AExplosion() {
+  AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
+}
 
+void AExplosion::OnConstruction(const FTransform& Transform) {
+  AudioComponent->SetAutoActivate(false);
+  AudioComponent->SetSound(ExplosionSound);
+}
 
+void AExplosion::Explode() {
+  AudioComponent->Play(0);
+}

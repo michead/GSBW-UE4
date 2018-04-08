@@ -29,6 +29,7 @@ AEarth::AEarth()
   DestructibleComponent->SetVisibility(false);
 
   Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+  AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioCompoenent"));
 
   RootComponent = StaticMeshComponent;
 }
@@ -38,6 +39,9 @@ void AEarth::OnConstruction(const FTransform& Transform) {
 
   Camera->SetWorldTransform(CameraTransform);
   Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+  
+  AudioComponent->SetAutoActivate(false);
+  AudioComponent->SetSound(RocketLaunchSound);
 }
 
 void AEarth::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
@@ -183,6 +187,9 @@ void AEarth::LaunchRocket() {
   props.speed = GetRocketSpeed();
   
   rocket->Init(props);
+  
+  // Play rocket launch sound wave
+  AudioComponent->Play(0);
   
   Target.rocketCount++;
 

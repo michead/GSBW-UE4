@@ -9,11 +9,20 @@
 *
 */
 UCLASS()
-class GSBW_API AExplosion : public AActor
-{
+class GSBW_API AExplosion : public AActor {
   GENERATED_BODY()
-
-
-
-
+  
+public:
+  AExplosion();
+  
+  virtual void OnConstruction(const FTransform& Transform) override;
+  
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Audio)
+  UAudioComponent* AudioComponent;
+    
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Audio)
+  USoundBase* ExplosionSound;
+  
+protected:
+  virtual void Explode();
 };

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "Explosion.h"
+#include "RocketExplosion.h"
 #include "RocketStructs.h"
 #include "Rocket.generated.h"
 
@@ -51,7 +51,7 @@ public:
   AAsteroid* Target;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
-  TSubclassOf<AExplosion> ExplosionClass;
+  TSubclassOf<ARocketExplosion> ExplosionClass;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
   float DeltaHomingAcceleration;

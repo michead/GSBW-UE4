@@ -94,8 +94,9 @@ void ARocket::Explode(const FHitResult& hit) {
   UE_LOG(Rocket, Log, TEXT("Explode() called."));
   if (ExplosionClass) {
     // Spawn explosion actor
-    GetWorld()->SpawnActor<AExplosion>(ExplosionClass);
+    GetWorld()->SpawnActor<ARocketExplosion>(ExplosionClass);
   }
+  
   // Destroy actor on next tick in order to allow overlap events to be sent to both sides
   GSBWUtils::DestroyOnNextTick<ARocket>(GetWorld(), this, &ARocket::Disappear);
 }

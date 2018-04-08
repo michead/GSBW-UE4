@@ -5,13 +5,14 @@
 #include "GameFramework/Actor.h"
 #include "Asteroid.h"
 #include "AsteroidStructs.h"
+#include "Explosion.h"
 #include "AsteroidExplosion.generated.h"
 
 /**
 *
 */
 UCLASS()
-class GSBW_API AAsteroidExplosion : public AActor
+class GSBW_API AAsteroidExplosion : public AExplosion
 {
   GENERATED_BODY()
 
@@ -31,6 +32,8 @@ public:
   UDestructibleComponent* DestructibleComponent;
 
 protected:
+  virtual void Explode() override;
+    
   FHitResult Hit;
   UDestructibleMesh* Mesh;
   FTimerHandle TimerHandle;
