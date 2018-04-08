@@ -39,27 +39,27 @@ void UAsteroidTextComponent::AttachTextComponents() {
 
     TextRenderComponents.Empty();
 
+    uint8_t i = 0;
+    float x = -((TextRenderComponents.Num() - (TextRenderComponents.Num() % 2 == 0 ? 1 : 0)) / 2) * (CharSpacing * FontScalingFactor);
+      
     for (TCHAR c : Word) {
-      TextRenderComponents.Push(NewObject<UAsteroidLetterComponent>(this, AsteroidLetterComponentBPClass));
+      auto component = NewObject<UAsteroidLetterComponent>(this, AsteroidLetterComponentBPClass);
+      
+      component->SetWorldRotation(BaseRotation);
+      component->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
+      component->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
+      component->SetRelativeLocation(FVector(x, 0, -Radius));
+      component->SetWorldScale3D(FVector(FontScalingFactor));
+      component->SetText(FText::FromString(FString("").AppendChar(c)));
+      component->SetTextRenderColor(TextColor);
+      component->RegisterComponent();
+        
+      check(component->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform));
+      
+      TextRenderComponents.Push(component);
+      
+      x += CharSpacing * FontScalingFactor;
+      i += 1;
     }
-  }
-
-  uint8_t i = 0;
-  float x = -((TextRenderComponents.Num() - (TextRenderComponents.Num() % 2 == 0 ? 1 : 0)) / 2) * (CharSpacing * FontScalingFactor);
-
-  for (auto component : TextRenderComponents) {
-    component->SetWorldRotation(BaseRotation);
-    component->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
-    component->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
-    component->SetRelativeLocation(FVector(x, 0, -Radius));
-    component->SetWorldScale3D(FVector(FontScalingFactor));
-    component->SetText(FText::FromString(FString("").AppendChar(Word[i])));
-    component->SetTextRenderColor(TextColor);
-    component->RegisterComponent();
-
-    check(component->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform));
-    
-    x += CharSpacing * FontScalingFactor;
-    i += 1;
   }
 };
