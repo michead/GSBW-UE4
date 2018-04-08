@@ -53,7 +53,7 @@ void UAsteroidTextComponent::AttachTextComponents() {
     component->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
     component->SetRelativeLocation(FVector(x, 0, -Radius));
     component->SetWorldScale3D(FVector(FontScalingFactor));
-    component->SetText(FString("").AppendChar(Word[i]));
+    component->SetText(FText::FromString(FString("").AppendChar(Word[i])));
     component->SetTextRenderColor(TextColor);
     component->RegisterComponent();
 
