@@ -19,6 +19,9 @@ public:
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   FRotator BaseRotation;
 
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Rendering)
+  TSubclassOf<UAsteroidLetterComponent> AsteroidLetterComponentBPClass;
+    
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   TArray<UAsteroidLetterComponent*> TextRenderComponents;
 

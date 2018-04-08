@@ -40,7 +40,7 @@ void UAsteroidTextComponent::AttachTextComponents() {
     TextRenderComponents.Empty();
 
     for (TCHAR c : Word) {
-      TextRenderComponents.Push(NewObject<UAsteroidLetterComponent>(this, UAsteroidLetterComponent::StaticClass()));
+      TextRenderComponents.Push(NewObject<UAsteroidLetterComponent>(this, AsteroidLetterComponentBPClass));
     }
   }
 

@@ -6,10 +6,8 @@
 #include "Components/TextRenderComponent.h"
 #include "AsteroidLetterComponent.generated.h"
 
-/**
- * 
- */
-UCLASS()
+
+UCLASS(Blueprintable)
 class GSBW_API UAsteroidLetterComponent : public UTextRenderComponent {
 	GENERATED_BODY()
 };
