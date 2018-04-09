@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "RandomizedAudioComponent.h"
 #include "Explosion.generated.h"
 
 /**
@@ -18,7 +19,7 @@ public:
   virtual void OnConstruction(const FTransform& Transform) override;
   
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Audio)
-  UAudioComponent* AudioComponent;
+  URandomizedAudioComponent* AudioComponent;
     
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Audio)
   USoundBase* ExplosionSound;

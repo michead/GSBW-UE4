@@ -29,7 +29,7 @@ AEarth::AEarth()
   DestructibleComponent->SetVisibility(false);
 
   Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-  AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioCompoenent"));
+  AudioComponent = CreateDefaultSubobject<URandomizedAudioComponent>(TEXT("AudioCompoenent"));
 
   RootComponent = StaticMeshComponent;
 }

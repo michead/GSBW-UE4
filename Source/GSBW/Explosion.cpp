@@ -5,7 +5,7 @@
 
 
 AExplosion::AExplosion() {
-  AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
+  AudioComponent = CreateDefaultSubobject<URandomizedAudioComponent>(TEXT("AudioComponent"));
 }
 
 void AExplosion::OnConstruction(const FTransform& Transform) {

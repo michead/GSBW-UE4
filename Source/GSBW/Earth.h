@@ -8,6 +8,7 @@
 #include "Asteroid.h"
 #include "Rocket.h"
 #include "EarthStructs.h"
+#include "RandomizedAudioComponent.h"
 #include "Earth.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(Earth, Log, All);
@@ -43,7 +44,7 @@ public:
   FRotator DeltaRotation;
   
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Audio)
-  UAudioComponent* AudioComponent;
+  URandomizedAudioComponent* AudioComponent;
   
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Audio)
   USoundBase* RocketLaunchSound;
