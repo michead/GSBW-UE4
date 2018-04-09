@@ -39,9 +39,6 @@ void AEarth::OnConstruction(const FTransform& Transform) {
 
   Camera->SetWorldTransform(CameraTransform);
   Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
-  
-  AudioComponent->SetAutoActivate(false);
-  AudioComponent->SetSound(RocketLaunchSound);
 }
 
 void AEarth::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
@@ -88,6 +85,9 @@ void AEarth::BeginPlay() {
   WorldSettings = Cast<AGSBWWorldSettings>(GetWorldSettings());
   MaxHealth = WorldSettings->EarthMaxHealth;
   Health = MaxHealth;
+  
+  AudioComponent->SetAutoActivate(false);
+  AudioComponent->SetSounds(RocketLaunchSounds);
 }
 
 // Called every frame
@@ -189,7 +189,7 @@ void AEarth::LaunchRocket() {
   rocket->Init(props);
   
   // Play rocket launch sound wave
-  AudioComponent->Play(0);
+  AudioComponent->PlayOneAtRand();
   
   Target.rocketCount++;
 

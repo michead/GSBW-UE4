@@ -9,10 +9,16 @@ AExplosion::AExplosion() {
 }
 
 void AExplosion::OnConstruction(const FTransform& Transform) {
+  Super::OnConstruction(Transform);
+}
+
+void AExplosion::BeginPlay() {
+  Super::BeginPlay();
+  
   AudioComponent->SetAutoActivate(false);
-  AudioComponent->SetSound(ExplosionSound);
+  AudioComponent->SetSounds(ExplosionSounds);
 }
 
 void AExplosion::Explode() {
-  AudioComponent->Play(0);
+  AudioComponent->PlayOneAtRand();
 }

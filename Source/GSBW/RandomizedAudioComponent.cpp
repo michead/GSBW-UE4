@@ -9,6 +9,10 @@ void URandomizedAudioComponent::SetSounds(TArray<USoundBase*> SoundBases) {
 }
 
 void URandomizedAudioComponent::PlayOneAtRand() {
+  if (!Sounds.Num()) {
+    // No sound bases have been assigned
+    return;
+  }
   int index = FMath::RandRange(0, Sounds.Num() - 1);
   SetSound(Sounds[index]);
   Play(0);

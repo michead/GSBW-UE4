@@ -17,12 +17,13 @@ public:
   AExplosion();
   
   virtual void OnConstruction(const FTransform& Transform) override;
+  virtual void BeginPlay() override;
   
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Audio)
   URandomizedAudioComponent* AudioComponent;
     
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Audio)
-  USoundBase* ExplosionSound;
+  TArray<USoundBase*> ExplosionSounds;
   
 protected:
   virtual void Explode();

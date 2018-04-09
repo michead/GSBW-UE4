@@ -47,7 +47,7 @@ public:
   URandomizedAudioComponent* AudioComponent;
   
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Audio)
-  USoundBase* RocketLaunchSound;
+  TArray<USoundBase*> RocketLaunchSounds;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   UStaticMeshComponent* StaticMeshComponent;
