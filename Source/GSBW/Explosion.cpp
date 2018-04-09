@@ -10,13 +10,16 @@ AExplosion::AExplosion() {
 
 void AExplosion::OnConstruction(const FTransform& Transform) {
   Super::OnConstruction(Transform);
+  
+  AudioComponent->SetAutoActivate(false);
+  AudioComponent->SetSounds(ExplosionSounds);
 }
 
 void AExplosion::BeginPlay() {
   Super::BeginPlay();
   
-  AudioComponent->SetAutoActivate(false);
-  AudioComponent->SetSounds(ExplosionSounds);
+  // Trigger explosion in next tick
+  GetWorld()->GetTimerManager().SetTimerForNextTick<AExplosion>(this, &AExplosion::Explode);
 }
 
 void AExplosion::Explode() {

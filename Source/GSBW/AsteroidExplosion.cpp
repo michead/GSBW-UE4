@@ -26,8 +26,6 @@ void AAsteroidExplosion::Init(const FAsteroidExplosionInitProps& props) {
   Hit = props.hit;
   Mesh = props.mesh;
   DestructibleComponent->SetDestructibleMesh(Mesh);
-  
-  Explode();
 }
 
 void AAsteroidExplosion::Explode() {
