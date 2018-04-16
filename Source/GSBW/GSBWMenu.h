@@ -22,8 +22,18 @@ public:
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_UI)
   TSubclassOf<class UMainMenu> MainMenuClass;
+  
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_UI)
+  TSubclassOf<class USettingsMenu> SettingsMenuClass;
+  
+  UFUNCTION(BlueprintCallable)
+  void ShowMainMenu();
+  
+  UFUNCTION(BlueprintCallable)
+  void ShowSettingsMenu();
 
 private:
-  APlayerController * PlayerController;
+  APlayerController* PlayerController;
   UMainMenu* MainMenu;
+  USettingsMenu* SettingsMenu;
 };

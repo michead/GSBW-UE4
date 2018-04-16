@@ -2,6 +2,7 @@
 
 #include "GSBW.h"
 #include "MainMenu.h"
+#include "SettingsMenu.h"
 #include "GSBWMenu.h"
 
 DEFINE_LOG_CATEGORY(GSBWMenu);
@@ -16,7 +17,22 @@ void AGSBWMenu::BeginPlay() {
   Super::BeginPlay();
 
   PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-
   MainMenu = CreateWidget<UMainMenu>(PlayerController, MainMenuClass);
+  SettingsMenu = CreateWidget<USettingsMenu>(PlayerController, SettingsMenuClass);
+
+  ShowMainMenu();
+}
+
+void AGSBWMenu::ShowMainMenu() {
+  if (SettingsMenu->IsVisible()) {
+    SettingsMenu->RemoveFromParent();
+  }
+
   MainMenu->AddToViewport();
+}
+
+void AGSBWMenu::ShowSettingsMenu() {
+  MainMenu->RemoveFromParent();
+
+  SettingsMenu->AddToViewport();
 }
