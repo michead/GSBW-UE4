@@ -13,53 +13,64 @@ UAsteroidTextComponent::UAsteroidTextComponent() {
 }
 
 void UAsteroidTextComponent::Init(const FAsteroidTextComponentInitProps& Props) {
-  Word = Props.word;
   RootComponent = Props.rootComponent;
+  Word = Props.word;
+  BaseRotation = Props.baseRotation;
+  CharSpacing = Props.charSpacing;
+  FontScalingFactor = Props.fontScalingFactor;
+  Radius = Props.radius;
+  TextColor = Props.textColor;
+  TextRenderComponentClass = Props.textRenderComponentClass;
 
-  AttachTextComponents();
+  InitAsteroidLetterComponents();
+}
+
+void UAsteroidTextComponent::DestroyAllLetters() {
+  for (auto i = 0; i < TextRenderComponents.Num(); i++) {
+    DestroyLetterAt(i);
+  }
+  
+  TextRenderComponents.Empty();
 }
 
 void UAsteroidTextComponent::DestroyLetterAt(uint32 LetterIndex) {
+  if (LetterIndex < 0 || LetterIndex >= TextRenderComponents.Num() || !TextRenderComponents[LetterIndex]) {
+    return;
+  }
+  
+  TextRenderComponents[LetterIndex]->UnregisterComponent();
+  TextRenderComponents[LetterIndex]->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
   TextRenderComponents[LetterIndex]->DestroyComponent();
 }
 
-void UAsteroidTextComponent::AttachTextComponents() {
-  bool bWordChanged = InitialWord != Word;
+void UAsteroidTextComponent::InitAsteroidLetterComponents() {
+  DestroyAllLetters();
 
-  InitialWord = Word;
-
-  if (bWordChanged) {
-    for (auto component : TextRenderComponents) {
-      if (component) {
-        component->UnregisterComponent();
-        component->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
-        component->DestroyComponent();
-      }
-    }
-
-    TextRenderComponents.Empty();
-
-    uint8_t i = 0;
-    float x = -((TextRenderComponents.Num() - (TextRenderComponents.Num() % 2 == 0 ? 1 : 0)) / 2) * (CharSpacing * FontScalingFactor);
+  uint8_t i = 0;
+  for (TCHAR c : Word) {
+    auto component = NewObject<UTextRenderComponent>(this, TextRenderComponentClass);
+    
+    component->RegisterComponent();
+    component->SetWorldRotation(BaseRotation);
+    component->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
+    component->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
+    component->SetWorldScale3D(FVector(FontScalingFactor));
+    component->SetText(FText::FromString(FString("").AppendChar(c)));
+    component->SetTextRenderColor(TextColor);
+    component->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
       
-    for (TCHAR c : Word) {
-      auto component = NewObject<UAsteroidLetterComponent>(this, AsteroidLetterComponentBPClass);
-      
-      component->SetWorldRotation(BaseRotation);
-      component->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
-      component->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
-      component->SetRelativeLocation(FVector(x, 0, -Radius));
-      component->SetWorldScale3D(FVector(FontScalingFactor));
-      component->SetText(FText::FromString(FString("").AppendChar(c)));
-      component->SetTextRenderColor(TextColor);
-      component->RegisterComponent();
-        
-      check(component->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform));
-      
-      TextRenderComponents.Push(component);
-      
-      x += CharSpacing * FontScalingFactor;
-      i += 1;
-    }
+    TextRenderComponents.Push(component);
+    i += 1;
+  }
+  
+  float width = CharSpacing * float(TextRenderComponents.Num() - 1);
+  for (auto component : TextRenderComponents) {
+    width += component->Bounds.BoxExtent.X;
+  }
+  
+  float x = -width / 2.f;
+  for (auto component : TextRenderComponents) {
+    component->SetRelativeLocation(FVector(x, 0, -Radius));
+    x += component->Bounds.BoxExtent.X + CharSpacing;
   }
 };

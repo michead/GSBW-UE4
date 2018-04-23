@@ -47,4 +47,16 @@ struct FAsteroidTextComponentInitProps {
   USceneComponent* rootComponent;
   UPROPERTY()
   FString word;
+  UPROPERTY()
+  float radius;
+  UPROPERTY()
+  float charSpacing;
+  UPROPERTY()
+  FRotator baseRotation;
+  UPROPERTY()
+  TSubclassOf<UTextRenderComponent> textRenderComponentClass;
+  UPROPERTY()
+  float fontScalingFactor;
+  UPROPERTY()
+  FColor textColor;
 };

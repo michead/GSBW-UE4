@@ -8,6 +8,7 @@
 #include "AsteroidExplosion.h"
 #include "Asteroid.h"
 
+DEFINE_LOG_CATEGORY(Asteroid);
 
 // Sets default values
 AAsteroid::AAsteroid() {
@@ -31,12 +32,11 @@ void AAsteroid::OnConstruction(const FTransform& Transform) {
   Super::OnConstruction(Transform);
 
   StaticMeshComponent->SetStaticMesh(StaticMesh);
-  AsteroidTextComponent = NewObject<UAsteroidTextComponent>(this, AsteroidTextComponentClass);
 
   // Set default value mostly for debugging purposes
   WordToDisplay = Word;
 
-  AttachFloatingText();
+  InitTextComponent();
 }
 
 // Called when the game starts or when spawned
@@ -56,16 +56,32 @@ void AAsteroid::Init(const FAsteroidInitProps& props) {
 
   WordToDisplay = Word;
 
-  AttachFloatingText();
+  InitTextComponent();
   ApplyImpulse();
 }
 
-void AAsteroid::AttachFloatingText() {
+void AAsteroid::InitTextComponent() {
+  if (!AsteroidTextComponentClass || !TextRenderComponentClass) {
+    UE_LOG(Asteroid, Warning, TEXT("Cannot initialize text component because of core props have not been defined."));
+    return;
+  }
+  
   FAsteroidTextComponentInitProps props = {};
   props.rootComponent = RootComponent;
   props.word = WordToDisplay;
+  props.charSpacing = CharSpacing;
+  props.radius = RootComponent->Bounds.SphereRadius;
+  props.fontScalingFactor = FontScalingFactor;
+  props.baseRotation = BaseTextRotation;
+  props.textColor = TextColor;
+  props.textRenderComponentClass = TextRenderComponentClass;
+  
+  if (!AsteroidTextComponent) {
+    AsteroidTextComponent = NewObject<UAsteroidTextComponent>(this, AsteroidTextComponentClass);
+    AsteroidTextComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+  }
+  
   AsteroidTextComponent->Init(props);
-  check(AsteroidTextComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform));
 }
 
 void AAsteroid::ApplyImpulse() {

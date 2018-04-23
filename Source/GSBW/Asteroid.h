@@ -8,6 +8,8 @@
 #include "AsteroidTextComponent.h"
 #include "Asteroid.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(Asteroid, Log, All);
+
 UCLASS()
 class GSBW_API AAsteroid : public AActor {
   GENERATED_BODY()
@@ -58,6 +60,23 @@ public:
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
   int32 RocketCount;
+  
+  // UAsteroidTextComponent Props
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  FRotator BaseTextRotation;
+  
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Rendering)
+  TSubclassOf<UTextRenderComponent> TextRenderComponentClass;
+  
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  float FontScalingFactor;
+  
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  FColor TextColor;
+  
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  float CharSpacing;
+  
 
   // Returns current asteroid word (which might be truncated wrt the original one)
   UFUNCTION()
@@ -67,7 +86,7 @@ public:
   virtual void Explode(const FHitResult& hit);
 
 protected:
-  void AttachFloatingText();
+  void InitTextComponent();
   void ApplyImpulse();
 
   // Asteroid protected virtual methods

@@ -4,7 +4,6 @@
 
 #include "Components/ActorComponent.h"
 #include "AsteroidStructs.h"
-#include "AsteroidLetterComponent.h"
 #include "AsteroidTextComponent.generated.h"
 
 
@@ -20,10 +19,10 @@ public:
   FRotator BaseRotation;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Rendering)
-  TSubclassOf<UAsteroidLetterComponent> AsteroidLetterComponentBPClass;
+  TSubclassOf<UTextRenderComponent> TextRenderComponentClass;
     
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
-  TArray<UAsteroidLetterComponent*> TextRenderComponents;
+  TArray<UTextRenderComponent*> TextRenderComponents;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   USceneComponent* RootComponent;
@@ -47,12 +46,12 @@ public:
   UFUNCTION()
   void Init(const FAsteroidTextComponentInitProps& Props);
 
-  // Make the first char explode
   UFUNCTION()
   void DestroyLetterAt(uint32 LetterIndex);
+  
+  UFUNCTION()
+  void DestroyAllLetters();
 
-private:
-  void AttachTextComponents();
-
-  FString InitialWord;
+protected:
+  void InitAsteroidLetterComponents();
 };
