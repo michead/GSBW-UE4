@@ -48,6 +48,9 @@ public:
   TArray<float> AsteroidSpeedRanges;
   
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
+  TArray<float> AsteroidTorqueSpeedRanges;
+  
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_Gameplay)
   TArray<float> AsteroidTypeProbabilities;
 
   UFUNCTION()
@@ -62,6 +65,7 @@ private:
   FString GetNextAsteroidWord();
   EAsteroidType GetNextAsteroidType();
   float GetNextAsteroidSpeed();
+  FVector GetNextAsteroidTorque();
   void ComputeSpawnerBounds();
   void InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type);
   FString PickWordFromMap(uint8_t WordLen, uint8_t PrefixCharIndex);

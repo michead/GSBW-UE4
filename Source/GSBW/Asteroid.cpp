@@ -53,6 +53,7 @@ void AAsteroid::Init(const FAsteroidInitProps& props) {
   Type = props.type;
   Word = props.word;
   Speed = props.speed;
+  Torque = props.torque;
 
   WordToDisplay = Word;
 
@@ -93,6 +94,7 @@ void AAsteroid::ApplyImpulse() {
 
   // Self-apply impulse
   StaticMeshComponent->AddImpulse(direction * Speed);
+  StaticMeshComponent->AddTorque(Torque);
 }
 
 void AAsteroid::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,

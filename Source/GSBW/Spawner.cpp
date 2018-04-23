@@ -106,6 +106,7 @@ void ASpawner::InitAsteroidProps(FAsteroidInitProps& Props, EAsteroidType Type) 
   Props.type = Type;
   Props.word = GetNextAsteroidWord();
   Props.speed = GetNextAsteroidSpeed();
+  Props.torque = GetNextAsteroidTorque();
 }
 
 FVector ASpawner::GetNextAsteroidLocation(EAsteroidType AsteroidType) {
@@ -159,6 +160,13 @@ float ASpawner::GetNextAsteroidSpeed() {
   float a = AsteroidSpeedRanges[2 * difficultyIndex];
   float b = AsteroidSpeedRanges[2 * difficultyIndex + 1];
   return FMath::FRandRange(a, b);
+}
+
+FVector ASpawner::GetNextAsteroidTorque() {
+  int difficultyIndex = static_cast<int>(GameState->GetCurrentDifficulty());
+  float a = AsteroidTorqueSpeedRanges[2 * difficultyIndex];
+  float b = AsteroidTorqueSpeedRanges[2 * difficultyIndex + 1];
+  return FMath::FRandRange(a, b) * FMath::VRand();
 }
 
 float ASpawner::GetSpawnInterval() {

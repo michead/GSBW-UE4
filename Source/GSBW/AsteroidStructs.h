@@ -27,6 +27,8 @@ struct FAsteroidInitProps {
   FString word;
   UPROPERTY()
   float speed;
+  UPROPERTY()
+  FVector torque;
 };
 
 USTRUCT(BlueprintType)

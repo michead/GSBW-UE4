@@ -57,6 +57,9 @@ public:
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Gameplay)
   float Speed;
+  
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Gameplay)
+  FVector Torque;
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
   int32 RocketCount;
