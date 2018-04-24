@@ -11,6 +11,7 @@ UAsteroidTextComponent::UAsteroidTextComponent() {
   Radius = 10;
   CharSpacing = 10;
   RadiusMultiplier = 1.1f;
+  AngleBetweenLetters = 20.f;
 }
 
 void UAsteroidTextComponent::Init(const FAsteroidTextComponentInitProps& Props) {
@@ -47,7 +48,6 @@ void UAsteroidTextComponent::DestroyLetterAt(uint32 LetterIndex) {
 void UAsteroidTextComponent::InitAsteroidLetterComponents() {
   DestroyAllLetters();
 
-  uint8_t i = 0;
   for (TCHAR c : Word) {
     auto component = NewObject<UTextRenderComponent>(this, TextRenderComponentClass);
     
@@ -61,11 +61,9 @@ void UAsteroidTextComponent::InitAsteroidLetterComponents() {
     component->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
       
     TextRenderComponents.Push(component);
-    i += 1;
   }
   
-  i = 0;
-  float angle = FMath::DegreesToRadians<float>(20.f);
+  float angle = FMath::DegreesToRadians<float>(AngleBetweenLetters);
   float totalAngle = angle * (TextRenderComponents.Num() - 1);
   FVector forward = FVector(0, 0, -1);
   FVector2D sphericalLoc = forward.UnitCartesianToSpherical();
@@ -78,6 +76,5 @@ void UAsteroidTextComponent::InitAsteroidLetterComponents() {
     component->SetRelativeLocation(dir * Radius * RadiusMultiplier);
     component->AddWorldRotation(deltaRotation);
     baseLoc -= FVector2D(angle, 0.f);
-    i++;
   }
 };

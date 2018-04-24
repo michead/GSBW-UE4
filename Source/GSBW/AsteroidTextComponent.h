@@ -44,6 +44,9 @@ public:
   
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   float RadiusMultiplier;
+  
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  float AngleBetweenLetters;
 
   // Initialize component with passed word
   UFUNCTION()
