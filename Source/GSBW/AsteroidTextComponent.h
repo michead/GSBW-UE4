@@ -41,6 +41,9 @@ public:
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   float Radius;
+  
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  float RadiusMultiplier;
 
   // Initialize component with passed word
   UFUNCTION()
