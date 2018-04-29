@@ -24,8 +24,14 @@ AAsteroid::AAsteroid() {
   StaticMeshComponent->SetCollisionProfileName("Asteroid");
   StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &AAsteroid::OnOverlapBegin);
   SetRootComponent(StaticMeshComponent);
-
+  
+  AsteroidTimeScaleChangeDelegate.BindUFunction(this, "OnAsteroidTimeScaleChange");
+  
   RocketCount = 0;
+  Speed = 0.f;
+  WordLenRadiusConstantFactor = 2.f;
+  MinRadius = 50.f;
+  MaxRadius = 100.f;
 }
 
 void AAsteroid::OnConstruction(const FTransform& Transform) {
@@ -35,13 +41,22 @@ void AAsteroid::OnConstruction(const FTransform& Transform) {
 
   // Set default value mostly for debugging purposes
   WordToDisplay = Word;
+  
+  FAsteroidInitProps props = {};
+  props.speed = Speed;
+  props.torque = Torque;
+  props.type = Type;
+  props.word = Word;
 
-  InitTextComponent();
+  Init(props);
 }
 
 // Called when the game starts or when spawned
 void AAsteroid::BeginPlay() {
   Super::BeginPlay();
+  
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_TIME_SCALE_CHANGE, AsteroidTimeScaleChangeDelegate);
+  CustomTimeDilation = GSBWUtils::GetGameState(GetWorld())->AsteroidTimeScale;
 }
 
 // Called every frame
@@ -57,6 +72,7 @@ void AAsteroid::Init(const FAsteroidInitProps& props) {
 
   WordToDisplay = Word;
 
+  ScaleAccordingToWordLen();
   InitTextComponent();
   ApplyImpulse();
 }
@@ -86,6 +102,11 @@ void AAsteroid::InitTextComponent() {
 }
 
 void AAsteroid::ApplyImpulse() {
+  if (!Speed) {
+    // Workaround for testing actor in blueprint's viewport
+    return;
+  }
+  
   TArray<AActor*> actors;
   UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEarth::StaticClass(), actors);
 
@@ -93,7 +114,7 @@ void AAsteroid::ApplyImpulse() {
   direction.Normalize();
 
   // Self-apply impulse
-  StaticMeshComponent->AddImpulse(direction * Speed);
+  StaticMeshComponent->AddImpulse(direction * Speed * CustomTimeDilation);
   StaticMeshComponent->AddTorque(Torque);
 }
 
@@ -124,6 +145,12 @@ void AAsteroid::OnRocketHit(class AActor* Actor, const FHitResult& Hit) {
   }
 }
 
+void AAsteroid::OnAsteroidTimeScaleChange() {
+  CustomTimeDilation = GSBWUtils::GetGameState(GetWorld())->AsteroidTimeScale;
+  // Re-apply impulse with new time dilation
+  ApplyImpulse();
+}
+
 void AAsteroid::OnDestruction() {
   // Base asteroid class has no logic to execute on destruction
 }
@@ -145,6 +172,15 @@ void AAsteroid::Explode(const FHitResult& Hit) {
 
 FString AAsteroid::GetWord() const {
   return WordToDisplay;
+}
+
+void AAsteroid::ScaleAccordingToWordLen() {
+  FVector currScale = RootComponent->GetComponentScale();
+  float currRadius = RootComponent->Bounds.SphereRadius;
+  float nextRadius = FMath::Min(MinRadius + Word.Len() * WordLenRadiusConstantFactor, MaxRadius);
+  FVector nextScale = (currScale * nextRadius) / currRadius;
+  RootComponent->SetWorldScale3D(nextScale);
+  UE_LOG(Asteroid, Log, TEXT("Asteroid has been scaled by %.2f. Previous radius was %.2f, current radius is %.2f."), nextScale.X, currRadius, nextRadius);
 }
 
 void AAsteroid::Disappear() {

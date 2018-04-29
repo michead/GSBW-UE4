@@ -4,6 +4,7 @@
 #include "Json.h"
 #include "GlobalEventHandler.h"
 #include "GSBWCommon.h"
+#include "GSBWGameState.h"
 
 #define LINE_LEN        100000
 #define S2W_MULTIPLIER  10
@@ -98,5 +99,9 @@ namespace GSBWUtils {
       }
     }
     return wordMap;
+  }
+  
+  inline AGSBWGameState* GetGameState(UWorld* World) {
+    return Cast<AGSBWGameState>(World->GetGameState());
   }
 }

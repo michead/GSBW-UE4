@@ -33,6 +33,9 @@ public:
   virtual void OnEarthHitAction() {}
   virtual void OnRocketHitAction() {}
   virtual void OnExplodeAction() {} // PURE_VIRTUAL
+  
+  UFUNCTION()
+  void OnAsteroidTimeScaleChange();
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
   UStaticMeshComponent* StaticMeshComponent;
@@ -80,6 +83,14 @@ public:
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   float CharSpacing;
   
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  float MinRadius;
+  
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  float MaxRadius;
+  
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  float WordLenRadiusConstantFactor;
 
   // Returns current asteroid word (which might be truncated wrt the original one)
   UFUNCTION()
@@ -91,6 +102,7 @@ public:
 protected:
   void InitTextComponent();
   void ApplyImpulse();
+  void ScaleAccordingToWordLen();
 
   // Asteroid protected virtual methods
   virtual void Disappear();
@@ -108,4 +120,6 @@ protected:
     const FHitResult& SweepResult);
 
   FString WordToDisplay;
+  FScriptDelegate AsteroidTimeScaleChangeDelegate;
+
 };

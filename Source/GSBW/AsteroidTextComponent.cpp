@@ -10,7 +10,7 @@ UAsteroidTextComponent::UAsteroidTextComponent() {
 
   Radius = 10;
   CharSpacing = 10;
-  RadiusMultiplier = 1.1f;
+  DistanceFromSurface = .01f;
   AngleBetweenLetters = 20.f;
 }
 
@@ -73,7 +73,7 @@ void UAsteroidTextComponent::InitAsteroidLetterComponents() {
     float alpha = FMath::RadiansToDegrees<float>(FMath::Acos(FVector::DotProduct(dir, forward)));
     float bPlus = FVector::DotProduct(FVector::CrossProduct(dir, forward), FVector(0, 1, 0)) > 0;
     FRotator deltaRotation = FRotator(bPlus ? alpha : -alpha, 0, 0);
-    component->SetRelativeLocation(dir * Radius * RadiusMultiplier);
+    component->SetRelativeLocation(dir * Radius + DistanceFromSurface);
     component->AddWorldRotation(deltaRotation);
     baseLoc -= FVector2D(angle, 0.f);
   }

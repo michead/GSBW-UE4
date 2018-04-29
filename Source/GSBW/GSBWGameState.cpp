@@ -14,6 +14,7 @@ void AGSBWGameState::HandleMatchHasStarted() {
   // Register event listeners
   AsteroidHitDelegate.BindUFunction(this,"OnAsteroidHit");
   AsteroidDownDelegate.BindUFunction(this, "OnAsteroidDown");
+  AsteroidTimeScaleChangeDelegate.BindUFunction(this, "OnAsteroidTimeScaleChange");
   GamePausedDelegate.BindUFunction(this, "OnGamePaused");
   GameUnpausedDelegate.BindUFunction(this, "OnGameUnpaused");
   EarthDownDelegate.BindUFunction(this, "OnEarthDown");
@@ -21,6 +22,7 @@ void AGSBWGameState::HandleMatchHasStarted() {
   
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_HIT, AsteroidHitDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_DOWN, AsteroidDownDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_TIME_SCALE_CHANGE, AsteroidTimeScaleChangeDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_PAUSED, GamePausedDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_UNPAUSED, GameUnpausedDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::DIFFICULTY_BUMP, DifficultyBumpDelegate);
@@ -43,6 +45,10 @@ void AGSBWGameState::OnAsteroidHit() {
 void AGSBWGameState::OnAsteroidDown() {
   UE_LOG(GSBWGameState, Log, TEXT("OnAsteroidDown()"));
   Score += WorldSettings->AsteroidDownScore;
+}
+
+void AGSBWGameState::OnAsteroidTimeScaleChange() {
+  UE_LOG(GSBWGameState, Log, TEXT("OnAsteroidTimeScaleChange()"));
 }
 
 void AGSBWGameState::OnGamePaused() {
@@ -77,4 +83,9 @@ void AGSBWGameState::OnEarthDown() {
 
 void AGSBWGameState::RequestPauseToggle() {
   GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(IsPaused ? EGSBWEvent::GAME_UNPAUSED : EGSBWEvent::GAME_PAUSED);
+}
+
+void AGSBWGameState::RequestAsteroidTimeScaleChange(float NewTimeScale) {
+  AsteroidTimeScale = NewTimeScale;
+  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::ASTEROID_TIME_SCALE_CHANGE);
 }

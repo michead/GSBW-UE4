@@ -23,6 +23,9 @@ public:
   void OnAsteroidDown();
   
   UFUNCTION()
+  void OnAsteroidTimeScaleChange();
+  
+  UFUNCTION()
   void OnGamePaused();
   
   UFUNCTION()
@@ -40,10 +43,17 @@ public:
   UFUNCTION()
   EDifficulty GetCurrentDifficulty() const;
   
+  UFUNCTION()
+  void RequestPauseToggle();
+  
+  UFUNCTION()
+  void RequestAsteroidTimeScaleChange(float NewTimeScale);
+  
+  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Gameplay)
+  float AsteroidTimeScale;
+  
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=CPP_Score)
   int32 Score;
-
-  void RequestPauseToggle();
 
 private:
   AGSBWWorldSettings* WorldSettings;
@@ -52,6 +62,7 @@ private:
   
   FScriptDelegate AsteroidHitDelegate;
   FScriptDelegate AsteroidDownDelegate;
+  FScriptDelegate AsteroidTimeScaleChangeDelegate;
   FScriptDelegate GamePausedDelegate;
   FScriptDelegate GameUnpausedDelegate;
   FScriptDelegate EarthDownDelegate;

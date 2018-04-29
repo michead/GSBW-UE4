@@ -209,7 +209,7 @@ void AEarth::ClearTarget() {
   Target.ref = nullptr;
 }
 
-void AEarth::OnTargetHit(AAsteroid& Asteroid) {
+void AEarth::OnTargetHit(AAsteroid& HitAsteroid) {
 
 }
 
@@ -256,5 +256,5 @@ void AEarth::Disappear() {
 }
 
 void AEarth::TogglePause() {
-  Cast<AGSBWGameState>(GetWorld()->GetGameState())->RequestPauseToggle();
+  GSBWUtils::GetGameState(GetWorld())->RequestPauseToggle();
 }

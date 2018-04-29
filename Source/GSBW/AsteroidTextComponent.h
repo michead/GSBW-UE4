@@ -43,7 +43,7 @@ public:
   float Radius;
   
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
-  float RadiusMultiplier;
+  float DistanceFromSurface;
   
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   float AngleBetweenLetters;

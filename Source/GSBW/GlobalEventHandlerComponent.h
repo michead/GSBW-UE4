@@ -7,6 +7,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnAsteroidHit);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnAsteroidDown);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnAsteroidTimeScaleChange);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnEarthHit);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnEarthDown);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnGamePaused);
@@ -30,6 +31,7 @@ public:
     
   FLevelEventDelegate_OnAsteroidHit OnAsteroidHit;
   FLevelEventDelegate_OnAsteroidDown OnAsteroidDown;
+  FLevelEventDelegate_OnAsteroidTimeScaleChange OnAsteroidTimeScaleChange;
   FLevelEventDelegate_OnEarthHit OnEarthHit;
   FLevelEventDelegate_OnEarthDown OnEarthDown;
   FLevelEventDelegate_OnGamePaused OnGamePaused;
