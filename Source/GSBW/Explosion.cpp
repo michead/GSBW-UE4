@@ -24,4 +24,10 @@ void AExplosion::BeginPlay() {
 
 void AExplosion::Explode() {
   AudioComponent->PlayOneAtRand();
+  const FTimerDelegate DisappearDelegate = FTimerDelegate::CreateUObject(this, &AExplosion::Disappear);
+  GetWorldTimerManager().SetTimer(TimerHandle, DisappearDelegate, Duration, false);
+}
+
+void AExplosion::Disappear() {
+  Destroy();
 }

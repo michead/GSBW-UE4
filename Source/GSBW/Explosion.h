@@ -19,6 +19,8 @@ public:
   virtual void OnConstruction(const FTransform& Transform) override;
   virtual void BeginPlay() override;
   
+  virtual void Disappear();
+  
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Audio)
   URandomizedAudioComponent* AudioComponent;
     
@@ -27,4 +29,7 @@ public:
   
 protected:
   virtual void Explode();
+  
+  float Duration;
+  FTimerHandle TimerHandle;
 };

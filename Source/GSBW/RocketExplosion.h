@@ -12,4 +12,10 @@
 UCLASS()
 class GSBW_API ARocketExplosion : public AExplosion {
 	GENERATED_BODY()
+  
+public:
+  ARocketExplosion();
+  
+protected:
+  FTimerHandle TimerHandle;
 };

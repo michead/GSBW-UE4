@@ -16,6 +16,8 @@ AAsteroidExplosion::AAsteroidExplosion() : AExplosion() {
   DestructibleComponent->SetSimulatePhysics(true);
   DestructibleComponent->SetCollisionProfileName(FName("OverlapAll"));
   SetRootComponent(DestructibleComponent);
+  
+  Duration = ASTEROID_EXPLOSION_DURATION;
 }
 
 void AAsteroidExplosion::BeginPlay() {
@@ -36,10 +38,4 @@ void AAsteroidExplosion::Explode() {
 
 void AAsteroidExplosion::ApplyDamage() {
   DestructibleComponent->ApplyRadiusDamage(ROCKET_HIT_BASE_DAMAGE, Hit.Location, ROCKET_HIT_DAMAGE_RADIUS, ROCKET_HIT_IMPULSE_STRENGTH, true);
-  const FTimerDelegate DisappearDelegate = FTimerDelegate::CreateUObject(this, &AAsteroidExplosion::Disappear);
-  GetWorldTimerManager().SetTimer(TimerHandle, DisappearDelegate, ASTEROID_EXPLOSION_DURATION, false);
-}
-
-void AAsteroidExplosion::Disappear() {
-  Destroy();
 }

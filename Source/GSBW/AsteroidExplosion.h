@@ -26,7 +26,6 @@ public:
   // AsteroidExplosion public virtual methods
   virtual void Init(const FAsteroidExplosionInitProps& Props);
   virtual void ApplyDamage();
-  virtual void Disappear();
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=CPP_Rendering)
   UDestructibleComponent* DestructibleComponent;
@@ -36,5 +35,4 @@ protected:
     
   FHitResult Hit;
   UDestructibleMesh* Mesh;
-  FTimerHandle TimerHandle;
 };

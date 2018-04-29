@@ -102,5 +102,6 @@ void ARocket::Explode(const FHitResult& hit) {
 }
 
 void ARocket::Disappear() {
+  SmokeEmitter->Destroy();
   Destroy();
 }
