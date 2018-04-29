@@ -27,6 +27,7 @@ AAsteroid::AAsteroid() {
   
   AsteroidTimeScaleChangeDelegate.BindUFunction(this, "OnAsteroidTimeScaleChange");
   
+  EffectDuration = 0.f;
   RocketCount = 0;
   Speed = 0.f;
   WordLenRadiusConstantFactor = 2.f;
@@ -182,6 +183,10 @@ void AAsteroid::ScaleAccordingToWordLen() {
   FVector nextScale = (currScale * nextRadius) / currRadius;
   RootComponent->SetWorldScale3D(nextScale);
   UE_LOG(Asteroid, Log, TEXT("Asteroid has been scaled by %.2f. Previous radius was %.2f, current radius is %.2f."), nextScale.X, currRadius, nextRadius);
+}
+
+void AAsteroid::RestoreAsteroidTimeScale() {
+  GSBWUtils::GetGameState(GetWorld())->RequestAsteroidTimeScaleChange(1);
 }
 
 void AAsteroid::Disappear() {

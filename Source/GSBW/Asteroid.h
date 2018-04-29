@@ -59,6 +59,9 @@ public:
   EAsteroidType Type;
 
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Gameplay)
+  float EffectDuration;
+  
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Gameplay)
   float Speed;
   
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Gameplay)
@@ -109,6 +112,7 @@ protected:
   virtual void OnEarthHit(class AActor* Actor, const FHitResult& hit);
   virtual void OnRocketHit(class AActor* Actor, const FHitResult& hit);
   virtual void OnDestruction();
+  virtual void RestoreAsteroidTimeScale();
 
   UFUNCTION()
   void OnOverlapBegin(

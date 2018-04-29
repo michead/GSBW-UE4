@@ -5,6 +5,7 @@
 #include "GlobalEventHandler.h"
 #include "GSBWCommon.h"
 #include "GSBWGameState.h"
+#include "Spawner.h"
 
 #define LINE_LEN        100000
 #define S2W_MULTIPLIER  10
@@ -52,12 +53,22 @@ namespace GSBWUtils {
       if (!Str1.Contains(currChar)) Str2.RemoveAt(i);
     }
   }
+  
+  template<typename T>
+  inline T* GetUniqueActorOfClass(UWorld* World) {
+    TArray<AActor*> actors;
+    UGameplayStatics::GetAllActorsOfClass(World, T::StaticClass(), actors);
+    // Is actor the only one of that class in the whole level?
+    check(actors.Num() == 1);
+    return Cast<T>(actors[0]);
+  }
 
   inline AGlobalEventHandler* GetEventHandler(UWorld* World) {
-    TArray<AActor*> actors;
-    UGameplayStatics::GetAllActorsOfClass(World, AGlobalEventHandler::StaticClass(), actors);
-    check(actors.Num() == 1);
-    return Cast<AGlobalEventHandler>(actors[0]);
+    return GetUniqueActorOfClass<AGlobalEventHandler>(World);
+  }
+  
+  inline ASpawner* GetSpawner(UWorld* World) {
+    return GetUniqueActorOfClass<ASpawner>(World);
   }
 
   inline FActorSpawnParameters GetNoFailSpawnParams() {
@@ -103,5 +114,11 @@ namespace GSBWUtils {
   
   inline AGSBWGameState* GetGameState(UWorld* World) {
     return Cast<AGSBWGameState>(World->GetGameState());
+  }
+  
+  inline float GetDistanceFromEarthToSpawnerBounds(UWorld* World) {
+    ASpawner* spawner = GetUniqueActorOfClass<ASpawner>(World);
+    // Earth is assumed to be at (0, 0, 0)
+    return spawner->Bounds[0].Size();
   }
 }

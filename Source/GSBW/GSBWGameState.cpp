@@ -38,34 +38,32 @@ void AGSBWGameState::HandleMatchHasStarted() {
 }
 
 void AGSBWGameState::OnAsteroidHit() {
-  UE_LOG(GSBWGameState, Log, TEXT("OnAsteroidHit()"));
   Score += WorldSettings->AsteroidHitScore;
 }
 
 void AGSBWGameState::OnAsteroidDown() {
-  UE_LOG(GSBWGameState, Log, TEXT("OnAsteroidDown()"));
   Score += WorldSettings->AsteroidDownScore;
 }
 
 void AGSBWGameState::OnAsteroidTimeScaleChange() {
-  UE_LOG(GSBWGameState, Log, TEXT("OnAsteroidTimeScaleChange()"));
+
 }
 
 void AGSBWGameState::OnGamePaused() {
-  UE_LOG(GSBWGameState, Log, TEXT("OnGamePaused()"));
+  UE_LOG(GSBWGameState, Log, TEXT("Pausing game"));
   IsPaused = true;
 }
 
 void AGSBWGameState::OnGameUnpaused() {
-  UE_LOG(GSBWGameState, Log, TEXT("OnGameUnpaused()"));
+  UE_LOG(GSBWGameState, Log, TEXT("Unpausing game"));
   IsPaused = false;
 }
 
 void AGSBWGameState::OnDifficultyBump() {
-  UE_LOG(GSBWGameState, Log, TEXT("OnDifficultyBump()"));
   if (static_cast<uint8>(CurrentDifficulty) <
       static_cast<uint8>(EDifficulty::NUM_DIFFICULTIES) - 1) {
     CurrentDifficulty = static_cast<EDifficulty>(static_cast<uint8>(CurrentDifficulty) + 1);
+    UE_LOG(GSBWGameState, Log, TEXT("Bumping difficulty index to %d"), CurrentDifficulty);
   }
 }
 
@@ -78,7 +76,7 @@ bool AGSBWGameState::IsGamePaused() {
 }
 
 void AGSBWGameState::OnEarthDown() {
-  UE_LOG(GSBWGameState, Log, TEXT("OnEarthDown()"));
+
 }
 
 void AGSBWGameState::RequestPauseToggle() {

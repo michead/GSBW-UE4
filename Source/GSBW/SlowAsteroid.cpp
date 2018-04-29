@@ -4,9 +4,16 @@
 #include "GSBWUtils.h"
 #include "SlowAsteroid.h"
 
+
+ASlowAsteroid::ASlowAsteroid() {
+  EffectDuration = 8.f;
+}
+
 void ASlowAsteroid::OnDestruction() {
   AAsteroid::OnDestruction();
   
   GSBWUtils::GetGameState(GetWorld())->RequestAsteroidTimeScaleChange(TimeScale);
-  // TODO: Restore time scale
+
+  const FTimerDelegate RestoreAsteroidTimeScaleDelegate = FTimerDelegate::CreateUObject(this, &ASlowAsteroid::RestoreAsteroidTimeScale);
+  GetWorldTimerManager().SetTimer(TimerHandle, RestoreAsteroidTimeScaleDelegate, EffectDuration, false);
 }

@@ -216,12 +216,18 @@ FVector AEarth::GetRocketSpawnLocation() {
   FVector dir = Target.ref->GetActorLocation() - GetActorLocation();
   float radius = RootComponent->Bounds.SphereRadius;
   float distanceFromOrigin = radius * 1.15f;
+  float distanceFromSpawnPoint = GSBWUtils::GetDistanceFromEarthToSpawnerBounds(GetWorld());
   FVector2D sphericalLoc = dir.UnitCartesianToSpherical();
-  float pi4 = FMath::DegreesToRadians<float>(45.f);
-  float phi = FMath::FRandRange(-pi4, pi4);
-  float theta = FMath::FRandRange(-pi4, pi4);
+  float maxAngle = FMath::DegreesToRadians<float>(45.f);
+  float angle = maxAngle * GetDistanceFromTarget() / distanceFromSpawnPoint;
+  float phi = FMath::FRandRange(-angle, angle);
+  float theta = FMath::FRandRange(-angle, angle);
   FVector2D delta = FVector2D(phi, theta);
   return (sphericalLoc + delta).SphericalToUnitCartesian() * distanceFromOrigin;
+}
+                                                                                
+float AEarth::GetDistanceFromTarget() {
+  return Target.ref->GetActorLocation().Size();
 }
 
 float AEarth::GetRocketSpeed() {

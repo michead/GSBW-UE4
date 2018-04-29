@@ -11,7 +11,12 @@
 UCLASS()
 class GSBW_API AFreezeAsteroid : public AAsteroid {
   GENERATED_BODY()
-	
+
+public:
+  AFreezeAsteroid();
+  
 protected:
   virtual void OnDestruction() override;
+  
+  FTimerHandle TimerHandle;
 };

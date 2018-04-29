@@ -12,9 +12,14 @@ UCLASS()
 class GSBW_API ASlowAsteroid : public AAsteroid {
   GENERATED_BODY()
   
+public:
+  ASlowAsteroid();
+  
   UPROPERTY(EditAnywhere, Category=CPP_Gameplay)
   float TimeScale;
   
 protected:
   virtual void OnDestruction() override;
+  
+  FTimerHandle TimerHandle;
 };

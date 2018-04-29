@@ -8,7 +8,7 @@
 #define ASTEROID_HIT_BASE_DAMAGE      100.f
 #define ASTEROID_HIT_DAMAGE_RADIUS    1000.f
 #define ASTEROID_HIT_IMPULSE_STRENGTH 5000.f
-#define EARTH_EXPLOSION_DURATION      2.f
+#define EARTH_EXPLOSION_DURATION      10.f   // Make sure it is greater than any effect duration
 #define ROCKET_HIT_BASE_DAMAGE        100.f
 #define ROCKET_HIT_DAMAGE_RADIUS      1000.f
 #define ROCKET_HIT_IMPULSE_STRENGTH   5000.f
