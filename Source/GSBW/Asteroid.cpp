@@ -71,7 +71,8 @@ void AAsteroid::Init(const FAsteroidInitProps& props) {
   Torque = props.torque;
 
   WordToDisplay = Word;
-
+  
+  CustomTimeDilation = 1.f;
   ScaleAccordingToWordLen();
   InitTextComponent();
   ApplyImpulse();

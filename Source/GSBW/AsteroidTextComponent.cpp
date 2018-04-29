@@ -59,6 +59,10 @@ void UAsteroidTextComponent::InitAsteroidLetterComponents() {
     component->SetText(FText::FromString(FString("").AppendChar(c)));
     component->SetTextRenderColor(TextColor);
     component->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+    
+    UMaterialInstanceDynamic* material = UMaterialInstanceDynamic::Create(component->GetMaterial(0), this);
+    component->SetMaterial(0, material);
+    material->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(TextColor));
       
     TextRenderComponents.Push(component);
   }
