@@ -130,8 +130,7 @@ void AAsteroid::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class 
 }
 
 void AAsteroid::OnEarthHit(class AActor* Actor, const FHitResult& Hit) {
-  // Let Earth broadcast the event, just explode
-  Explode(Hit);
+  Explode(Hit, false);
 }
 
 void AAsteroid::OnRocketHit(class AActor* Actor, const FHitResult& Hit) {
