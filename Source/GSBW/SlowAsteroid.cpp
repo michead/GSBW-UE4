@@ -7,6 +7,7 @@
 
 ASlowAsteroid::ASlowAsteroid() {
   EffectDuration = 8.f;
+  TimeScale = .5f;
 }
 
 void ASlowAsteroid::OnDestruction() {
