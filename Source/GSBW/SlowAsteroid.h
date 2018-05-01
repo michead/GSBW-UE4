@@ -20,6 +20,4 @@ public:
   
 protected:
   virtual void OnDestruction() override;
-  
-  FTimerHandle TimerHandle;
 };

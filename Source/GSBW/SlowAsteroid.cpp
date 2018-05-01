@@ -10,10 +10,10 @@ ASlowAsteroid::ASlowAsteroid() {
 }
 
 void ASlowAsteroid::OnDestruction() {
-  AAsteroid::OnDestruction();
+  Super::OnDestruction();
   
   GSBWUtils::GetGameState(GetWorld())->RequestAsteroidTimeScaleChange(TimeScale);
 
   const FTimerDelegate RestoreAsteroidTimeScaleDelegate = FTimerDelegate::CreateUObject(this, &ASlowAsteroid::RestoreAsteroidTimeScale);
-  GetWorldTimerManager().SetTimer(TimerHandle, RestoreAsteroidTimeScaleDelegate, EffectDuration, false);
+  GetWorldTimerManager().SetTimer(DisableEffectTimerHandle, RestoreAsteroidTimeScaleDelegate, EffectDuration, false);
 }

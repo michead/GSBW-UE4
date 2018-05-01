@@ -73,7 +73,6 @@ void AAsteroid::Init(const FAsteroidInitProps& props) {
 
   WordToDisplay = Word;
   
-  CustomTimeDilation = 1.f;
   ScaleAccordingToWordLen();
   InitTextComponent();
   ApplyImpulse();
@@ -115,9 +114,9 @@ void AAsteroid::ApplyImpulse() {
   FVector direction = (actors[0]->GetActorLocation() - GetActorLocation());
   direction.Normalize();
 
-  // Self-apply impulse
+  // Self-apply impulse and torque
   StaticMeshComponent->AddImpulse(direction * Speed * CustomTimeDilation);
-  StaticMeshComponent->AddTorque(Torque);
+  StaticMeshComponent->AddTorque(Torque * CustomTimeDilation);
 }
 
 void AAsteroid::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
@@ -149,6 +148,7 @@ void AAsteroid::OnRocketHit(class AActor* Actor, const FHitResult& Hit) {
 
 void AAsteroid::OnAsteroidTimeScaleChange() {
   CustomTimeDilation = GSBWUtils::GetGameState(GetWorld())->AsteroidTimeScale;
+  StaticMeshComponent->SetPhysicsLinearVelocity(FVector(0));
   // Re-apply impulse with new time dilation
   ApplyImpulse();
 }
@@ -157,19 +157,23 @@ void AAsteroid::OnDestruction() {
   // Base asteroid class has no logic to execute on destruction
 }
 
-void AAsteroid::Explode(const FHitResult& Hit) {
+void AAsteroid::Explode(const FHitResult& Hit, bool TriggerEffect) {
   // Notify other actors about event
   GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::ASTEROID_DOWN);
 
-  // Trigger asteroid-specific logic on destruction
-  OnDestruction();
+  if (TriggerEffect) {
+    // Trigger asteroid-specific logic on destruction
+    OnDestruction();
+  }
   
   // Spawn explosion
   AAsteroidExplosion* explosion = GetWorld()->SpawnActor<AAsteroidExplosion>(GetActorLocation(), GetActorRotation());
   explosion->Init({ DestructibleMesh, Hit });
     
-  // Destroy static mesh
-  Disappear();
+  // Hide actor and defer its destruction
+  SetActorHiddenInGame(true);
+  const FTimerDelegate DestroyDelegate = FTimerDelegate::CreateUObject(this, &AAsteroid::Disappear);
+  GetWorldTimerManager().SetTimer(DestroyTimerHandle, DestroyDelegate, ASTEROID_EXPLOSION_DURATION, false);
 }
 
 FString AAsteroid::GetWord() const {

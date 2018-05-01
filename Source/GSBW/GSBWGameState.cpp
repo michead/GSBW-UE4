@@ -35,6 +35,9 @@ void AGSBWGameState::HandleMatchHasStarted() {
   
   // Start off easy
   CurrentDifficulty = EDifficulty::EASY;
+  
+  // Start with normal asteroid movement speed
+  AsteroidTimeScale = 1.f;
 }
 
 void AGSBWGameState::OnAsteroidHit() {

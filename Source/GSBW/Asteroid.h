@@ -100,7 +100,7 @@ public:
   FString GetWord() const;
   
   UFUNCTION()
-  virtual void Explode(const FHitResult& hit);
+  virtual void Explode(const FHitResult& hit, bool TriggerEffect = true);
 
 protected:
   void InitTextComponent();
@@ -125,5 +125,6 @@ protected:
 
   FString WordToDisplay;
   FScriptDelegate AsteroidTimeScaleChangeDelegate;
-
+  FTimerHandle DisableEffectTimerHandle;
+  FTimerHandle DestroyTimerHandle;
 };
