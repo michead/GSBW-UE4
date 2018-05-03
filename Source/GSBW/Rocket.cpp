@@ -86,8 +86,7 @@ void ARocket::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AA
 }
 
 uint32 ARocket::GetTargetID() {
-  check(Target);
-  return Target->GetUniqueID();
+  return Target ? Target->GetUniqueID() : TNumericLimits<uint32>::Max();
 }
 
 void ARocket::Explode(const FHitResult& hit) {
