@@ -1,17 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GSBW.h"
+#include "GSBWCommon.h"
 #include "AsteroidTextComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 // Sets default values for this component's properties
 UAsteroidTextComponent::UAsteroidTextComponent() {
   PrimaryComponentTick.bCanEverTick = false;
-
+  
   Radius = 10;
   CharSpacing = 10;
-  DistanceFromSurface = .01f;
+  DistanceFromSurface = 2.f;
   AngleBetweenLetters = 20.f;
+  RotationSpeed = .8f;
+  SphericalPositionOffset = { 0.f, 0.f };
+  WorldRotationAxis = { 1.f, 0.f, 0.f };
 }
 
 void UAsteroidTextComponent::Init(const FAsteroidTextComponentInitProps& Props) {
@@ -23,8 +28,47 @@ void UAsteroidTextComponent::Init(const FAsteroidTextComponentInitProps& Props) 
   Radius = Props.radius;
   TextColor = Props.textColor;
   TextRenderComponentClass = Props.textRenderComponentClass;
+  WorldRotationAxis = Props.textWorldRotationAxis;
+  SphericalPositionOffset = Props.sphericalPositionOffset;
 
   InitAsteroidLetterComponents();
+}
+
+FVector2D UAsteroidTextComponent::GetTextForwardVector() const {
+  float angle = FMath::DegreesToRadians<float>(AngleBetweenLetters);
+  float totalAngle = angle * (TextRenderComponents.Num() - 1);
+  
+  return FVector(0, 0, -1).UnitCartesianToSpherical() + SphericalPositionOffset;
+}
+
+FVector2D UAsteroidTextComponent::GetBaseTextLocation() const {
+  float angle = FMath::DegreesToRadians<float>(AngleBetweenLetters);
+  float totalAngle = angle * (TextRenderComponents.Num() - 1);
+  
+  return GetTextForwardVector() + FVector2D(totalAngle / 2.f, 0.f);
+}
+
+void UAsteroidTextComponent::UpdatePosition(float DeltaTime) {
+  WorldRotationAxis.Normalize();
+  SphericalPositionOffset += RotationSpeed * DeltaTime * FVector2D(1.f, 0.f);
+  
+  float angle = FMath::DegreesToRadians<float>(AngleBetweenLetters);
+  FVector worldForward = FVector(0, 0, -1);
+  FVector2D forward = GetTextForwardVector();
+  FVector2D baseLoc = GetBaseTextLocation();
+  
+  for (auto component : TextRenderComponents) {
+    FVector dir = baseLoc.SphericalToUnitCartesian();
+    component->SetWorldLocation(RootComponent->GetComponentLocation() + dir * (Radius + DistanceFromSurface));
+    
+    float alpha = FMath::RadiansToDegrees<float>(FMath::Acos(FVector::DotProduct(dir, worldForward)));
+    bool bPlus = FVector::DotProduct(FVector::CrossProduct(dir, worldForward), FVector(0, 1, 0)) > 0;
+    float rotAngle = bPlus ? alpha : -alpha;
+    FRotator deltaRotation = FRotator(WorldRotationAxis.X, WorldRotationAxis.Y, WorldRotationAxis.Z) * rotAngle;
+    component->SetWorldRotation(UKismetMathLibrary::ComposeRotators(BaseRotation, deltaRotation));
+    
+    baseLoc -= FVector2D(angle, 0.f);
+  }
 }
 
 void UAsteroidTextComponent::DestroyAllLetters() {
@@ -52,7 +96,6 @@ void UAsteroidTextComponent::InitAsteroidLetterComponents() {
     auto component = NewObject<UTextRenderComponent>(this, TextRenderComponentClass);
     
     component->RegisterComponent();
-    component->SetWorldRotation(BaseRotation);
     component->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
     component->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
     component->SetWorldScale3D(FVector(FontScalingFactor));
@@ -67,18 +110,5 @@ void UAsteroidTextComponent::InitAsteroidLetterComponents() {
     TextRenderComponents.Push(component);
   }
   
-  float angle = FMath::DegreesToRadians<float>(AngleBetweenLetters);
-  float totalAngle = angle * (TextRenderComponents.Num() - 1);
-  FVector forward = FVector(0, 0, -1);
-  FVector2D sphericalLoc = forward.UnitCartesianToSpherical();
-  FVector2D baseLoc = sphericalLoc + FVector2D(totalAngle / 2.f, 0.f);
-  for (auto component : TextRenderComponents) {
-    FVector dir = baseLoc.SphericalToUnitCartesian();
-    float alpha = FMath::RadiansToDegrees<float>(FMath::Acos(FVector::DotProduct(dir, forward)));
-    float bPlus = FVector::DotProduct(FVector::CrossProduct(dir, forward), FVector(0, 1, 0)) > 0;
-    FRotator deltaRotation = FRotator(bPlus ? alpha : -alpha, 0, 0);
-    component->SetRelativeLocation(dir * Radius + DistanceFromSurface);
-    component->AddWorldRotation(deltaRotation);
-    baseLoc -= FVector2D(angle, 0.f);
-  }
+  UpdatePosition(0);
 };

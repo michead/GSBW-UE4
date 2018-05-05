@@ -94,6 +94,12 @@ public:
   
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   float WordLenRadiusConstantFactor;
+  
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  FVector2D TextSphericalPositionOffset;
+  
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  FVector TextWorldRotationAxis;
 
   // Returns current asteroid word (which might be truncated wrt the original one)
   UFUNCTION()

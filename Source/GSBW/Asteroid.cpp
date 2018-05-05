@@ -33,6 +33,8 @@ AAsteroid::AAsteroid() {
   WordLenRadiusConstantFactor = 2.f;
   MinRadius = 50.f;
   MaxRadius = 100.f;
+  TextSphericalPositionOffset = { 0.f, 0.f };
+  TextWorldRotationAxis = { 1.f, 0.f, 0.f };
 }
 
 void AAsteroid::OnConstruction(const FTransform& Transform) {
@@ -63,6 +65,9 @@ void AAsteroid::BeginPlay() {
 // Called every frame
 void AAsteroid::Tick(float DeltaTime) {
   Super::Tick(DeltaTime);
+  
+  // Hack for nullifying the effect of custom time dilation in children components
+  AsteroidTextComponent->UpdatePosition((1.f / CustomTimeDilation) * DeltaTime);
 }
 
 void AAsteroid::Init(const FAsteroidInitProps& props) {
@@ -93,6 +98,8 @@ void AAsteroid::InitTextComponent() {
   props.baseRotation = BaseTextRotation;
   props.textColor = TextColor;
   props.textRenderComponentClass = TextRenderComponentClass;
+  props.textWorldRotationAxis = TextWorldRotationAxis;
+  props.sphericalPositionOffset = TextSphericalPositionOffset;
   
   if (!AsteroidTextComponent) {
     AsteroidTextComponent = NewObject<UAsteroidTextComponent>(this, AsteroidTextComponentClass);

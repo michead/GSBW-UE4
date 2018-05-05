@@ -61,4 +61,8 @@ struct FAsteroidTextComponentInitProps {
   float fontScalingFactor;
   UPROPERTY()
   FColor textColor;
+  UPROPERTY()
+  FVector2D sphericalPositionOffset;
+  UPROPERTY()
+  FVector textWorldRotationAxis;
 };

@@ -10,11 +10,14 @@
 UCLASS(Blueprintable)
 class GSBW_API UAsteroidTextComponent : public USceneComponent {
   GENERATED_BODY()
+  
+  // Workaround for TickComponent not firing in AsteroidTextComponent
+  friend class AAsteroid;
 
 public:
   // Sets default values for this component's properties
   UAsteroidTextComponent();
-
+  
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   FRotator BaseRotation;
 
@@ -47,6 +50,12 @@ public:
   
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
   float AngleBetweenLetters;
+  
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  float RotationSpeed;
+  
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CPP_Rendering)
+  FVector WorldRotationAxis;
 
   // Initialize component with passed word
   UFUNCTION()
@@ -60,4 +69,9 @@ public:
 
 protected:
   void InitAsteroidLetterComponents();
+  void UpdatePosition(float DeltaTime);
+  FVector2D GetTextForwardVector() const;
+  FVector2D GetBaseTextLocation() const;
+  
+  FVector2D SphericalPositionOffset;
 };
