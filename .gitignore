@@ -69,11 +69,6 @@ DerivedDataCache/*
 *.swo
 .ctrlp_cache/
 
-# UE4 Starter Content / Migrated Assets
-Content/StarterContent/*
-Content/Assets/*
-Content/Effects/*
-
 # UE4 Temp Files
 enc_temp_folder/
 
