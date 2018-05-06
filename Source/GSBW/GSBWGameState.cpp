@@ -38,6 +38,9 @@ void AGSBWGameState::HandleMatchHasStarted() {
   
   // Start with normal asteroid movement speed
   AsteroidTimeScale = 1.f;
+  
+  // Let all components know game has started
+  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::GAME_STARTED);
 }
 
 void AGSBWGameState::OnAsteroidHit() {
@@ -79,7 +82,8 @@ bool AGSBWGameState::IsGamePaused() {
 }
 
 void AGSBWGameState::OnEarthDown() {
-
+  // Let game state class decide that, when earth goes down, game is over
+  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::GAME_OVER);
 }
 
 void AGSBWGameState::RequestPauseToggle() {

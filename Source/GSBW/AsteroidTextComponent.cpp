@@ -14,7 +14,7 @@ UAsteroidTextComponent::UAsteroidTextComponent() {
   CharSpacing = 10;
   DistanceFromSurface = 2.f;
   AngleBetweenLetters = 20.f;
-  RotationSpeed = .8f;
+  RotationSpeed = 1.5f;
   SphericalPositionOffset = { 0.f, 0.f };
   WorldRotationAxis = { 1.f, 0.f, 0.f };
 }
@@ -29,7 +29,7 @@ void UAsteroidTextComponent::Init(const FAsteroidTextComponentInitProps& Props) 
   TextColor = Props.textColor;
   TextRenderComponentClass = Props.textRenderComponentClass;
   WorldRotationAxis = Props.textWorldRotationAxis;
-  SphericalPositionOffset = Props.sphericalPositionOffset;
+  SphericalPositionOffset = Props.textSphericalPositionOffset;
 
   InitAsteroidLetterComponents();
 }

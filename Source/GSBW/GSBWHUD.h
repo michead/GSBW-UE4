@@ -27,18 +27,32 @@ public:
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_UI)
   TSubclassOf<class UPauseMenu> PauseMenuClass;
 
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=CPP_UI)
+  TSubclassOf<class UGameOverMenu> GameOverMenuClass;
+  
   UFUNCTION()
   void OnGamePaused();
   
   UFUNCTION()
   void OnGameUnpaused();
+  
+  UFUNCTION()
+  void OnGameStarted();
+  
+  UFUNCTION()
+  void OnGameOver();
 
 private:
+  void SetWidgetVisibility(UUserWidget* Widget, bool NewVisiblity);
   void SetPauseMenuVisibility(bool NewVisibilty);
+  void SetGameOverMenuVisibility(bool NewVisibility);
 
   APlayerController* PlayerController;
   UEarthHUD* HUD;
   UPauseMenu* PauseMenu;
+  UGameOverMenu* GameOverMenu;
   FScriptDelegate OnGamePausedDelegate;
   FScriptDelegate OnGameUnpausedDelegate;
+  FScriptDelegate OnGameStartedDelegate;
+  FScriptDelegate OnGameOverDelegate;
 };

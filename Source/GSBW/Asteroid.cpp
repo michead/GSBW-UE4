@@ -99,7 +99,7 @@ void AAsteroid::InitTextComponent() {
   props.textColor = TextColor;
   props.textRenderComponentClass = TextRenderComponentClass;
   props.textWorldRotationAxis = TextWorldRotationAxis;
-  props.sphericalPositionOffset = TextSphericalPositionOffset;
+  props.textSphericalPositionOffset = TextSphericalPositionOffset;
   
   if (!AsteroidTextComponent) {
     AsteroidTextComponent = NewObject<UAsteroidTextComponent>(this, AsteroidTextComponentClass);

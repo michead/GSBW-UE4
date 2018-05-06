@@ -4,6 +4,7 @@
 #include "GSBWUtils.h"
 #include "EarthHUD.h"
 #include "PauseMenu.h"
+#include "GameOverMenu.h"
 #include "GSBWHUD.h"
 
 DEFINE_LOG_CATEGORY(GSBWHUD);
@@ -25,19 +26,36 @@ void AGSBWHUD::BeginPlay() {
 
   PauseMenu = CreateWidget<UPauseMenu>(PlayerController, PauseMenuClass);
   PauseMenu->AddToViewport();
+  
+  GameOverMenu = CreateWidget<UGameOverMenu>(PlayerController, GameOverMenuClass);
+  GameOverMenu->AddToViewport();
 
   OnGamePausedDelegate.BindUFunction(this, "OnGamePaused");
   OnGameUnpausedDelegate.BindUFunction(this, "OnGameUnpaused");
+  OnGameStartedDelegate.BindUFunction(this, "OnGameStarted");
+  OnGameOverDelegate.BindUFunction(this, "OnGameOver");
 
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_PAUSED, OnGamePausedDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_UNPAUSED, OnGameUnpausedDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_STARTED, OnGameStartedDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_OVER, OnGameOverDelegate);
 
-  // Pause Menu Widget should start hidden
+  // Pause and game over menus should start hidden
   SetPauseMenuVisibility(false);
+  SetGameOverMenuVisibility(false);
+}
+
+void AGSBWHUD::SetWidgetVisibility(UUserWidget* Widget, bool NewVisibility) {
+  check(Widget);
+  Widget->SetVisibility(NewVisibility ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
 }
 
 void AGSBWHUD::SetPauseMenuVisibility(bool NewVisiblity) {
-  PauseMenu->SetVisibility(NewVisiblity ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
+  SetWidgetVisibility(PauseMenu, NewVisiblity);
+}
+
+void AGSBWHUD::SetGameOverMenuVisibility(bool NewVisibility) {
+  SetWidgetVisibility(GameOverMenu, NewVisibility);
 }
 
 void AGSBWHUD::OnGamePaused() {
@@ -46,4 +64,12 @@ void AGSBWHUD::OnGamePaused() {
 
 void AGSBWHUD::OnGameUnpaused() {
   SetPauseMenuVisibility(false);
+}
+
+void AGSBWHUD::OnGameStarted() {
+  
+}
+
+void AGSBWHUD::OnGameOver() {
+  SetGameOverMenuVisibility(true);
 }
