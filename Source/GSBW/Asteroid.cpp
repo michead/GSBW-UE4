@@ -143,12 +143,14 @@ void AAsteroid::OnEarthHit(class AActor* Actor, const FHitResult& Hit) {
 void AAsteroid::OnRocketHit(class AActor* Actor, const FHitResult& Hit) {
   uint32 rocketLetterIndex = Cast<ARocket>(Actor)->LetterIndex;
   GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::ASTEROID_HIT);
-  
+
   RocketCount++;
 
   AsteroidTextComponent->DestroyLetterAt(rocketLetterIndex);
-  if (WordToDisplay.Len() == RocketCount) {
+  if (Word.Len() == RocketCount) {
     Explode(Hit);
+  } else {
+    WordToDisplay = WordToDisplay.Mid(1);
   }
 }
 

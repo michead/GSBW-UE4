@@ -125,10 +125,12 @@ bool AEarth::AcquireTarget(FString& InputLetters) {
     AAsteroid* asteroid = Cast<AAsteroid>(actor);
     
     // Maybe we could compute this only once we know that 'StartsWith' condition is satisfied
+    FString asteroidWord = asteroid->GetWord();
     FVector distVec = GetActorLocation() - asteroid->GetActorLocation();
     float tmpSqrdDist = FVector::DotProduct(distVec, distVec);
-
-    if (GSBWUtils::StartsWithAnyOf(asteroid->GetWord(), InputLetters) && tmpSqrdDist < sqrdDistance) {
+    UE_LOG(Earth, Log, TEXT("Checking asteroid with word %s for input %s."), *asteroidWord, *InputLetters);
+    
+    if (GSBWUtils::StartsWithAnyOf(asteroidWord, InputLetters) && tmpSqrdDist < sqrdDistance) {
       tentativeTarget = asteroid;
       sqrdDistance = tmpSqrdDist; 
     }
@@ -138,6 +140,7 @@ bool AEarth::AcquireTarget(FString& InputLetters) {
     Target.ref = tentativeTarget;
     Target.originalWord = tentativeTarget->GetWord();
     Target.rocketCount = 0;
+    UE_LOG(Earth, Log, TEXT("Asteroid with word %s has been selected as target."), *Target.originalWord);
     
     return true;
   }

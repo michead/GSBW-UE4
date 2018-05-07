@@ -58,6 +58,11 @@ void UAsteroidTextComponent::UpdatePosition(float DeltaTime) {
   FVector2D baseLoc = GetBaseTextLocation();
   
   for (auto component : TextRenderComponents) {
+    if (!component) {
+      // Letter component has been destroyed
+      continue;
+    }
+    
     FVector dir = baseLoc.SphericalToUnitCartesian();
     component->SetWorldLocation(RootComponent->GetComponentLocation() + dir * (Radius + DistanceFromSurface));
     
