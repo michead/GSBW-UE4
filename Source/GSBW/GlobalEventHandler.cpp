@@ -39,6 +39,10 @@ void AGlobalEventHandler::BroadcastEvent(EGSBWEvent Ev) {
     EventHandler->OnGamePaused.Broadcast(); break;
   case EGSBWEvent::GAME_UNPAUSED:
     EventHandler->OnGameUnpaused.Broadcast(); break;
+  case EGSBWEvent::GAME_STARTED:
+    EventHandler->OnGameStarted.Broadcast(); break;
+  case EGSBWEvent::GAME_OVER:
+    EventHandler->OnGameOver.Broadcast(); break;
   case EGSBWEvent::DIFFICULTY_BUMP:
     EventHandler->OnDifficultyBump.Broadcast(); break;
   default:
@@ -62,6 +66,10 @@ void AGlobalEventHandler::SubscribeToEvent(EGSBWEvent Ev, const FScriptDelegate&
     EventHandler->OnGamePaused.Add(DelegateFunc); break;
   case EGSBWEvent::GAME_UNPAUSED:
     EventHandler->OnGameUnpaused.Add(DelegateFunc); break;
+  case EGSBWEvent::GAME_STARTED:
+    EventHandler->OnGameStarted.Add(DelegateFunc); break;
+  case EGSBWEvent::GAME_OVER:
+    EventHandler->OnGameOver.Add(DelegateFunc); break;
   case EGSBWEvent::DIFFICULTY_BUMP:
     EventHandler->OnDifficultyBump.Add(DelegateFunc); break;
   default:

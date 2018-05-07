@@ -23,6 +23,7 @@ void AGSBWGameState::HandleMatchHasStarted() {
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_HIT, AsteroidHitDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_DOWN, AsteroidDownDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_TIME_SCALE_CHANGE, AsteroidTimeScaleChangeDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::EARTH_DOWN, EarthDownDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_PAUSED, GamePausedDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_UNPAUSED, GameUnpausedDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::DIFFICULTY_BUMP, DifficultyBumpDelegate);

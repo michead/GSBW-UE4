@@ -12,6 +12,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnEarthHit);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnEarthDown);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnGamePaused);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnGameUnpaused);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnGameStarted);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnGameOver);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnDifficultyBump);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -36,5 +38,7 @@ public:
   FLevelEventDelegate_OnEarthDown OnEarthDown;
   FLevelEventDelegate_OnGamePaused OnGamePaused;
   FLevelEventDelegate_OnGameUnpaused OnGameUnpaused;
+  FLevelEventDelegate_OnGameStarted OnGameStarted;
+  FLevelEventDelegate_OnGameOver OnGameOver;
   FLevelEventDelegate_OnDifficultyBump OnDifficultyBump;
 };
