@@ -35,12 +35,14 @@ void AGlobalEventHandler::BroadcastEvent(EGSBWEvent Ev) {
     EventHandler->OnEarthHit.Broadcast(); break;
   case EGSBWEvent::EARTH_DOWN:
     EventHandler->OnEarthDown.Broadcast(); break;
-  case EGSBWEvent::GAME_PAUSED:
-    EventHandler->OnGamePaused.Broadcast(); break;
-  case EGSBWEvent::GAME_UNPAUSED:
-    EventHandler->OnGameUnpaused.Broadcast(); break;
-  case EGSBWEvent::GAME_STARTED:
-    EventHandler->OnGameStarted.Broadcast(); break;
+  case EGSBWEvent::TARGET_CHANGE:
+    EventHandler->OnTargetChange.Broadcast(); break;
+  case EGSBWEvent::GAME_PAUSE:
+    EventHandler->OnGamePause.Broadcast(); break;
+  case EGSBWEvent::GAME_UNPAUSE:
+    EventHandler->OnGameUnpause.Broadcast(); break;
+  case EGSBWEvent::GAME_START:
+    EventHandler->OnGameStart.Broadcast(); break;
   case EGSBWEvent::GAME_OVER:
     EventHandler->OnGameOver.Broadcast(); break;
   case EGSBWEvent::DIFFICULTY_BUMP:
@@ -62,12 +64,14 @@ void AGlobalEventHandler::SubscribeToEvent(EGSBWEvent Ev, const FScriptDelegate&
     EventHandler->OnEarthHit.Add(DelegateFunc); break;
   case EGSBWEvent::EARTH_DOWN:
     EventHandler->OnEarthDown.Add(DelegateFunc); break;
-  case EGSBWEvent::GAME_PAUSED:
-    EventHandler->OnGamePaused.Add(DelegateFunc); break;
-  case EGSBWEvent::GAME_UNPAUSED:
-    EventHandler->OnGameUnpaused.Add(DelegateFunc); break;
-  case EGSBWEvent::GAME_STARTED:
-    EventHandler->OnGameStarted.Add(DelegateFunc); break;
+  case EGSBWEvent::TARGET_CHANGE:
+    EventHandler->OnTargetChange.Add(DelegateFunc); break;
+  case EGSBWEvent::GAME_PAUSE:
+    EventHandler->OnGamePause.Add(DelegateFunc); break;
+  case EGSBWEvent::GAME_UNPAUSE:
+    EventHandler->OnGameUnpause.Add(DelegateFunc); break;
+  case EGSBWEvent::GAME_START:
+    EventHandler->OnGameStart.Add(DelegateFunc); break;
   case EGSBWEvent::GAME_OVER:
     EventHandler->OnGameOver.Add(DelegateFunc); break;
   case EGSBWEvent::DIFFICULTY_BUMP:

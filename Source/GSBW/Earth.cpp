@@ -128,6 +128,7 @@ bool AEarth::AcquireTarget(FString& InputLetters) {
     FString asteroidWord = asteroid->GetWord();
     FVector distVec = GetActorLocation() - asteroid->GetActorLocation();
     float tmpSqrdDist = FVector::DotProduct(distVec, distVec);
+    
     UE_LOG(Earth, Log, TEXT("Checking asteroid with word %s for input %s."), *asteroidWord, *InputLetters);
     
     if (GSBWUtils::StartsWithAnyOf(asteroidWord, InputLetters) && tmpSqrdDist < sqrdDistance) {
@@ -140,7 +141,11 @@ bool AEarth::AcquireTarget(FString& InputLetters) {
     Target.ref = tentativeTarget;
     Target.originalWord = tentativeTarget->GetWord();
     Target.rocketCount = 0;
+    
     UE_LOG(Earth, Log, TEXT("Asteroid with word %s has been selected as target."), *Target.originalWord);
+    
+    GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::TARGET_CHANGE);
+    Target.ref->SetIsTarget(true);
     
     return true;
   }
@@ -205,10 +210,16 @@ void AEarth::LaunchRocket() {
 
 void AEarth::ClearTarget() {
   UE_LOG(Earth, Log, TEXT("ClearTarget() called."));
+  
+  if (Target.ref && Target.rocketCount < Target.originalWord.Len()) {
+    Target.ref->SetIsTarget(false);
+  }
 
   Target.originalWord = nullptr;
   Target.rocketCount = 0;
   Target.ref = nullptr;
+  
+  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::TARGET_CHANGE);
 }
 
 void AEarth::OnTargetHit(AAsteroid& HitAsteroid) {

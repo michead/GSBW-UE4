@@ -30,14 +30,14 @@ void AGSBWHUD::BeginPlay() {
   GameOverMenu = CreateWidget<UGameOverMenu>(PlayerController, GameOverMenuClass);
   GameOverMenu->AddToViewport();
 
-  OnGamePausedDelegate.BindUFunction(this, "OnGamePaused");
-  OnGameUnpausedDelegate.BindUFunction(this, "OnGameUnpaused");
-  OnGameStartedDelegate.BindUFunction(this, "OnGameStarted");
+  OnGamePauseDelegate.BindUFunction(this, "OnGamePause");
+  OnGameUnpauseDelegate.BindUFunction(this, "OnGameUnpause");
+  OnGameStartDelegate.BindUFunction(this, "OnGameStart");
   OnGameOverDelegate.BindUFunction(this, "OnGameOver");
 
-  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_PAUSED, OnGamePausedDelegate);
-  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_UNPAUSED, OnGameUnpausedDelegate);
-  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_STARTED, OnGameStartedDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_PAUSE, OnGamePauseDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_UNPAUSE, OnGameUnpauseDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_START, OnGameStartDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_OVER, OnGameOverDelegate);
 
   // Pause and game over menus should start hidden

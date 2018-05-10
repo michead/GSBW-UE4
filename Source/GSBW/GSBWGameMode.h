@@ -37,8 +37,8 @@ private:
 
   APlayerController* PlayerController;
   FTimerHandle TimerHandle;
-  FScriptDelegate OnGamePausedDelegate;
-  FScriptDelegate OnGameUnpausedDelegate;
+  FScriptDelegate OnGamePauseDelegate;
+  FScriptDelegate OnGameUnpauseDelegate;
   FScriptDelegate OnEarthDownDelegate;
   bool IsGamePaused;
 };

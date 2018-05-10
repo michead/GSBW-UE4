@@ -22,6 +22,7 @@ AAsteroid::AAsteroid() {
   StaticMeshComponent->SetEnableGravity(false);
   StaticMeshComponent->SetSimulatePhysics(true);
   StaticMeshComponent->SetCollisionProfileName("Asteroid");
+  StaticMeshComponent->SetCustomDepthStencilValue(ASTEROID_SELECTED_OUTLINE_CUSTOM_DEPTH);
   StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &AAsteroid::OnOverlapBegin);
   SetRootComponent(StaticMeshComponent);
   
@@ -59,6 +60,7 @@ void AAsteroid::BeginPlay() {
   Super::BeginPlay();
   
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_TIME_SCALE_CHANGE, AsteroidTimeScaleChangeDelegate);
+  
   CustomTimeDilation = GSBWUtils::GetGameState(GetWorld())->AsteroidTimeScale;
 }
 
@@ -107,6 +109,10 @@ void AAsteroid::InitTextComponent() {
   }
   
   AsteroidTextComponent->Init(props);
+}
+
+void AAsteroid::SetIsTarget(bool IsTarget) {
+  StaticMeshComponent->SetRenderCustomDepth(IsTarget);
 }
 
 void AAsteroid::ApplyImpulse() {

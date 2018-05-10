@@ -21,12 +21,12 @@ void AGSBWGameMode::HandleMatchHasStarted() {
 
   StartBumpDifficultyCoroutine();
 
-  OnGamePausedDelegate.BindUFunction(this, "OnGamePaused");
-  OnGameUnpausedDelegate.BindUFunction(this, "OnGameUnpaused");
+  OnGamePauseDelegate.BindUFunction(this, "OnGamePause");
+  OnGameUnpauseDelegate.BindUFunction(this, "OnGameUnpause");
   OnEarthDownDelegate.BindUFunction(this, "OnEarthDown");
 
-  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_PAUSED, OnGamePausedDelegate);
-  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_UNPAUSED, OnGameUnpausedDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_PAUSE, OnGamePauseDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_UNPAUSE, OnGameUnpauseDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::EARTH_DOWN, OnEarthDownDelegate);
 
   PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);

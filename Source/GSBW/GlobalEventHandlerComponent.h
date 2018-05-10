@@ -10,9 +10,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnAsteroidDown);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnAsteroidTimeScaleChange);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnEarthHit);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnEarthDown);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnGamePaused);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnGameUnpaused);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnGameStarted);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnTargetChange);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnGamePause);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnGameUnpause);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnGameStart);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnGameOver);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLevelEventDelegate_OnDifficultyBump);
 
@@ -36,9 +37,10 @@ public:
   FLevelEventDelegate_OnAsteroidTimeScaleChange OnAsteroidTimeScaleChange;
   FLevelEventDelegate_OnEarthHit OnEarthHit;
   FLevelEventDelegate_OnEarthDown OnEarthDown;
-  FLevelEventDelegate_OnGamePaused OnGamePaused;
-  FLevelEventDelegate_OnGameUnpaused OnGameUnpaused;
-  FLevelEventDelegate_OnGameStarted OnGameStarted;
+  FLevelEventDelegate_OnTargetChange OnTargetChange;
+  FLevelEventDelegate_OnGamePause OnGamePause;
+  FLevelEventDelegate_OnGameUnpause OnGameUnpause;
+  FLevelEventDelegate_OnGameStart OnGameStart;
   FLevelEventDelegate_OnGameOver OnGameOver;
   FLevelEventDelegate_OnDifficultyBump OnDifficultyBump;
 };

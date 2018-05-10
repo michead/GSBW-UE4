@@ -51,8 +51,8 @@ private:
   UEarthHUD* HUD;
   UPauseMenu* PauseMenu;
   UGameOverMenu* GameOverMenu;
-  FScriptDelegate OnGamePausedDelegate;
-  FScriptDelegate OnGameUnpausedDelegate;
-  FScriptDelegate OnGameStartedDelegate;
+  FScriptDelegate OnGamePauseDelegate;
+  FScriptDelegate OnGameUnpauseDelegate;
+  FScriptDelegate OnGameStartDelegate;
   FScriptDelegate OnGameOverDelegate;
 };

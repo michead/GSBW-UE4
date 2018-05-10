@@ -15,8 +15,8 @@ void AGSBWGameState::HandleMatchHasStarted() {
   AsteroidHitDelegate.BindUFunction(this,"OnAsteroidHit");
   AsteroidDownDelegate.BindUFunction(this, "OnAsteroidDown");
   AsteroidTimeScaleChangeDelegate.BindUFunction(this, "OnAsteroidTimeScaleChange");
-  GamePausedDelegate.BindUFunction(this, "OnGamePaused");
-  GameUnpausedDelegate.BindUFunction(this, "OnGameUnpaused");
+  GamePauseDelegate.BindUFunction(this, "OnGamePause");
+  GameUnpauseDelegate.BindUFunction(this, "OnGameUnpause");
   EarthDownDelegate.BindUFunction(this, "OnEarthDown");
   DifficultyBumpDelegate.BindUFunction(this, "OnDifficultyBump");
   
@@ -24,8 +24,8 @@ void AGSBWGameState::HandleMatchHasStarted() {
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_DOWN, AsteroidDownDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::ASTEROID_TIME_SCALE_CHANGE, AsteroidTimeScaleChangeDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::EARTH_DOWN, EarthDownDelegate);
-  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_PAUSED, GamePausedDelegate);
-  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_UNPAUSED, GameUnpausedDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_PAUSE, GamePauseDelegate);
+  GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::GAME_UNPAUSE, GameUnpauseDelegate);
   GSBWUtils::GetEventHandler(GetWorld())->SubscribeToEvent(EGSBWEvent::DIFFICULTY_BUMP, DifficultyBumpDelegate);
 
   // Cache world settings
@@ -41,7 +41,7 @@ void AGSBWGameState::HandleMatchHasStarted() {
   AsteroidTimeScale = 1.f;
   
   // Let all components know game has started
-  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::GAME_STARTED);
+  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(EGSBWEvent::GAME_START);
 }
 
 void AGSBWGameState::OnAsteroidHit() {
@@ -88,7 +88,7 @@ void AGSBWGameState::OnEarthDown() {
 }
 
 void AGSBWGameState::RequestPauseToggle() {
-  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(IsPaused ? EGSBWEvent::GAME_UNPAUSED : EGSBWEvent::GAME_PAUSED);
+  GSBWUtils::GetEventHandler(GetWorld())->BroadcastEvent(IsPaused ? EGSBWEvent::GAME_UNPAUSE : EGSBWEvent::GAME_PAUSE);
 }
 
 void AGSBWGameState::RequestAsteroidTimeScaleChange(float NewTimeScale) {

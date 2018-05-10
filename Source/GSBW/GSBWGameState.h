@@ -63,8 +63,8 @@ private:
   FScriptDelegate AsteroidHitDelegate;
   FScriptDelegate AsteroidDownDelegate;
   FScriptDelegate AsteroidTimeScaleChangeDelegate;
-  FScriptDelegate GamePausedDelegate;
-  FScriptDelegate GameUnpausedDelegate;
+  FScriptDelegate GamePauseDelegate;
+  FScriptDelegate GameUnpauseDelegate;
   FScriptDelegate EarthDownDelegate;
   FScriptDelegate DifficultyBumpDelegate;
   

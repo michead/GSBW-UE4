@@ -32,7 +32,7 @@ public:
   // Asteroid special actions
   virtual void OnEarthHitAction() {}
   virtual void OnRocketHitAction() {}
-  virtual void OnExplodeAction() {} // PURE_VIRTUAL
+  virtual void OnExplodeAction() {}
   
   UFUNCTION()
   void OnAsteroidTimeScaleChange();
@@ -107,6 +107,9 @@ public:
   
   UFUNCTION()
   virtual void Explode(const FHitResult& hit, bool TriggerEffect = true);
+  
+  UFUNCTION()
+  virtual void SetIsTarget(bool IsTarget);
 
 protected:
   void InitTextComponent();
