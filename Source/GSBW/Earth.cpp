@@ -211,6 +211,7 @@ void AEarth::LaunchRocket() {
 void AEarth::ClearTarget() {
   UE_LOG(Earth, Log, TEXT("ClearTarget() called."));
   
+  // Remove outline only if the whole word has not been typed yet
   if (Target.ref && Target.rocketCount < Target.originalWord.Len()) {
     Target.ref->SetIsTarget(false);
   }
