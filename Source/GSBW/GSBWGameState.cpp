@@ -56,12 +56,12 @@ void AGSBWGameState::OnAsteroidTimeScaleChange() {
 
 }
 
-void AGSBWGameState::OnGamePaused() {
+void AGSBWGameState::OnGamePause() {
   UE_LOG(GSBWGameState, Log, TEXT("Pausing game"));
   IsPaused = true;
 }
 
-void AGSBWGameState::OnGameUnpaused() {
+void AGSBWGameState::OnGameUnpause() {
   UE_LOG(GSBWGameState, Log, TEXT("Unpausing game"));
   IsPaused = false;
 }

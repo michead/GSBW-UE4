@@ -26,10 +26,10 @@ public:
   void OnAsteroidTimeScaleChange();
   
   UFUNCTION()
-  void OnGamePaused();
+  void OnGamePause();
   
   UFUNCTION()
-  void OnGameUnpaused();
+  void OnGameUnpause();
   
   UFUNCTION(BlueprintCallable, Category=CPP_Gameplay)
   bool IsGamePaused();

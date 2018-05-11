@@ -60,13 +60,13 @@ void AGSBWGameMode::OnEarthDown() {
   // Probably nothing to do on behalf of GameMode
 }
 
-void AGSBWGameMode::OnGamePaused() {
+void AGSBWGameMode::OnGamePause() {
   UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0);
   PlayerController->bShowMouseCursor = true;
   IsGamePaused = true;
 }
 
-void AGSBWGameMode::OnGameUnpaused() {
+void AGSBWGameMode::OnGameUnpause() {
   UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
   PlayerController->bShowMouseCursor = false;
   IsGamePaused = false;

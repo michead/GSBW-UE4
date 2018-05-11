@@ -58,17 +58,17 @@ void AGSBWHUD::SetGameOverMenuVisibility(bool NewVisibility) {
   SetWidgetVisibility(GameOverMenu, NewVisibility);
 }
 
-void AGSBWHUD::OnGamePaused() {
+void AGSBWHUD::OnGamePause() {
   SetPauseMenuVisibility(true);
   PlayerController->bShowMouseCursor = true;
 }
 
-void AGSBWHUD::OnGameUnpaused() {
+void AGSBWHUD::OnGameUnpause() {
   SetPauseMenuVisibility(false);
   PlayerController->bShowMouseCursor = false;
 }
 
-void AGSBWHUD::OnGameStarted() {
+void AGSBWHUD::OnGameStart() {
   PlayerController->bShowMouseCursor = false;
 }
 

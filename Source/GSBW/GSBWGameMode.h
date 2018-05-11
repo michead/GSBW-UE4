@@ -22,10 +22,10 @@ class GSBW_API AGSBWGameMode : public AGameMode
 
 public:
   UFUNCTION()
-  void OnGamePaused();
+  void OnGamePause();
 
   UFUNCTION()
-  void OnGameUnpaused();
+  void OnGameUnpause();
 
   UFUNCTION()
   void OnEarthDown();

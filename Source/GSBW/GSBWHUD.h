@@ -31,13 +31,13 @@ public:
   TSubclassOf<class UGameOverMenu> GameOverMenuClass;
   
   UFUNCTION()
-  void OnGamePaused();
+  void OnGamePause();
   
   UFUNCTION()
-  void OnGameUnpaused();
+  void OnGameUnpause();
   
   UFUNCTION()
-  void OnGameStarted();
+  void OnGameStart();
   
   UFUNCTION()
   void OnGameOver();
