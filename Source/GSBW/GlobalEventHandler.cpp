@@ -25,28 +25,58 @@ void AGlobalEventHandler::Tick( float DeltaTime ) {
 
 void AGlobalEventHandler::BroadcastEvent(EGSBWEvent Ev) {
   switch (Ev) {
+    case EGSBWEvent::ASTEROID_HIT:
+      EventHandler->OnAsteroidHit.Broadcast(); break;
+    case EGSBWEvent::ASTEROID_DOWN:
+      EventHandler->OnAsteroidDown.Broadcast(); break;
+    case EGSBWEvent::ASTEROID_TIME_SCALE_CHANGE:
+      EventHandler->OnAsteroidTimeScaleChange.Broadcast(); break;
+    case EGSBWEvent::EARTH_HIT:
+      EventHandler->OnEarthHit.Broadcast(); break;
+    case EGSBWEvent::EARTH_DOWN:
+      EventHandler->OnEarthDown.Broadcast(); break;
+    case EGSBWEvent::TARGET_CHANGE:
+      EventHandler->OnTargetChange.Broadcast(); break;
+    case EGSBWEvent::GAME_PAUSE:
+      EventHandler->OnGamePause.Broadcast(); break;
+    case EGSBWEvent::GAME_UNPAUSE:
+      EventHandler->OnGameUnpause.Broadcast(); break;
+    case EGSBWEvent::GAME_START:
+      EventHandler->OnGameStart.Broadcast(); break;
+    case EGSBWEvent::GAME_OVER:
+      EventHandler->OnGameOver.Broadcast(); break;
+    case EGSBWEvent::DIFFICULTY_BUMP:
+      EventHandler->OnDifficultyBump.Broadcast(); break;
+    default:
+      break;
+  }
+}
+
+template<typename T>
+void AGlobalEventHandler::BroadcastEvent(EGSBWEvent Ev, T& Payload) {
+  switch (Ev) {
   case EGSBWEvent::ASTEROID_HIT:
-    EventHandler->OnAsteroidHit.Broadcast(); break;
+    EventHandler->OnAsteroidHit.Broadcast(Payload); break;
   case EGSBWEvent::ASTEROID_DOWN:
-    EventHandler->OnAsteroidDown.Broadcast(); break;
+    EventHandler->OnAsteroidDown.Broadcast(Payload); break;
   case EGSBWEvent::ASTEROID_TIME_SCALE_CHANGE:
-    EventHandler->OnAsteroidTimeScaleChange.Broadcast(); break;
+    EventHandler->OnAsteroidTimeScaleChange.Broadcast(Payload); break;
   case EGSBWEvent::EARTH_HIT:
-    EventHandler->OnEarthHit.Broadcast(); break;
+    EventHandler->OnEarthHit.Broadcast(Payload); break;
   case EGSBWEvent::EARTH_DOWN:
-    EventHandler->OnEarthDown.Broadcast(); break;
+    EventHandler->OnEarthDown.Broadcast(Payload); break;
   case EGSBWEvent::TARGET_CHANGE:
-    EventHandler->OnTargetChange.Broadcast(); break;
+    EventHandler->OnTargetChange.Broadcast(Payload); break;
   case EGSBWEvent::GAME_PAUSE:
-    EventHandler->OnGamePause.Broadcast(); break;
+    EventHandler->OnGamePause.Broadcast(Payload); break;
   case EGSBWEvent::GAME_UNPAUSE:
-    EventHandler->OnGameUnpause.Broadcast(); break;
+    EventHandler->OnGameUnpause.Broadcast(Payload); break;
   case EGSBWEvent::GAME_START:
-    EventHandler->OnGameStart.Broadcast(); break;
+    EventHandler->OnGameStart.Broadcast(Payload); break;
   case EGSBWEvent::GAME_OVER:
-    EventHandler->OnGameOver.Broadcast(); break;
+    EventHandler->OnGameOver.Broadcast(Payload); break;
   case EGSBWEvent::DIFFICULTY_BUMP:
-    EventHandler->OnDifficultyBump.Broadcast(); break;
+    EventHandler->OnDifficultyBump.Broadcast(Payload); break;
   default:
     break;
   }

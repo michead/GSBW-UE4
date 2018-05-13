@@ -27,8 +27,8 @@ public:
   // Wraps delegates of GSBW events
   UGlobalEventHandlerComponent* EventHandler;
 
-  UFUNCTION(BlueprintCallable, Category=CPP_Events)
   void BroadcastEvent(EGSBWEvent Ev);
-
+  template<typename T>
+  void BroadcastEvent(EGSBWEvent Ev, T& Payload);
   void SubscribeToEvent(EGSBWEvent Ev, const FScriptDelegate& DelegateFunc);
 };
